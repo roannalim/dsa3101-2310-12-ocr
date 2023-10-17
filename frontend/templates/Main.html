@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Web Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>OCR Web App</h1>
+    </header>
+    <main>
+        <section>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file">
+                <input type="submit" value="Upload and Process">
+            </form>
+        </section>
+        <section id="results">
+            {% if text %}
+                <p>{{ text }}</p>
+            {% endif %}
+        </section>
+        <!-- Add dashboard content here if needed -->
+    </main>
+</body>
+</html>
