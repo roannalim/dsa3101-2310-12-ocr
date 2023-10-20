@@ -50,7 +50,10 @@
     </header>
 
     <div class="button-container">
-        <button onclick="location.href='/upload'">Upload</button>
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <input type="file" name="file" accept="image/*" id="fileInput" style="display: none" onchange="form.submit()">
+            <button type="button" onclick="document.getElementById('fileInput').click();">Upload</button>
+        </form>
         <button onclick="location.href='/dashboard'">Dashboard</button>
     </div>
 </body>
