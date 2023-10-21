@@ -1,28 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCR Web Application</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 100px; /* Space between buttons */
+        }
+
+        button {
+            font-size: 30px;
+            padding: 20px 40px;
+            cursor: pointer;
+            width: 200px;  /* Ensuring same width for both buttons */
+            text-align: center;  /* Center text horizontally */
+
+            /* These properties ensure the content is centered vertically */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>OCR Web App</h1>
+        <h1>What-A-Waste</h1>
     </header>
-    <main>
-        <section>
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="file">
-                <input type="submit" value="Upload and Process">
-            </form>
-        </section>
-        <section id="results">
-            {% if text %}
-                <p>{{ text }}</p>
-            {% endif %}
-        </section>
-        <!-- Add dashboard content here if needed -->
-    </main>
+
+    <div class="button-container">
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <input type="file" name="file" accept="image/*" id="fileInput" style="display: none" onchange="form.submit()">
+            <button type="button" onclick="document.getElementById('fileInput').click();">Upload</button>
+        </form>
+        <button onclick="location.href='/dashboard'">Dashboard</button>
+    </div>
 </body>
 </html>
