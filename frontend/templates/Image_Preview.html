@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between buttons */
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .confirm-button {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #008000; /* Light green */
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .confirm-button:hover {
+            background-color: #006400; /* Dark green on hover */
+        }
+
+        .re-browse-button {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #d3d3d3; /* Light gray */
+            color: #000;
+            cursor: pointer;
+        }
+
+        .re-browse-button:hover {
+            background-color: #808080; /* Dark gray on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+
+    <div class = "image-container">
+        <img src = "{{ image_path }}" alt = "Uploaded Image">
+    </div>
+
+    <div class = "button-container">
+        <form method = "POST" action = "/next_page">
+            <input type = "submit" class = "confirm-button" value = "Confirm">
+        </form>
+        <form method = "GET" action = "/upload">
+            <input type = "submit" class = "re-browse-button" value = "Re-Browse">
+        </form>
+    </div>
+</body>
+</html>
