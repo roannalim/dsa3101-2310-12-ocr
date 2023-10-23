@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit_Confirm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .box {
+            width: 500px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        .description {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .editable-text {
+            font-size: 18px;
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center the buttons horizontally */
+            align-items: center;
+            padding: 10px;
+        }
+
+        .button-container button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .edit-button:hover {
+            background-color: #006400;
+        }
+
+        .confirm-button:hover {
+            background-color: #006400;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+
+    <div class="box">
+        <p class="description">Bin Center:</p>
+        <input type="text" class="editable-text" value="Bin Center 1" id="binCenter" readonly>
+        <p class="description">Gross Weight:</p>
+        <input type="text" class="editable-text" value="200kg" id="grossWeight" readonly>
+        <p class="description">Time/Date:</p>
+        <input type="text" class="editable-text" value="12:00 am, 2023-10-01" id="timeDate" readonly>
+    </div>
+
+    <div class="button-container">
+        <button class="edit-button" id="editButton" onclick="enableEditing()">Edit</button>
+        <button class="confirm-button" onclick="navigateToThankYouPage()">Confirm</button>
+    </div>
+
+    <script>
+        function enableEditing() {
+            // Enable editing of text boxes
+            document.getElementById("binCenter").readOnly = false;
+            document.getElementById("grossWeight").readOnly = false;
+            document.getElementById("timeDate").readOnly = false;
+        }
+
+        function navigateToThankYouPage() {
+            // Redirect to the Thank You page
+            window.location.href = "/thank_you";
+        }
+    </script>
+</body>
+</html>
