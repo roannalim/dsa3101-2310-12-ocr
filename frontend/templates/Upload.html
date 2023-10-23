@@ -26,27 +26,49 @@
 
         .button-container {
             display: flex;
-            flex-direction: column;
+            flex-direction: row; /* Align items side by side */
             justify-content: center;
             align-items: center;
-            gap: 20px; /* Space between elements */
+            gap: 40px; /* Increase the gap for separation */
         }
 
-        .upload-text {
-            font-size: 24px;
+        .box {
+            width: 250px; /* Width of the container */
+            height: 300px; /* Height of the container */
+            padding: 20px;
+            border: 1px solid #e0e0e0; /* A subtle border */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Distribute space between button and description */
+            align-items: center; /* Center items horizontally */
+            text-align: center; /* Center the text of description */
+        }
+
+        .description {
+            font-size: 20px;
         }
 
         .browse-button {
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 24px; /* Increased font size */
+            padding: 15px 25px; /* Increased padding */
             background-color: #008000; /* Light green */
             color: #fff;
             cursor: pointer;
+            width: 200px; /* Fixed width */
+            text-align: center; /* Center the text */
+            border: none; /* Remove default browser styling */
+            display: inline-block; /* Allow for text-align to work */
         }
 
         .browse-button:hover {
             background-color: #006400; /* Dark green on hover */
         }
+
+        .logo {
+            width: 80px; /* Adjust the size based on your needs */
+            margin-bottom: 20px; /* Space between the logo and the button */
+        }
+
     </style>
 </head>
 
@@ -55,12 +77,25 @@
         <h1>What-A-Waste</h1>
     </header>
 
-    <div class = "button-container">
-        <p class = "upload-text">Select browse to upload an image</p>
-        <form method = "POST" enctype="multipart/form-data" action = "/image_preview">
-            <input type = "file" name="image" id="file-input" accept = "image/*" style="display: none;">
-            <label for = "file-input" class="browse-button">Browse</label>
-        </form>
+    <div class="button-container">
+
+        <div class="box">
+            <p class="description">Upload an image to get started!</p>
+            <img src="../Web Images/upload_icon.png" alt="Upload Logo" class="logo"> <!-- Upload Logo -->
+            <form method="POST" enctype="multipart/form-data" action="/image_preview">
+                <input type="file" name="image" id="file-input" accept="image/*" style="display: none;">
+                <label for="file-input" class="browse-button">Browse</label>
+            </form>
+        </div>
+
+        <div class="box">
+            <p class="description">Visit the dashboard for more insights.</p>
+            <img src="../Web Images/dashboard_icon.png" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
+            <form action="/dashboard" method="get">
+                <button type="submit" class="browse-button">Dashboard</button>
+            </form>
+        </div>
+
     </div>
 </body>
 </html>
