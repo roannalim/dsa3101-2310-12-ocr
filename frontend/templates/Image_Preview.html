@@ -29,7 +29,7 @@
             justify-content: center;
             gap: 40px;
             align-items: center;
-            margin-top: 300px;
+            margin-top: 3%;
         }
 
         .image-container {
@@ -38,7 +38,9 @@
 
         .image-container img {
             max-width: 100%;
-            height: auto;
+            max-height: 500px;
+            display: block;
+            margin: 0 auto;
         }
 
         .confirm-button {
@@ -83,7 +85,7 @@
     </header>
 
     <div class = "image-container">
-        <img src = "{{ image_path }}" alt = "Uploaded Image">
+        <img src = "{{ url_for('static', filename='uploaded_images/' ~ filename) }}" alt = "Uploaded Image">
     </div>
 
     <div class = "button-container">

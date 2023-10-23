@@ -83,9 +83,11 @@
         <div class="box">
             <p class="description">Upload an image to get started!</p>
             <img src="{{ url_for('static', filename='Web Images/upload_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Upload Logo -->
-            <form method="POST" enctype="multipart/form-data" action="/image_preview">
-                <input type="file" name="image" id="file-input" accept="image/*" style="display: none;">
-                <label for="file-input" class="browse-button">Browse</label>
+
+            <form method="POST" enctype="multipart/form-data" action="/image_processing" onsubmit="return validateForm()">
+                <input type="file" name="image" id="file-input" accept=".jpg, .jpeg, .png, .heic">
+                <button type="submit" class="browse-button">Go</button>
+                <p id="error-message" style="color: red; display: none; ">Please select an image to upload.</p>
             </form>
         </div>
 
@@ -96,7 +98,22 @@
                 <button type="submit" class="browse-button">Dashboard</button>
             </form>
         </div>
-
     </div>
+
+    <script>
+        function validateForm() {
+            var fileInput = document.getElementById('file-input');
+            var errorMessage = document.getElementById('error-message');
+            
+            if (fileInput.files.length === 0) {
+                errorMessage.style.display = 'block';
+                return false;
+            } else {
+                errorMessage.style.display = 'none';
+                return true;
+            }
+        }
+    </script>
+
 </body>
 </html>

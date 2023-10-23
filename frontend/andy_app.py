@@ -1,33 +1,39 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for
 import os
-from werkzeug.utils import secure_filename
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploaded_images'
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok = True)
 
 @app.route('/')
 def main():
-    return render_template('Upload.html')
+    return render_template('main.html')
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'image' not in request.files:
-        return redirect(request.url)
+@app.route('/image_processing', methods = ['POST'])
+def image_processing():
+    if 'image' in request.files:
+        image = request.files['image']
 
-    image = request.files['image']
+        if image.filename != '':
+            curr_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = curr_datetime + '.jpg'
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('image_preview', filename = filename))
+        
+    return "Image processing failed"
 
-    if image.filename == '':
-        return redirect(request.url)
+@app.route('/image_preview/<filename>')
+def image_preview(filename):
+    return render_template('Image_Preview.html', filename = filename)
 
-    if image:
-        image_path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(image.filename))
-        image.save(image_path)
-        return redirect(url_for('image_preview', image_path=image_path))
+@app.route('/dashboard')
+def dashboard():
+    return render_template('Dashboard.html')
 
-@app.route('/image_preview/<path:image_path>', methods=['GET'])
-def image_preview(image_path):
-    return render_template('image_preview.html', image_path=image_path)
+@app.route('/thank_you')
+def thank_you():
+    return render_template('Thank_you.html')
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(debug=True)
