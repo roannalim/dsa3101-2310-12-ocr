@@ -81,7 +81,7 @@
 
         <div class="box">
             <p class="description">Upload an image to get started!</p>
-            <img src="../Web Images/upload_icon.png" alt="Upload Logo" class="logo"> <!-- Upload Logo -->
+            <img src="{{ url_for('static', filename='Web Images/upload_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Upload Logo -->
             <form method="POST" enctype="multipart/form-data" action="/image_preview">
                 <input type="file" name="image" id="file-input" accept="image/*" style="display: none;">
                 <label for="file-input" class="browse-button">Browse</label>
@@ -90,7 +90,7 @@
 
         <div class="box">
             <p class="description">Visit the dashboard for more insights.</p>
-            <img src="../Web Images/dashboard_icon.png" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
+            <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
             <form action="/dashboard" method="get">
                 <button type="submit" class="browse-button">Dashboard</button>
             </form>
