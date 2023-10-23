@@ -27,7 +27,9 @@
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 20px; /* Space between buttons */
+            gap: 40px;
+            align-items: center;
+            margin-top: 300px;
         }
 
         .image-container {
@@ -40,11 +42,16 @@
         }
 
         .confirm-button {
-            font-size: 20px;
-            padding: 10px 20px;
-            background-color: #008000; /* Light green */
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
             color: #fff;
             cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
         }
 
         .confirm-button:hover {
@@ -52,11 +59,16 @@
         }
 
         .re-browse-button {
-            font-size: 20px;
-            padding: 10px 20px;
+            font-size: 25px;
+            padding: 15px 25px;
             background-color: #d3d3d3; /* Light gray */
             color: #000;
             cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
         }
 
         .re-browse-button:hover {
@@ -64,6 +76,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>What-A-Waste</h1>
@@ -74,11 +87,11 @@
     </div>
 
     <div class = "button-container">
-        <form method = "POST" action = "/next_page">
-            <input type = "submit" class = "confirm-button" value = "Confirm">
-        </form>
-        <form method = "GET" action = "/upload">
+        <form method = "GET" action = "/">
             <input type = "submit" class = "re-browse-button" value = "Re-Browse">
+        </form>
+        <form method = "POST" action = "/details">
+            <input type = "submit" class = "confirm-button" value = "Confirm">
         </form>
     </div>
 </body>
