@@ -1,30 +1,31 @@
-import os
-from dotenv import load_dotenv
-from flask import Flask, render_template, request
-from flask_mysqldb import MySQL
-import pdb
+import mysql.connector
 from PIL import Image
 from io import BytesIO
 import io
 from datetime import datetime, timedelta
+import pdb
+##cronjob for deletion
+
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import os
+import mysql.connector
+from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
-
-app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
-app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
-app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
-app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
-
-mysql = MySQL(app)
-
-def createPicturesTable():
+def createImagesTable():
     try:
-        cur = mysql.connection.cursor()
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+
+        cursor = connection.cursor()
         create_table_query = """
-        CREATE TABLE IF NOT EXISTS pictures (
-            image_id INT(10) NOT NULL auto_increment,
+        CREATE TABLE images (
+            image_id int(10) NOT NULL auto_increment,
             image LONGBLOB,
             start_date DATE NOT NULL,
             expiry_date DATE NOT NULL,
@@ -32,86 +33,70 @@ def createPicturesTable():
             PRIMARY KEY (image_id)
         );
         """
-        cur.execute(create_table_query)
+
+        cursor.execute(create_table_query)
         mysql.connection.commit()
-        cur.close()
-        print("Table 'pictures' created successfully.")
+        cursor.close()
+        print("Table 'Images' created successfully.")
 
     except Exception as e:
         return f'An error occurred: {str(e)}'
+    # finally:
+    #     if connection.is_connected():
+    #         cursor.close()
+    #         connection.close()
+    #         print("MySQL connection is closed")
 
-# Call the createPicturesTable function to create the table
-createPicturesTable()
+# Call the createimagesTable function to create the table
+createImagesTable()
 
 def createUsersTable():
     try:
-        cur = mysql.connection.cursor()
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+
+        cursor = connection.cursor()
         create_table_query = """
         CREATE TABLE IF NOT EXISTS users (
             user_id int(10) NOT NULL auto_increment,
             name VARCHAR(45) NOT NULL,
             email VARCHAR(45) NOT NULL,
-            PRIMARY KEY (id)
+            PRIMARY KEY (user_id)
         );
         """
-        cur.execute(create_table_query)
+        cursor.execute(create_table_query)
         mysql.connection.commit()
-        cur.close()
+        cursor.close()
         print("Table 'users' created successfully.")
 
     except Exception as e:
         return f'An error occurred: {str(e)}'
+    
 
 # Call the createUsersTable function to create the table
 createUsersTable()
 
-# Insert images into the 'pictures' table
-def insertImage(image_path):
-    try:
-        cur = mysql.connection.cursor()
 
-        with open(image_path, 'rb') as file:
-            image_data = file.read()
-            
-        image = Image.open(io.BytesIO(image_data))
-        image = image.rotate(90)
-
-        # Convert the image back to binary data
-        with io.BytesIO() as output:
-            image.save(output, format="JPEG")
-            image_data = output.getvalue()
-        
-        # Calculate the start_date as the current date
-        start_date = datetime.now().date()
-
-        # Calculate the expiry_date as 3 months from the start_date
-        expiry_date = start_date + timedelta(days=90)
-
-        # location
-        location = "UTown"
-
-        # Insert the image data along with start_date and expiry_date
-        insert_query = "INSERT INTO pictures (image, start_date, expiry_date) VALUES (%s, %s, %s, %s)"
-        cur.execute(insert_query, (image_data, start_date, expiry_date, location))
-        mysql.connection.commit()
-        cur.close()
-        print("Image inserted successfully.")
-
-    except Exception as e:
-        return f'An error occurred: {str(e)}'
-
-# Call the insertImage function to insert an image into the 'pictures' table
-insertImage("20231006_084417.jpg")
-
-# Retrieve and display an image from the 'pictures' table
+#to retrieve image
 def retrieve_and_display_image(image_id):
     try:
-        cur = mysql.connection.cursor()
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+        cursor = connection.cursor()
         
         # Retrieve the binary image data from the database
-        query = "SELECT image FROM pictures WHERE image_id = %s"
-        cur.execute(query, (image_id,))
-        result = cur.fetchone()
+        query = "SELECT image FROM images WHERE image_id = %s"
+        #filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
+        #SELECT * --> to show all
+        ##front end delete button, and func delete the photo from the db
+        # tag username to the image, and add it to the users table , and tag it to an image
+        #sql queries for filtering to the image table 
+        cursor.execute(query, (image_id,))
+        result = cursor.fetchone()
 
         if result:
             image_data = result[0]
@@ -120,42 +105,52 @@ def retrieve_and_display_image(image_id):
             image = Image.open(BytesIO(image_data))
             
             # Display the image
-            image.show()
+            #image.show()
         else:
             print("Image with ID {} not found.".format(image_id))
 
-    except Exception as e:
-        return f'An error occurred: {str(e)}'
+    except mysql.connector.Error as error:
+        print("Failed to retrieve and display the image: {}".format(error))
 
-# Manually set the id to display
+
 image_id_to_display = 1
 
 # Call the retrieve_and_display_image function
 retrieve_and_display_image(image_id_to_display)
+UPLOAD_FOLDER='C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\database\\uploads'
+app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
-@app.route('/home')
-def home():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM users")
-    fetchdata = cur.fetchall()
-    cur.close()
-    return render_template('home.html', data = fetchdata)
+@app.route('/upload', methods=['GET', 'POST'])
+def submit():
+    db = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                 database=os.getenv("MYSQL_DB"),
+                                 user=os.getenv("MYSQL_USER"),
+                                 password=os.getenv("MYSQL_PASSWORD"))
+    cursor = db.cursor()
+    if request.method == 'POST':
+        input = request.form
+        f = request.files['image']
+        image_data = f.read()
+        photo_n = secure_filename(f.filename)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    if request.method == "POST":
-        # Fetch form data
-        userDetails = request.form
-        id = userDetails['id']
-        name = userDetails['name']
-        email = userDetails['email']
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO users(user_id, name, email) VALUES(%s, %s, %s)",(id, name, email))
-        mysql.connection.commit()
-        cur.close()
-        return 'success'
+        # Calculate the start_date as the current date
+        start_date = datetime.now().date()
 
-    return render_template('index.html')
+        # Calculate the expiry_date as 3 months from the start_date
+        expiry_date = start_date + timedelta(days=90)
 
-if __name__ == '__main__':
+        #Save the image to a folder
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_n))
+
+        # Insert data into the MySQL database
+        cursor.execute("INSERT INTO images (image_id, image ,start_date, expiry_date, location) VALUES (%s, %s, %s, %s, %s)",
+                        (input['image_id'], image_data, start_date, expiry_date ,input['location']))
+        db.commit()
+        return "Successfully uploaded"
+    try:
+        return render_template("upload.html")
+    except Exception as e:
+        return f"Error: {e}"
+    
+if __name__ == 'main':
     app.run(debug=True)
