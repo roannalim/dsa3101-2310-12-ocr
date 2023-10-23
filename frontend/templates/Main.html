@@ -48,7 +48,7 @@
             font-size: 20px;
         }
 
-        .browse-button {
+        .go-button {
             font-size: 25px;
             padding: 15px 25px;
             background-color: #008000;
@@ -58,16 +58,21 @@
             text-align: center;
             border: none;
             display: inline-block;
-            border-radius: 5px; /* Rounded corners */
+            border-radius: 5px; /* Rounded corners*/
         }
 
-        .browse-button:hover {
-            background-color: #006400; /* Dark green on hover */
+        .go-button:hover {
+            background-color: #006400;
         }
 
         .logo {
-            width: 80px; /* Adjust the size based on your needs */
-            margin-bottom: 20px; /* Space between the logo and the button */
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="file"] {
+            padding: 2px;
+            margin-left: 53px;
         }
 
     </style>
@@ -86,7 +91,7 @@
 
             <form method="POST" enctype="multipart/form-data" action="/image_processing" onsubmit="return validateForm()">
                 <input type="file" name="image" id="file-input" accept=".jpg, .jpeg, .png, .heic">
-                <button type="submit" class="browse-button">Go</button>
+                <button type="submit" class="go-button">Go</button>
                 <p id="error-message" style="color: red; display: none; ">Please select an image to upload.</p>
             </form>
         </div>
@@ -95,7 +100,7 @@
             <p class="description">Visit the dashboard for more insights.</p>
             <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
             <form action="/dashboard" method="get">
-                <button type="submit" class="browse-button">Dashboard</button>
+                <button type="submit" class="go-button">Dashboard</button>
             </form>
         </div>
     </div>
