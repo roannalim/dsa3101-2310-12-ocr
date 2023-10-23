@@ -78,12 +78,14 @@
 
     <div class="button-container">
         <div class="box">
-            <img src="../Web Images/thank-you-page-gif1.gif" alt="Thank You GIF" width="180" height="180">
+            <img src="{{ url_for('static', filename='Web Images/thank-you-page-gif1.gif') }}" alt="Thank You GIF" width="180" height="180">
             <p class="description">Thank you for your upload!</p>
-            <form action="/upload" method="get">
-                <button type="submit" class="return-button">Return to Main Page</button>
+            <form action="/" method="get">
+                <button type="submit" class="return-button">Main Page</button>
             </form>
         </div>
     </div>
 </body>
 </html>
+
+
