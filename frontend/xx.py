@@ -26,16 +26,12 @@ def image_processing():
 @app.route('/image_preview/<filename>', methods=['GET', 'POST'])
 def image_preview(filename):
     if request.method == 'POST':
-        # Process the form data from the Image Preview page
-        # For example, save the data to a database or perform other actions
         return redirect(url_for('edit_confirm'))
     return render_template('Image_Preview.html', filename=filename)
 
 @app.route('/edit_confirm', methods=['GET', 'POST'])
 def edit_confirm():
     if request.method == 'POST':
-        # Process the form data from the Edit-Confirm page
-        # For example, save the edited data to a database or perform other actions
         return redirect(url_for('thank_you'))
     return render_template('Edit_Confirm.html')
 
