@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            padding-left: 50px;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Style for the two boxes */
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%; /* Adjust as needed */
+            margin: 40px auto;
+        }
+
+        .graphs {
+            flex: 0 0 70%;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            height: 500px; /* Adjust as needed */
+            position: relative;
+        }
+
+        .bin-center {
+            flex: 0 0 30%;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+        }
+
+        .bin-center h3 {
+            text-align: center;
+        }
+
+        /* Style for the dropdown and button */
+        .bin-center select, 
+        .bin-center button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+
+    <h2>Bin Center Dashboard</h2>
+
+    <div class="dashboard-container">
+        <div class="graphs">
+            <!-- Placeholder for the graphs -->
+            <p>Graphs will be displayed here...</p>
+        </div>
+
+        <div class="bin-center">
+            <h3>Bin Center</h3>
+            <input list="binCenters" name="binCenter" placeholder="Choose or type a bin center">
+            <datalist id="binCenters">
+                <option value="Bin Center A">
+                <option value="Bin Center B">
+                <option value="Bin Center C">
+                <option value="Bin Center D">
+                <!-- ... add more options as needed ... -->
+            </datalist>
+            <button onclick="fetchGraphs()">Confirm</button>
+        </div>
+    </div>
+
+    <script>
+        function fetchGraphs() {
+            // Placeholder for logic to send a GET request to the server to fetch and display the graphs
+            console.log("Fetching graphs for selected bin center...");
+        }
+    </script>
+</body>
+</html>
