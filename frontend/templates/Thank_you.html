@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0; /* Background color */
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Center items vertically */
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Increase the gap for separation */
+        }
+
+        .box {
+            width: 500px;
+            height: 480px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            background-color: #fff; /* Container background color */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 30px;
+            color: #333; /* Text color */
+        }
+
+        .return-button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        .return-button:hover {
+            background-color: #006400;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+
+    <div class="button-container">
+        <div class="box">
+            <img src="../Web Images/thank-you-page-gif1.gif" alt="Thank You GIF" width="180" height="180">
+            <p class="description">Thank you for your upload!</p>
+            <form action="/upload" method="get">
+                <button type="submit" class="return-button">Return to Main Page</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
