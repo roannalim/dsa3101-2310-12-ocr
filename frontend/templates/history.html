@@ -13,6 +13,41 @@
             text-align: left;
             background-color: #f4f4f4;
         }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding-top: 40px; 
+        }
+
+        .container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            flex-grow: 0.7; 
+        }
+
+
+        .return-button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .return-button:hover {
+            background-color: #006400; /* Dark green on hover */
+        }
     </style>
 </head>
 <body>
@@ -20,8 +55,11 @@
         <h1>What-A-Waste</h1>
     </header>
     
-    <div class="content">
+    <h1> Image Upload History</h1>
+    <div class="container">
         <!-- Placeholder to display history records here -->
     </div>
+
+    <button class="return-button" onclick="window.location.href = '/';">Home Page</button>
 </body>
 </html>

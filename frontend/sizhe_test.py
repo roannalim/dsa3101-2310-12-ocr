@@ -1,14 +1,33 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
+import pandas as pd
 from datetime import datetime
 
+
 app = Flask(__name__)
+app.secret_key = "strongPassword"
 app.config['UPLOAD_FOLDER'] = 'static/uploaded_images'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok = True)
 
 @app.route('/')
 def login():
     return render_template('login.html')
+
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    
+    if check_credentials(username, password):
+        session['user'] = username
+        return redirect(url_for('main'))
+    return redirect(url_for('login'))
+
+# try not using the ==, check is there any library to authenticate.
+def check_credentials(username, password):
+    df = pd.read_csv('users.csv')
+    matching_users = df[(df['username'] == username) & (df['password'] == password)]
+    return not matching_users.empty
 
 @app.route('/home')
 def main():
@@ -31,6 +50,13 @@ def image_processing():
 def image_preview(filename):
     return render_template('Image_Preview.html', filename = filename)
 
+@app.route('/edit_confirm', methods=['GET', 'POST'])
+def edit_confirm():
+    if request.method == 'POST':
+        ## send data to backend
+        return redirect(url_for('thank_you'))
+    return render_template('Edit_Confirm.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('Dashboard.html')
@@ -41,6 +67,7 @@ def thank_you():
 
 @app.route('/history')
 def history():
+    ## trigger function to display history data
     return render_template('history.html')
 
 
