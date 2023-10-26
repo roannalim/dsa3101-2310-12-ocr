@@ -13,6 +13,7 @@ import mysql.connector
 from dotenv import load_dotenv
 
 import pandas as pd
+import base64
 
 load_dotenv()
 
@@ -204,6 +205,33 @@ def deleteUsersTable():
 # Call the deleteUsersTable function to delete the users table
 # deleteUsersTable()
 
+# Setting up the location to save the uploaded images
+UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/flask_mysql/uploads'
+app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
+
+# Login page
+@app.route('/', methods=['GET'])
+def login_page():
+    return render_template('index.html')
+
+# Login page
+@app.route('/', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+
+    # Authenticate the user (e.g., check username and password)
+    if is_authenticated(username, password):
+        session['username'] = username
+        return redirect(url_for('home'))
+    else:
+        return "Login failed"
+    
+# Home page
+@app.route('/home', methods=['GET'])
+def home():
+    return render_template("home.html")
+
 # Retrieve and display the image
 def retrieve_and_display_image(image_id):
     try:
@@ -233,44 +261,22 @@ def retrieve_and_display_image(image_id):
     except mysql.connector.Error as error:
         print("Failed to retrieve and display the image: {}".format(error))
 
-#1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
-#2. front end delete button, and func delete the photo from the db
-#3. tag username to the image, and add it to the users table , and tag it to an image
-
 # Manual retrieval of image
 # image_id = 1
 # retrieve_and_display_image(image_id)
 
-# Setting up the location to save the uploaded images
-UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/flask_mysql/uploads'
-app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
-
-# Login page
-@app.route('/', methods=['GET'])
-def login_page():
-    return render_template('index.html')
-
-# Login page
-@app.route('/', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
-
-    # Authenticate the user (e.g., check username and password)
-    if is_authenticated(username, password):
-        session['username'] = username
-        return redirect(url_for('home'))
-    else:
-        return "Login failed"
-    
-# Home page
-@app.route('/home', methods=['GET'])
-def home():
-    return render_template("home.html")
+#1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
+#2. front end delete button, and func delete the photo from the db
+#3. tag username to the image, and add it to the users table , and tag it to an image
 
 # Page to upload the images
 @app.route('/upload', methods=['GET', 'POST'])
 def submit():
+    connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+    cursor = connection.cursor()
     if request.method == 'POST':
         if 'username' in session:
             input = request.form
@@ -287,14 +293,17 @@ def submit():
             #Save the image to a folder
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_n))
 
-            # Store image data and other information in session
-            session['image_info'] = {
-                'file_name': photo_n,
-                'location': input['location'],
-                'start_date': start_date.strftime('%Y-%m-%d'),
-                'expiry_date': expiry_date.strftime('%Y-%m-%d')
-                }
+            # Insert data into the MySQL database
+            cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username) VALUES (%s, %s, %s, %s, %s)",
+                            (image_data, start_date, expiry_date, input['location'], session['username']))
+            connection.commit()
 
+            # Retrieve the auto-incremented ID of the inserted record
+            inserted_id = cursor.lastrowid
+            session['image_id'] = inserted_id
+            session['file_name'] = photo_n
+            cursor.close()
+            connection.close()
             return redirect(url_for('confirm_upload'))
         else:
             return "User not authenticated"
@@ -303,24 +312,20 @@ def submit():
     except Exception as e:
         return f"Error: {e}"
 
+# Confirm the upload
 @app.route('/confirm_upload', methods=['GET', 'POST'])
 def confirm_upload():
-    if 'image_info' in session:
-        image_info = session['image_info']
-        # Retrieve image data and other information from session
-        file_name = image_info['file_name']
+    if 'image_id' in session:
+        # Retrieve image_id and file_name from session
+        image_id = session['image_id']
+        file_name = session['file_name']
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
-        location = image_info['location']
-        start_date = image_info['start_date']
-        expiry_date = image_info['expiry_date']
-        username = session['username']
-        # Read the image from the file
-        with open(file_path, 'rb') as image_file:
-            image_data = image_file.read()
-    
+             
         if request.method == 'POST':
             if request.form.get('confirm') == 'yes':
-                # User confirmed the upload, save the image to the database
+                # User confirmed the upload, do nothing
+                return redirect(url_for('success'))
+            else:
                 connection = mysql.connector.connect(
                     host=os.getenv("MYSQL_HOST"),
                     database=os.getenv("MYSQL_DB"),
@@ -328,15 +333,16 @@ def confirm_upload():
                     password=os.getenv("MYSQL_PASSWORD")
                 )
                 cursor = connection.cursor()
-                
-                # Insert data into the MySQL database
-                cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username) VALUES (%s, %s, %s, %s, %s)",
-                                (image_data, start_date, expiry_date, location, username))
+
+                # Delete the record with the specified ID
+                cursor.execute("DELETE FROM images WHERE image_id = %s", (image_id,))
                 connection.commit()
                 cursor.close()
-                return redirect(url_for('success'))
-            else:
-                # User canceled the upload, you can add a message here if needed
+                connection.close()
+
+                # Delete the uploaded file from the file system
+                os.remove(file_path)
+
                 return redirect(url_for('cancelled'))
         return render_template("confirm_upload.html")
 
@@ -350,29 +356,167 @@ def success():
 def cancelled():
     return render_template("cancelled.html")
 
-# View all images
+# Define a custom Jinja2 filter to convert the image to Base64
+def image_to_base64(image):
+    if image:
+        image_bytes = BytesIO()
+        image.save(image_bytes, format="JPEG")
+        base64_data = base64.b64encode(image_bytes.getvalue()).decode("utf-8")
+        return base64_data
+    return ""
+
+app.jinja_env.filters['to_base64'] = image_to_base64
+
+# Retrieve and display the images
 @app.route('/view_images', methods=['GET'])
 def view_images():
-    # Connect to the database
-    connection = mysql.connector.connect(
-        host=os.getenv("MYSQL_HOST"),
-        database=os.getenv("MYSQL_DB"),
-        user=os.getenv("MYSQL_USER"),
-        password=os.getenv("MYSQL_PASSWORD")
-    )
-    cursor = connection.cursor(dictionary=True)
+    try:
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+        cursor = connection.cursor()
+        
+        # Retrieve image and associated information from the database
+        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images"
 
-    # Query the database to retrieve all images
-    cursor.execute("SELECT * FROM images")
-    images = cursor.fetchall()
+        cursor.execute(query)
+        results = cursor.fetchall()
 
-    # Close the database connection
-    cursor.close()
-    connection.close()
+        image_info = []
 
-    return render_template("view_images.html", images=images)
+        if results:
+            for result in results:
+                image_id, image_data, start_date, expiry_date, location, username = result
+                if image_data:
+                    image = Image.open(BytesIO(image_data))
+                    image_info.append({
+                        'image_id': image_id,
+                        'image': image,
+                        'start_date': start_date,
+                        'expiry_date': expiry_date,
+                        'location': location,
+                        'username': username
+                    })
+                else:
+                    print("Empty image data found in a record. Skipping.")
+            
+            cursor.close()
+            connection.close()
+                        
+            # Pass the list of image information to the template
+            return render_template("view_images.html", image_info=image_info)
+        else:
+            print("No image found")
+        
+    except mysql.connector.Error as error:
+        print("Failed to retrieve and display the images: {}".format(error))
+
+# Edit data
+@app.route('/edit_data', methods=['GET', 'POST'])
+def edit_data():
+    if request.method == 'GET':
+        image_id = request.args.get('image_id')
+        try:
+            connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                                 database=os.getenv("MYSQL_DB"),
+                                                 user=os.getenv("MYSQL_USER"),
+                                                 password=os.getenv("MYSQL_PASSWORD"))
+            cursor = connection.cursor()
+            
+            # Retrieve image and associated information from the database
+            query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images WHERE image_id = %s"
+            cursor.execute(query, (image_id,))
+            result = cursor.fetchone()
+
+            if result:
+                image_id, image_data, start_date, expiry_date, location, username = result
+                if image_data:
+                    image = Image.open(BytesIO(image_data))
+                    image_info = {
+                        'image_id': image_id,
+                        'image': image,
+                        'start_date': start_date,
+                        'expiry_date': expiry_date,
+                        'location': location,
+                        'username': username
+                    }
+                else:
+                    print("Empty image data found for the selected image ID.")
+            else:
+                print("Image not found for the selected image ID.")
+
+            cursor.close()
+            connection.close()
+
+            return render_template("edit_data.html", image_info=image_info)
+        
+        except mysql.connector.Error as error:
+            print("Failed to retrieve the data for editing: {}".format(error))
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        
+        if action == 'update':
+            image_id = request.form.get('image_id')
+            start_date = request.form.get('start_date')
+            expiry_date = request.form.get('expiry_date')
+            location = request.form.get('location')
+            username = request.form.get('username')
+            
+            try:
+                connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                                     database=os.getenv("MYSQL_DB"),
+                                                     user=os.getenv("MYSQL_USER"),
+                                                     password=os.getenv("MYSQL_PASSWORD"))
+                cursor = connection.cursor()
+                
+                # Update the image details in the database
+                query = "UPDATE images SET start_date = %s, expiry_date = %s, location = %s, username = %s WHERE image_id = %s"
+                cursor.execute(query, (start_date, expiry_date, location, username, image_id))
+                connection.commit()
+
+                cursor.close()
+                connection.close()
+
+                # Redirect to the "View Images" page after updating
+                return redirect('/view_images')
+            
+            except mysql.connector.Error as error:
+                print("Failed to update the data: {}".format(error))
+        
+        # If the "Cancel" button is clicked, simply redirect to the "View Images" page
+        return redirect('/view_images')
+
+
+# Delete Image
+@app.route('/delete_image', methods=['POST'])
+def delete_image():
+    image_id = request.form.get('image_id')
+    try:
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+        cursor = connection.cursor()
+        
+        # Delete the image row from the database
+        query = "DELETE FROM images WHERE image_id = %s"
+        cursor.execute(query, (image_id,))
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        # Redirect to the "View Images" page after deleting
+        return redirect('/view_images')
+    
+    except mysql.connector.Error as error:
+        print("Failed to delete the image: {}".format(error))
+
+#1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
 
 if __name__ == 'main':
     app.run(debug=True)
 
-#flask --app test.py --debug run
+# flask --app test.py --debug run

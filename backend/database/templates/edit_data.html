@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Data</title>
+</head>
+<body>
+    <h1>Edit Data</h1>
+    <form method="POST" action="/edit_data">
+        <input type="hidden" name="image_id" value="{{ image_info['image_id'] }}">
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" value="{{ image_info['start_date'] }}"><br>
+        <label for="expiry_date">Expiry Date:</label>
+        <input type="date" name="expiry_date" value="{{ image_info['expiry_date'] }}"><br>
+        <label for="location">Location:</label>
+        <input type="text" name="location" value="{{ image_info['location'] }}"><br>
+        <label for="username">Username:</label>
+        <input type="text" name="username" value="{{ image_info['username'] }}"><br>
+        <button type="submit" name="action" value="update">Update</button>
+        <a href="/view_images">Cancel</a>
+    </form>
+</body>
+</html>
