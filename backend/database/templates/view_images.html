@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Images</title>
+</head>
+<body>
+    <h1>View Images</h1>
+    <ul>
+        {% for image in images %}
+            <li>
+                <img src="{{ url_for('view_images', image_id=image.image_id) }}" alt="{{ image.location }}">
+                <p>Location: {{ image.location }}</p>
+                <p>Start Date: {{ image.start_date }}</p>
+                <p>Expiry Date: {{ image.expiry_date }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

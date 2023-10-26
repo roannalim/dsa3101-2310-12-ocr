@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Upload</title>
+</head>
+<body>
+    <h1>Confirm Upload</h1>
+    <p>Do you want to upload the image?</p>
+    <form method="post">
+        <button type="submit" name="confirm" value="yes">Yes, Confirm Upload</button>
+        <a href="{{ url_for('cancelled') }}"><button type="button">No, Cancel Upload</button></a>
+    </form>    
+</body>
+</html>

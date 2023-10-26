@@ -9,24 +9,23 @@
     </head>
     <body>
         <div style="width:400px; margin:25px auto;">
-            <h1>Registration Form</h1>
+            <h1>Upload Form</h1>
             <form action="/upload" method="POST" enctype="multipart/form-data">
             <table>
                 <tr>
-                    <td>Image_id</td>
-                    <td><input type="text" name="image_id" value=""/></td>
+                    <td>Image:</td>
+                    <td><input type="file" name="image" value="" id="image" required/></td>
                 </tr>
                 <tr>
-                    <td>Image</td>
-                    <td><input type="file" name="image" value=""/></td>
+                    <td>Location:</td>
+                    <td><input type="text" name="location" value="" id="location" required/></td>
                 </tr>
-                <tr>
-                    <td>Location</td>
-                    <td><input type="text" name="location" value=""/></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center;"><input type='submit' value="submit"/></td>
-                </tr>
+                <td colspan="2" style="text-align: center;">
+                    <input type="submit" value="Submit" style="width: 100px; height: 30px; font-size: 14px;" />
+                    <a href="{{ url_for('home') }}" style="text-decoration: none; color: #333;">
+                        <button type="button" style="width: 140px; height: 30px; font-size: 14px;">Return to Home</button>
+                    </a>
+                </td>
             </table>
             </form>
         </div>
