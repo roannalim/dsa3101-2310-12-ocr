@@ -103,6 +103,15 @@
                 <button type="submit" class="go-button">Dashboard</button>
             </form>
         </div>
+
+        <div class="box">
+            <p class="description">View History Image Records</p>
+            <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="History Logo" class="logo"> <!-- History Logo -->
+            <form action="/history" method="get">
+                <button type="submit" class="go-button">History</button>
+            </form>
+        </div>
+
     </div>
 
     <script>
