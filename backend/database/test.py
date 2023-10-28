@@ -206,7 +206,7 @@ def deleteUsersTable():
 # deleteUsersTable()
 
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/flask_mysql/uploads'
+UPLOAD_FOLDER='C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\dsa3101-2310-12-ocr\\backend\\database\\uploads'
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page
@@ -359,6 +359,7 @@ def cancelled():
 # Define a custom Jinja2 filter to convert the image to Base64
 def image_to_base64(image):
     if image:
+        image = image.convert('RGB') ##ADDED HERE CUS OF SOME ERROR
         image_bytes = BytesIO()
         image.save(image_bytes, format="JPEG")
         base64_data = base64.b64encode(image_bytes.getvalue()).decode("utf-8")
@@ -515,6 +516,70 @@ def delete_image():
         print("Failed to delete the image: {}".format(error))
 
 #1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
+@app.route('/filter_images', methods=['GET'])
+def filter_images():
+    loc = request.args.get('location')
+    day = request.args.get('day')
+    ##if location or day is not filled in 
+    if not loc:
+        loc = None
+    if not day:
+        day = None
+
+    try:
+        connection = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            database=os.getenv("MYSQL_DB"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD")
+        )
+        cursor = connection.cursor()
+
+        # Build the SQL query to filter images based on location and day
+        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images"
+
+        # Add filtering conditions if location and day are provided
+        if loc and day:
+            query += " WHERE location = %s AND DATE(start_date) = %s"
+            cursor.execute(query, (loc, day))
+        elif day:
+            query += " WHERE DATE(start_date) = %s"
+            cursor.execute(query, (day,))
+        elif loc:
+            query += " WHERE loc = %s"
+            cursor.execute(query, (loc,))
+        else:
+            cursor.execute(query)
+
+        results = cursor.fetchall()
+
+        image_info = []
+
+        if results:
+            for result in results:
+                image_id, image_data, start_date, expiry_date, location, username = result
+                if image_data:
+                    image = Image.open(BytesIO(image_data))
+                    image_info.append({
+                        'image_id': image_id,
+                        'image': image,
+                        'start_date': start_date,
+                        'expiry_date': expiry_date,
+                        'location': location,
+                        'username': username
+                    })
+                else:
+                    print("Empty image data found in a record. Skipping.")
+
+        cursor.close()
+        connection.close()
+
+        # Render the filtered images in the filtered_images.html template
+        return render_template("filtered_images.html", image_info=image_info, loc=loc, day=day)
+
+    except mysql.connector.Error as error:
+        print("Failed to retrieve and display the filtered images: {}".format(error))
+
 
 if __name__ == 'main':
     app.run(debug=True)

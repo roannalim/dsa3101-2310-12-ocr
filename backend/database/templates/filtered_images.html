@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Images</title>
+    <title>Filtered Images</title>
     <style>
         img {
             max-width: 200px;  /* Adjust the max width as needed */
@@ -23,20 +23,28 @@
         }
     </style>
 </head>
-    <!-- Filter Form -->
+<body>
+    <h1 style="text-align: center;">Filtered Images</h1>
+    
+    <!-- Filter Criteria Display -->
+    <div>
+        <p>Filter Criteria:</p>
+        {% if loc %}
+            <p>Location: {{ loc }}</p>
+        {% endif %}
+        {% if day %}
+            <p>Day: {{ day }}</p>
+        {% endif %}
+    </div>
+    
+    
     <div class="filter-form">
-        <form method="GET" action="/filter_images">
-            <label for="loc">Location:</label>
-            <input type="text" name="loc" id="loc">
-            <label for="day">Day (YYYY-MM-DD):</label>
-            <input type="text" name="day" id="day">
-            <input type="submit" value="Filter">
+        <form method="GET" action="/view_images">
+            <button type="submit">View All Images</button>
         </form>
     </div>
 
-<body>
-    
-    <h1 style="text-align: center;">View Images</h1>
+    <!-- Display Filtered Images -->
     <table>
         <tr>
             <th>Image ID</th>
@@ -45,8 +53,6 @@
             <th>Expiry Date</th>
             <th>Location</th>
             <th>Username</th>
-            <th>Edit</th>
-            <th>Delete</th>
         </tr>
         {% for info in image_info %}
             <tr>
