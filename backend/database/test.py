@@ -518,7 +518,7 @@ def delete_image():
 #1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
 @app.route('/filter_images', methods=['GET'])
 def filter_images():
-    loc = request.args.get('location')
+    loc = request.args.get('loc')
     day = request.args.get('day')
     ##if location or day is not filled in 
     if not loc:
@@ -542,17 +542,16 @@ def filter_images():
         if loc and day:
             query += " WHERE location = %s AND DATE(start_date) = %s"
             cursor.execute(query, (loc, day))
-        elif day:
+        elif loc and not day:
+            query += " WHERE location = %s"
+            cursor.execute(query, (loc,))
+        elif day and not loc:
             query += " WHERE DATE(start_date) = %s"
             cursor.execute(query, (day,))
-        elif loc:
-            query += " WHERE loc = %s"
-            cursor.execute(query, (loc,))
         else:
             cursor.execute(query)
-
         results = cursor.fetchall()
-
+        print("Location:", loc)
         image_info = []
 
         if results:
