@@ -1,4 +1,4 @@
-# Readme
+# README
 
 ## General Information
 
@@ -27,9 +27,9 @@ You must have access to a MySQL server where the target database resides. If you
 Before running the script, you need to make some specific configurations:
 
 Environment Variables (.env)
-In the root directory of the project, you should create a file named .env. This file should contain the following environment variables, specific to your database setup
+In the root directory of the project, you should create a file named .env. This file should contain the following environment variables, specific to your database setup:
 
-    ```bash
+    ```
     DB_SERVER=your_server_name
     DB_NAME=your_database_name
     DB_USER=your_username
@@ -38,7 +38,7 @@ In the root directory of the project, you should create a file named .env. This 
 
 ## Directory for Uploads
 This script may involve file uploads. You need to specify the directory where uploaded files will be stored. Ensure that this directory exists and is writable. You can configure the upload directory in the script's code, usually by modifying a variable or parameter.
-    ```bash
+    ```
     UPLOAD_FOLDER='<your-directory>'
     app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
     ```
@@ -46,7 +46,7 @@ This script may involve file uploads. You need to specify the directory where up
 ## Running the Script
 To run the script, open your command line or terminal and navigate to the directory where the script is located. Then, execute the following command:
 
-    ```bash
+    ```
     flask --app test.py --debug run
     ```
 ## Troubleshooting 
