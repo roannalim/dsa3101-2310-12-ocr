@@ -519,12 +519,18 @@ def delete_image():
 @app.route('/filter_images', methods=['GET'])
 def filter_images():
     loc = request.args.get('loc')
-    day = request.args.get('day')
-    ##if location or day is not filled in 
+    st_date = request.args.get('st_date')
+    end_date = request.args.get('end_date')
+    user_id = request.args.get('user_id')
+
     if not loc:
         loc = None
-    if not day:
-        day = None
+    if not st_date:
+        st_date = None
+    if not end_date:
+        end_date = None
+    if not user_id:
+        user_id = None
 
     try:
         connection = mysql.connector.connect(
@@ -534,24 +540,35 @@ def filter_images():
             password=os.getenv("MYSQL_PASSWORD")
         )
         cursor = connection.cursor()
+        
+        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images WHERE 1=1"
 
-        # Build the SQL query to filter images based on location and day
-        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images"
+        params = []  # Create an empty list to store the parameters
 
-        # Add filtering conditions if location and day are provided
-        if loc and day:
-            query += " WHERE location = %s AND DATE(start_date) = %s"
-            cursor.execute(query, (loc, day))
-        elif loc and not day:
-            query += " WHERE location = %s"
-            cursor.execute(query, (loc,))
-        elif day and not loc:
-            query += " WHERE DATE(start_date) = %s"
-            cursor.execute(query, (day,))
-        else:
-            cursor.execute(query)
+        if st_date and end_date:
+            query += " AND DATE(start_date) BETWEEN %s AND %s"
+            params.extend([st_date, end_date])
+        elif st_date:
+            query += " AND DATE(start_date) >= %s"
+            params.append(st_date)
+        elif end_date:
+            query += " AND DATE(start_date) <= %s"
+            params.append(end_date)
+
+        if loc:
+            query += " AND location = %s"
+            params.append(loc)
+
+        if user_id:
+            query += " AND username = %s"
+            params.append(user_id)
+
+        cursor.execute(query, params)  # Pass the query and parameters to cursor.execute
+
+
+
         results = cursor.fetchall()
-        print("Location:", loc)
+
         image_info = []
 
         if results:
@@ -573,8 +590,7 @@ def filter_images():
         cursor.close()
         connection.close()
 
-        # Render the filtered images in the filtered_images.html template
-        return render_template("filtered_images.html", image_info=image_info, loc=loc, day=day)
+        return render_template("filtered_images.html", image_info=image_info, loc=loc, st_date=st_date, end_date=end_date, user_id=user_id)
 
     except mysql.connector.Error as error:
         print("Failed to retrieve and display the filtered images: {}".format(error))

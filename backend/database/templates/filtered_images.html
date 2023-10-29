@@ -32,10 +32,18 @@
         {% if loc %}
             <p>Location: {{ loc }}</p>
         {% endif %}
-        {% if day %}
-            <p>Day: {{ day }}</p>
+        {% if st_date %}
+            <p>Start Date: {{ st_date }}</p>
+        {% endif %}
+        {% if end_date %}
+            <p>End Date: {{ end_date }}</p>
+        {% endif %}
+        {% if user_id %}
+            <p>User ID: {{ user_id }}</p>
         {% endif %}
     </div>
+    
+    
     
     
     <div class="filter-form">
@@ -53,6 +61,8 @@
             <th>Expiry Date</th>
             <th>Location</th>
             <th>Username</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         {% for info in image_info %}
             <tr>

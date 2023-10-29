@@ -25,14 +25,25 @@
 </head>
     <!-- Filter Form -->
     <div class="filter-form">
+        <p>Image Taken Date Range:</p>
         <form method="GET" action="/filter_images">
+            <label for="st_date">Start Date:</label>
+            <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
+    
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
+    
             <label for="loc">Location:</label>
-            <input type="text" name="loc" id="loc">
-            <label for="day">Day (YYYY-MM-DD):</label>
-            <input type="date" name="day" id="day">
+            <input type="text" name="loc" id="loc" value="{{ loc }}">
+    
+            <label for="user_id">Username:</label>
+            <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
+    
             <input type="submit" value="Filter">
         </form>
     </div>
+    
+    
 
 <body>
     
