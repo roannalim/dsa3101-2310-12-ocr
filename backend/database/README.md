@@ -16,9 +16,9 @@ Before running this Python script, make sure you have the following prerequisite
 
 2. **Dependencies:** This script relies on certain Python libraries and packages. You can install them by running the following command:
 
-   
+   ```bash
    pip install -r requirements.txt
-   
+   ```
 
 ## MySQL Server: 
 You must have access to a MySQL server where the target database resides. If you need to create the MySQL server manually, please follow your organization's guidelines or the database provider's instructions.
