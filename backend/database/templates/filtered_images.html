@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Images</title>
+    <title>Filtered Images</title>
     <style>
         img {
             max-width: 200px;  /* Adjust the max width as needed */
@@ -23,31 +23,36 @@
         }
     </style>
 </head>
-    <!-- Filter Form -->
-    <div class="filter-form">
-        <p>Image Taken Date Range:</p>
-        <form method="GET" action="/filter_images">
-            <label for="st_date">Start Date:</label>
-            <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
+<body>
+    <h1 style="text-align: center;">Filtered Images</h1>
     
-            <label for="end_date">End Date:</label>
-            <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
-    
-            <label for="loc">Location:</label>
-            <input type="text" name="loc" id="loc" value="{{ loc }}">
-    
-            <label for="user_id">Username:</label>
-            <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
-    
-            <input type="submit" value="Filter">
-        </form>
+    <!-- Filter Criteria Display -->
+    <div>
+        <p>Filter Criteria:</p>
+        {% if loc %}
+            <p>Location: {{ loc }}</p>
+        {% endif %}
+        {% if st_date %}
+            <p>Start Date: {{ st_date }}</p>
+        {% endif %}
+        {% if end_date %}
+            <p>End Date: {{ end_date }}</p>
+        {% endif %}
+        {% if user_id %}
+            <p>User ID: {{ user_id }}</p>
+        {% endif %}
     </div>
     
     
-
-<body>
     
-    <h1 style="text-align: center;">View Images</h1>
+    
+    <div class="filter-form">
+        <form method="GET" action="/view_images">
+            <button type="submit">View All Images</button>
+        </form>
+    </div>
+
+    <!-- Display Filtered Images -->
     <table>
         <tr>
             <th>Image ID</th>

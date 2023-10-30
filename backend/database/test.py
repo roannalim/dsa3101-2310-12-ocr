@@ -206,7 +206,7 @@ def deleteUsersTable():
 # deleteUsersTable()
 
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='C:/Users/wenji/Desktop/NUS Y3S1/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
+UPLOAD_FOLDER='C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\dsa3101-2310-12-ocr\\backend\\database\\uploads'
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page
@@ -359,6 +359,7 @@ def cancelled():
 # Define a custom Jinja2 filter to convert the image to Base64
 def image_to_base64(image):
     if image:
+        image = image.convert('RGB') ##ADDED HERE CUS OF SOME ERROR
         image_bytes = BytesIO()
         image.save(image_bytes, format="JPEG")
         base64_data = base64.b64encode(image_bytes.getvalue()).decode("utf-8")
@@ -515,6 +516,85 @@ def delete_image():
         print("Failed to delete the image: {}".format(error))
 
 #1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
+@app.route('/filter_images', methods=['GET'])
+def filter_images():
+    loc = request.args.get('loc')
+    st_date = request.args.get('st_date')
+    end_date = request.args.get('end_date')
+    user_id = request.args.get('user_id')
+
+    if not loc:
+        loc = None
+    if not st_date:
+        st_date = None
+    if not end_date:
+        end_date = None
+    if not user_id:
+        user_id = None
+
+    try:
+        connection = mysql.connector.connect(
+            host=os.getenv("MYSQL_HOST"),
+            database=os.getenv("MYSQL_DB"),
+            user=os.getenv("MYSQL_USER"),
+            password=os.getenv("MYSQL_PASSWORD")
+        )
+        cursor = connection.cursor()
+        
+        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images WHERE 1=1"
+
+        params = []  # Create an empty list to store the parameters
+
+        if st_date and end_date:
+            query += " AND DATE(start_date) BETWEEN %s AND %s"
+            params.extend([st_date, end_date])
+        elif st_date:
+            query += " AND DATE(start_date) >= %s"
+            params.append(st_date)
+        elif end_date:
+            query += " AND DATE(start_date) <= %s"
+            params.append(end_date)
+
+        if loc:
+            query += " AND location = %s"
+            params.append(loc)
+
+        if user_id:
+            query += " AND username = %s"
+            params.append(user_id)
+
+        cursor.execute(query, params)  # Pass the query and parameters to cursor.execute
+
+
+
+        results = cursor.fetchall()
+
+        image_info = []
+
+        if results:
+            for result in results:
+                image_id, image_data, start_date, expiry_date, location, username = result
+                if image_data:
+                    image = Image.open(BytesIO(image_data))
+                    image_info.append({
+                        'image_id': image_id,
+                        'image': image,
+                        'start_date': start_date,
+                        'expiry_date': expiry_date,
+                        'location': location,
+                        'username': username
+                    })
+                else:
+                    print("Empty image data found in a record. Skipping.")
+
+        cursor.close()
+        connection.close()
+
+        return render_template("filtered_images.html", image_info=image_info, loc=loc, st_date=st_date, end_date=end_date, user_id=user_id)
+
+    except mysql.connector.Error as error:
+        print("Failed to retrieve and display the filtered images: {}".format(error))
+
 
 if __name__ == 'main':
     app.run(debug=True)
