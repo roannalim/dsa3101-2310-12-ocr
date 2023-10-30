@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Images</title>
+    <style>
+        img {
+            max-width: 200px;  /* Adjust the max width as needed */
+            max-height: 200px; /* Adjust the max height as needed */
+            display: block;
+            margin: 0 auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center; /* Center-align text */
+        }
+        th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+    </style>
+</head>
+    <!-- Filter Form -->
+    <div class="filter-form">
+        <p>Image Taken Date Range:</p>
+        <form method="GET" action="/filter_images">
+            <label for="st_date">Start Date:</label>
+            <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
+    
+            <label for="end_date">End Date:</label>
+            <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
+    
+            <label for="loc">Location:</label>
+            <input type="text" name="loc" id="loc" value="{{ loc }}">
+    
+            <label for="user_id">Username:</label>
+            <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
+    
+            <input type="submit" value="Filter">
+        </form>
+    </div>
+    
+    
+
+<body>
+    
+    <h1 style="text-align: center;">View Images</h1>
+    <table>
+        <tr>
+            <th>Image ID</th>
+            <th>Image</th>
+            <th>Start Date</th>
+            <th>Expiry Date</th>
+            <th>Location</th>
+            <th>Username</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {% for info in image_info %}
+            <tr>
+                <td>{{ info['image_id'] }}</td>
+                <td>
+                    <img src="data:image/jpeg;base64, {{ info['image']|to_base64 }}" alt="Image">
+                </td>
+                <td>{{ info['start_date'] }}</td>
+                <td>{{ info['expiry_date'] }}</td>
+                <td>{{ info['location'] }}</td>
+                <td>{{ info['username'] }}</td>
+                <td>
+                    <form method="GET" action="/edit_data">
+                        <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
+                        <button type="submit">Edit</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="/delete_image">
+                        <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

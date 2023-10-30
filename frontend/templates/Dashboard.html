@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding-top: 40px; 
+        }
+
+        /* Style for the two boxes */
+        .dashboard-container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%; 
+            margin: 20px auto;
+            padding-left: 0px;
+        }
+
+        .graphs {
+            flex: 0 0 70%;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            height: 450px; /* Adjust as needed */
+            position: relative;
+        }
+
+        .bin-center {
+            align-items: center;
+            flex: 0 0 30%;
+            border: 1px solid #e0e0e0;
+            padding: 5px;
+        }
+
+        .bin-center h3 {
+            text-align: center;
+        }
+
+        /* Style for the dropdown and button */
+        .bin-center select, 
+        .bin-center button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .return-button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            margin-top: 0px;
+
+        }
+
+        .return-button:hover {
+            background-color: #006400; /* Dark green on hover */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+
+    <h2>Bin Center Dashboard</h2>
+
+    <div class="dashboard-container">
+        <div class="graphs">
+            <!-- Placeholder for the graphs -->
+            <p>Graphs will be displayed here...</p>
+        </div>
+
+        <div class="bin-center">
+            <h3>Bin Center</h3>
+            <input list="binCenters" name="binCenter" placeholder="Choose or type a bin center">
+            <datalist id="binCenters">
+                <option value="UTown">
+                <option value="CAPT">
+                <option value="RichTown">
+                <option value="RC4">
+                <option value="RichmondTown">
+                <!-- ... add more options as needed ... -->
+            </datalist>
+            <button onclick="fetchGraphs()">Confirm</button>
+        </div>
+    </div>
+
+    <button class="return-button" onclick="window.location.href = '/home';">Home Page</button>
+
+    <script>
+        function fetchGraphs() {
+            // Placeholder for logic to send a GET request to the server to fetch and display the graphs
+            console.log("Fetching graphs for selected bin center...");
+        }
+    </script>
+</body>
+</html>

@@ -28,6 +28,10 @@
             
         }
 
+        button:hover {
+            background-color: #e9f6fb; /* Grey on hover */
+        }
+
         #loginModal {
             display: none;
             display: flex;
@@ -51,6 +55,7 @@
             font-size: 30px;
             cursor: pointer;
             color: #333;
+            border-radius: 5px; /* Rounded corners */
         }
 
         #loginModal button:hover {
@@ -99,7 +104,7 @@
     
     <!-- Image container -->
     <div class="image-container">
-        <img src="../Web Images/zero_waste.jpg" alt="Your Image Description" class="centered-image">
+        <img src="{{ url_for('static', filename='Web Images/zero_waste.jpg') }}" alt="Zero Waste Image" class="centered-image">
     </div>
 
     <!-- Login Modal -->

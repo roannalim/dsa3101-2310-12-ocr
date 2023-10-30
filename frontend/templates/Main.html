@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Main Page</title>
+    <title>Upload Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,35 +26,108 @@
 
         .button-container {
             display: flex;
-            justify-content: center;
-            gap: 100px; /* Space between buttons */
-        }
-
-        button {
-            font-size: 30px;
-            padding: 20px 40px;
-            cursor: pointer;
-            width: 200px;  /* Ensuring same width for both buttons */
-            text-align: center;  /* Center text horizontally */
-
-            /* These properties ensure the content is centered vertically */
-            display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
+            gap: 40px;
         }
+
+        .box {
+            width: 250px;
+            height: 300px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .description {
+            font-size: 20px;
+        }
+
+        .go-button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 200px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px; /* Rounded corners*/
+        }
+
+        .go-button:hover {
+            background-color: #006400;
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="file"] {
+            padding: 2px;
+            margin-left: 53px;
+        }
+
     </style>
 </head>
+
 <body>
     <header>
         <h1>What-A-Waste</h1>
     </header>
 
     <div class="button-container">
-        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
-            <input type="file" name="file" accept="image/*" id="fileInput" style="display: none" onchange="form.submit()">
-            <button type="button" onclick="document.getElementById('fileInput').click();">Upload</button>
-        </form>
-        <button onclick="location.href='/dashboard'">Dashboard</button>
+
+        <div class="box">
+            <p class="description">Upload an image to get started!</p>
+            <img src="{{ url_for('static', filename='Web Images/upload_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Upload Logo -->
+
+            <form method="POST" enctype="multipart/form-data" action="/image_processing" onsubmit="return validateForm()">
+                <input type="file" name="image" id="file-input" accept=".jpg, .jpeg, .png, .heic">
+                <button type="submit" class="go-button">Go</button>
+                <p id="error-message" style="color: red; display: none; ">Please select an image to upload.</p>
+            </form>
+        </div>
+
+        <div class="box">
+            <p class="description">Visit the dashboard for more insights.</p>
+            <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
+            <form action="/dashboard" method="get">
+                <button type="submit" class="go-button">Dashboard</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <p class="description">View History Image Records</p>
+            <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="History Logo" class="logo"> <!-- History Logo -->
+            <form action="/history" method="get">
+                <button type="submit" class="go-button">History</button>
+            </form>
+        </div>
+
     </div>
+
+    <script>
+        function validateForm() {
+            var fileInput = document.getElementById('file-input');
+            var errorMessage = document.getElementById('error-message');
+            
+            if (fileInput.files.length === 0) {
+                errorMessage.style.display = 'block';
+                return false;
+            } else {
+                errorMessage.style.display = 'none';
+                return true;
+            }
+        }
+    </script>
+
 </body>
 </html>
