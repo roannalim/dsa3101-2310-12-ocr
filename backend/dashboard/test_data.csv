@@ -1,9 +1,15 @@
-image_id,image,start_date,expiry_date,location,username,weight_kg,remarks
-1,NULL,16/10/2023,25/1/2024,College of Alice and Peter Tan,user1,890,random number
-2,NULL,16/10/2023,25/1/2024,Residential College 4,user1,1040,random number
+image_id,image,start_date,expiry_date,location,username,gross_weight_kg,remarks
+1,NULL,16/10/2023,25/1/2024,College of Alice and Peter Tan,user1,890,dummy value
+2,NULL,16/10/2023,25/1/2024,Residential College 4,user1,1040,dummy value
 3,NULL,16/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,370,cinnamon_before
 4,NULL,16/10/2023,25/1/2024,UTown Residences,user1,160,utown_residence_before
-5,NULL,17/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,capt_after
-6,NULL,17/10/2023,25/1/2024,Residential College 4,user1,1940,rc4_after
-7,NULL,17/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,cinnamon_after
-8,NULL,17/10/2023,25/1/2024,UTown Residences,user1,210,utown_residence_after
+5,NULL,16/10/2023,25/1/2024,Yale-NUS Cendana College,user1,1420,dummy value
+6,NULL,16/10/2023,25/1/2024,Yale-NUS Elm College,user1,1690,dummy value
+7,NULL,16/10/2023,25/1/2024,Start,user1,0,dummy value
+8,NULL,17/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,capt_after
+9,NULL,17/10/2023,25/1/2024,Residential College 4,user1,1940,rc4_after
+10,NULL,17/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,cinnamon_after
+11,NULL,17/10/2023,25/1/2024,UTown Residences,user1,210,utown_residence_after
+12,NULL,17/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+13,NULL,17/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+14,NULL,17/10/2023,25/1/2024,Start,user1,0,dummy value

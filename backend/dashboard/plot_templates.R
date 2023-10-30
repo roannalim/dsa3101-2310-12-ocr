@@ -1,5 +1,6 @@
 #install.packages("ggplot2")
 #install.packages("gridExtra")
+setwd("C:/Users/wenji/Desktop/NUS Academics/NUS Y3S1/DSA3101/dsa3101-2310-12-ocr/backend/dashboard")
 
 library(ggplot2)
 library(ggrepel)
@@ -16,15 +17,37 @@ df_processed = df
 df_processed$start_date = date(parse_date_time(df$start_date, "dmy", tz = "Singapore"))
 df_processed$expiry_date = date(parse_date_time(df$expiry_date, "dmy", tz = "Singapore"))
 
+df_processed = 
+  df_processed %>%
+  arrange(start_date, match(location, c("Start",
+                                        "UTown Residences",
+                                        "Tembusu / Cinnamon College",
+                                        "College of Alice and Peter Tan",
+                                        "Residential College 4",
+                                        "Yale-NUS Cendana College",
+                                        "Yale-NUS Elm College"))) %>%
+  group_by(start_date) %>%
+  mutate(calculated_weight_kg = gross_weight_kg-lag(gross_weight_kg, 1)) %>%
+  ungroup() %>% 
+  drop_na(calculated_weight_kg)
+
 #1. Tabular data
+##filters
+table_selected_start_date = date(parse_date_time("01-10-2023", "dmy", tz = "Singapore"))
+#table_selected_end_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
+table_selected_end_date = Sys.Date()
+table_df_processed_filtered = 
+  df_processed %>%
+  filter(between(start_date, table_selected_start_date, table_selected_end_date))
+
 
 ##Summarise by location
 location_df = read.csv("location_database.csv")
 
 dashboard_tabular = 
-  df_processed %>% 
+  table_df_processed_filtered %>% 
   group_by(location, .drop = FALSE) %>% 
-  summarise("Total Weight in kg" = sum(weight_kg), .groups = 'keep')
+  summarise("Total Generated Waste (kg)" = sum(calculated_weight_kg), .groups = 'keep')
 
 dashboard_tabular_with_loc = 
   location_df %>%
@@ -48,7 +71,7 @@ DT::datatable(dashboard_tabular_with_loc,
 #2. Bar Charts
 ##filters
 bar_selected_start_date = date(parse_date_time("01-10-2023", "dmy", tz = "Singapore"))
-#selected_end_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
+#bar_selected_end_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
 bar_selected_end_date = Sys.Date()
 bar_df_processed_filtered = 
   df_processed %>%
@@ -56,14 +79,14 @@ bar_df_processed_filtered =
 
 ##plot
 ggplot(data = bar_df_processed_filtered,
-       aes(x = start_date, y = weight_kg, fill = location)) +
+       aes(x = start_date, y = calculated_weight_kg, fill = location)) +
   geom_bar(stat = 'identity', position = "dodge") + 
   labs(x = "Date",
        y = "Weight (kg)",
        title = "Total weight of General Waste collected by Bin Centre") +
   guides(fill = guide_legend(title = "Bin Centre")) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
-  geom_text(aes(label = weight_kg), 
+  geom_text(aes(label = calculated_weight_kg), 
             vjust = -0.4, 
             position = position_dodge(0.9), 
             size = 3.5,
@@ -71,8 +94,8 @@ ggplot(data = bar_df_processed_filtered,
 
 #3. Line Plot
 ##filters
-line_selected_start_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
-#selected_end_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
+line_selected_start_date = date(parse_date_time("01-10-2023", "dmy", tz = "Singapore"))
+#line_selected_end_date = date(parse_date_time("16-10-2023", "dmy", tz = "Singapore"))
 line_selected_end_date = Sys.Date()
 line_df_processed_filtered = 
   df_processed %>%
@@ -82,19 +105,19 @@ line_df_processed_filtered =
 dashboard_line = 
   line_df_processed_filtered %>% 
   group_by(start_date, .drop = FALSE) %>% 
-  summarise("Total Weight in kg" = sum(weight_kg), .groups = 'keep')
+  summarise("Total Generated Waste (kg)" = sum(calculated_weight_kg), .groups = 'keep')
 
 ##plot
 ggplot(data = dashboard_line, 
-       aes(x = start_date, y = `Total Weight in kg`)) + 
+       aes(x = start_date, y = `Total Generated Waste (kg)`)) + 
   geom_line(linewidth = 1.5, color = 'gray') +  
   geom_point(size = 3, color = 'gray') +
-  geom_text(aes(label = `Total Weight in kg`), 
+  geom_text(aes(label = `Total Generated Waste (kg)`), 
             #position = position_jitter(width = 0, height = 300), 
             vjust = 2,
             size = 3.5,
             fontface = "bold") +
-  ylim(c(min(dashboard_line$`Total Weight in kg`-200),max(dashboard_line$`Total Weight in kg`)))+
+  ylim(c(min(dashboard_line$`Total Generated Waste (kg)`-200),max(dashboard_line$`Total Generated Waste (kg)`)))+
   labs(x = "Date",
        y = "Weight (kg)",
        title = "Total weight of General Waste collected by Date") +
