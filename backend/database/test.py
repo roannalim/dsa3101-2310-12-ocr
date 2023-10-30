@@ -206,7 +206,7 @@ def deleteUsersTable():
 # deleteUsersTable()
 
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/flask_mysql/uploads'
+UPLOAD_FOLDER='C:/Users/wenji/Desktop/NUS Y3S1/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page
