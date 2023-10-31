@@ -126,6 +126,7 @@
                 <th>Expiry Date</th>
                 <th>Location</th>
                 <th>Username</th>
+                <th>Gross Weight</th> 
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -139,6 +140,7 @@
                     <td>{{ info['expiry_date'] }}</td>
                     <td>{{ info['location'] }}</td>
                     <td>{{ info['username'] }}</td>
+                    <td>{{ info['gross_weight'] }}</td>
                     <td>
                         <form method="GET" action="/edit_data">
                             <input type="hidden" name="image_id" value="{{ info['image_id'] }}">

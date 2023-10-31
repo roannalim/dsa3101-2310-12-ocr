@@ -39,6 +39,38 @@ def storingUser(file):
 # Call the storingUser function to store the username and password
 users = storingUser(users_file)
 
+# Read csv file to store the images data
+images_file = pd.read_csv('test_data.csv')
+# Create a dictionary to store the images data from the csv file
+def storingImages(file):
+    images = {}
+
+    # for loop to read the username and password from the csv file
+    for index, row in file.iterrows():
+        # another line to read 10 images and store as image,, binary
+            # Assuming you have a column in your CSV that contains file paths of the images
+            image_path = f'C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\dsa3101-2310-12-ocr\\backend\\database\\images\\{index}.jpg'  # Adjust this to match your column name
+
+            # Read the image file as binary data
+            with open(image_path, 'rb') as f:
+                binary_image_data = f.read() ##we nd this to replace images
+
+            # Store the binary image data in the dictionary
+            image = binary_image_data
+            start_date = row['start_date'] 
+            expiry_date = row['expiry_date']
+            location=row['location']
+            username=row['username']
+            gross_weight=row['gross_weight']
+
+            # Create a dictionary to store the images data         
+            images[index] = image, start_date, expiry_date, location, username, gross_weight
+    return images  
+
+# Call the storingUser function to store the images data
+images = storingImages(images_file)
+
+
 def is_authenticated(username, password):
     return users.get(username) == password
 
@@ -118,6 +150,7 @@ def insertUsersTable(users):
         cursor.close()
         print("Data inserted successfully.")
 
+
     except Exception as e:
         print(f'An error occurred: {str(e)}')
 
@@ -141,6 +174,7 @@ def createImagesTable():
             expiry_date DATE NOT NULL,
             location VARCHAR(45) NOT NULL,
             username VARCHAR(45) NOT NULL,
+            gross_weight int(10) NOT NULL,
             PRIMARY KEY (image_id)
         );
         """
@@ -156,6 +190,33 @@ def createImagesTable():
 
 # Call the createImagesTable function to create the table
 createImagesTable()
+
+# Insert data into the images table
+def insertImagesTable(images):
+    try:
+        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
+                                             database=os.getenv("MYSQL_DB"),
+                                             user=os.getenv("MYSQL_USER"),
+                                             password=os.getenv("MYSQL_PASSWORD"))
+
+        cursor = connection.cursor()
+        insert_query = """
+        INSERT INTO images (image, start_date, expiry_date, location, username, gross_weight) VALUES (%s, %s, %s, %s, %s, %s);
+        """
+        # for loop to execute the insert query from users
+        for image_id, (image, start_date, expiry_date, location, username, gross_weight) in images.items():
+            cursor.execute(insert_query, (image, start_date, expiry_date, location, username, gross_weight))
+            
+        connection.commit()
+        cursor.close()
+        print("Data inserted successfully.")
+
+
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+
+# Call the insertImagesTable function to insert data into the table
+insertImagesTable(images)
 
 # Delete the images table
 def deleteImagesTable():
@@ -290,12 +351,14 @@ def submit():
             # Calculate the expiry_date as 3 months from the start_date
             expiry_date = start_date + timedelta(days=90)
 
+            ###REPLACE THIS WITH THE GROSS WEIGHT EXTRACTED USING OCR
+            gross_weight=0
             #Save the image to a folder
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_n))
 
             # Insert data into the MySQL database
-            cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username) VALUES (%s, %s, %s, %s, %s)",
-                            (image_data, start_date, expiry_date, input['location'], session['username']))
+            cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username, gross_weight) VALUES (%s, %s, %s, %s, %s, %s)",
+                            (image_data, start_date, expiry_date, input['location'], session['username'], gross_weight))
             connection.commit()
 
             # Retrieve the auto-incremented ID of the inserted record
@@ -379,7 +442,7 @@ def view_images():
         cursor = connection.cursor()
         
         # Retrieve image and associated information from the database
-        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images"
+        query = "SELECT image_id, image, start_date, expiry_date, location, username, gross_weight FROM images"
 
         cursor.execute(query)
         results = cursor.fetchall()
@@ -388,7 +451,7 @@ def view_images():
 
         if results:
             for result in results:
-                image_id, image_data, start_date, expiry_date, location, username = result
+                image_id, image_data, start_date, expiry_date, location, username, gross_weight = result
                 if image_data:
                     image = Image.open(BytesIO(image_data))
                     image_info.append({
@@ -397,7 +460,8 @@ def view_images():
                         'start_date': start_date,
                         'expiry_date': expiry_date,
                         'location': location,
-                        'username': username
+                        'username': username,
+                        'gross_weight':gross_weight
                     })
                 else:
                     print("Empty image data found in a record. Skipping.")
@@ -426,12 +490,12 @@ def edit_data():
             cursor = connection.cursor()
             
             # Retrieve image and associated information from the database
-            query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images WHERE image_id = %s"
+            query = "SELECT image_id, image, start_date, expiry_date, location, username, gross_weight FROM images WHERE image_id = %s"
             cursor.execute(query, (image_id,))
             result = cursor.fetchone()
 
             if result:
-                image_id, image_data, start_date, expiry_date, location, username = result
+                image_id, image_data, start_date, expiry_date, location, username, gross_weight = result
                 if image_data:
                     image = Image.open(BytesIO(image_data))
                     image_info = {
@@ -440,7 +504,8 @@ def edit_data():
                         'start_date': start_date,
                         'expiry_date': expiry_date,
                         'location': location,
-                        'username': username
+                        'username': username,
+                        'gross_weight':gross_weight
                     }
                 else:
                     print("Empty image data found for the selected image ID.")
@@ -464,6 +529,7 @@ def edit_data():
             expiry_date = request.form.get('expiry_date')
             location = request.form.get('location')
             username = request.form.get('username')
+            gross_weight=request.form.get('gross_weight')
             
             try:
                 connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
@@ -473,8 +539,8 @@ def edit_data():
                 cursor = connection.cursor()
                 
                 # Update the image details in the database
-                query = "UPDATE images SET start_date = %s, expiry_date = %s, location = %s, username = %s WHERE image_id = %s"
-                cursor.execute(query, (start_date, expiry_date, location, username, image_id))
+                query = "UPDATE images SET start_date = %s, expiry_date = %s, location = %s, username = %s, gross_weight=%s WHERE image_id = %s"
+                cursor.execute(query, (start_date, expiry_date, location, username,gross_weight, image_id))
                 connection.commit()
 
                 cursor.close()
@@ -541,7 +607,7 @@ def filter_images():
         )
         cursor = connection.cursor()
         
-        query = "SELECT image_id, image, start_date, expiry_date, location, username FROM images WHERE 1=1"
+        query = "SELECT image_id, image, start_date, expiry_date, location, username, gross_weight FROM images WHERE 1=1"
 
         params = []  # Create an empty list to store the parameters
 
@@ -573,7 +639,7 @@ def filter_images():
 
         if results:
             for result in results:
-                image_id, image_data, start_date, expiry_date, location, username = result
+                image_id, image_data, start_date, expiry_date, location, username, gross_weight = result
                 if image_data:
                     image = Image.open(BytesIO(image_data))
                     image_info.append({
@@ -582,7 +648,8 @@ def filter_images():
                         'start_date': start_date,
                         'expiry_date': expiry_date,
                         'location': location,
-                        'username': username
+                        'username': username,
+                        'gross_weight':gross_weight
                     })
                 else:
                     print("Empty image data found in a record. Skipping.")

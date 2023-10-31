@@ -144,8 +144,10 @@
             </select>
 
 
-            <label for="username">Username:</label>
-            <input type="text" name="username" value="{{ image_info['username'] }}">
+            <input type="text" name="username" value="{{ image_info['username'] }}"><br>
+            <label for="gross_weight">Gross Weight:</label>
+            <input type="int" name="gross_weight" value="{{ image_info['gross_weight'] }}"><br>
+
 
             <div class="button-container">
                 <button type="submit" name="action" value="update" class="submit-button">Update</button>
