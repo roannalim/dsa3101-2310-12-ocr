@@ -35,6 +35,8 @@
         th {
             background-color: #f2f2f2; /* Light gray background for table headers */
         }
+
+
         .home-button {
             font-size: 25px;
             padding: 15px 25px;
@@ -55,6 +57,10 @@
         .filter-form {
             padding-top: 20px;
             padding-left: 10px;
+
+            align-items: center;
+            justify-content: center;
+            display: flex;
         }
 
         .image-table {
@@ -62,6 +68,19 @@
             padding-left: 20px;
             padding-right: 20px;
         }
+
+        .filter-button {
+          font-size: 18px;       /* Larger font size */
+          padding: 3px 10px;    /* Padding inside the button; Y-axis X-axis */
+          width: auto;           /* Adjust width as needed, or use 'auto' for natural width */
+          height: auto;          /* Adjust height as needed, or use 'auto' for natural height */
+          cursor: pointer;       /* Changes the cursor to signify it's clickable */
+          border: 1px solid #ccc; /* Optional: adds a border */
+          border-radius: 5px;    /* Optional: rounds the corners */
+          background-color: #f8f8f8; /* Optional: background color */
+          /* Add other styles like box-shadow, text color, etc., as desired */
+        }
+
     </style>
 </head>
 
@@ -93,7 +112,7 @@
             <label for="user_id">Username:</label>
             <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
     
-            <input type="submit" value="Filter">
+            <input type="submit" value="Filter" class="filter-button">
         </form>
     </div>
     
