@@ -2,9 +2,126 @@
 <html>
 <head>
     <title>Login</title>
+    <style>
+        /* Basic styling for positioning */
+        body, html {
+            font-family: Arial, sans-serif;
+            height: 100%; /* Ensure full viewport height */
+            margin: 0;    /* Remove default margin */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            padding-left: 50px;
+            background-color: #f4f4f4;
+        }
+
+        button {
+            width: 120px;       /* Adjust the width as needed */
+            height: 40px;       /* Adjust the height as needed */
+            font-size: 25px;    /* Adjust the font size as needed */
+            padding: 2px 16px;  /* Adjust the padding for top/bottom and left/right respectively */
+            cursor: pointer;    /* Changes the mouse cursor to a hand when hovering over the button */
+            
+        }
+
+        button:hover {
+            background-color: #e9f6fb; /* Grey on hover */
+        }
+
+        #loginModal {
+            display: none;
+            display: flex;
+            justify-content: center;  /* Center horizontally */
+            align-items: center;      /* Center vertically */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #loginModal button {
+            background-color: transparent;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            color: #333;
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        #loginModal button:hover {
+            color: red;
+        }
+
+        .modal-content {
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;  /* Center the text and inline elements */
+            font-size: 18px;
+        }
+
+        .modal-content input[type="text"],
+        .modal-content input[type="password"] {
+            width: 80%;             /* Make input fields take up more of the modal's width */
+            padding: 10px;          /* Increase padding for better aesthetics */
+            font-size: 16px;        /* Larger font size for inputs */
+            margin: 10px 0;         /* Space out the input fields */
+        }
+
+        .modal-content input[type="submit"] {
+            padding: 10px 10px;     /* Add padding to the submit button */
+            font-size: 16px;        /* Larger font size for the button */
+        }
+
+        /* Image centering styles */
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100% - 50px); /* Subtracting approximate height of the header */
+        }
+
+        .centered-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
+    <header>
+        <h1>What-A-Waste</h1>
+        <div>
+            <button onclick="openLoginModal()">Login</button>
+        </div>
+    </header>
+
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='Web Images/zero_waste.jpg') }}" alt="Zero Waste Image" class="centered-image">
+    </div>
+
+
+    <!-- Login Modal -->
+    <div id="loginModal" style="display:none;"> <!-- Added inline style to hide by default -->
+        <button onclick="closeLoginModal()" style="position: absolute; top: 15px; right: 0px;">&times;</button>
+        <div class="modal-content">
+            <h1>Login</h1>
+            <form action="/" method="post">
+                Username: <input type="text" name="username"><br><br>
+                Password: <input type="password" name="password" required><br><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
     <form method="POST" action="/">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -14,5 +131,16 @@
         <br>
         <input type="submit" value="Login">
     </form>
+
+    <script>
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+    </script>
 </body>
 </html>
