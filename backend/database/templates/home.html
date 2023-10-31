@@ -42,6 +42,7 @@
             justify-content: space-between;
             align-items: center;
             text-align: center;
+            background-color: #fff; 
         }
 
         .description {
@@ -75,14 +76,57 @@
             margin-left: 53px;
         }
 
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure the image is at the back */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3; /* Set the opacity to 30% */
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: #f0baba;
+        }
+
     </style>
 </head>
 
 <body>
     <header>
         <h1>What-A-Waste</h1>
+        <div>
+            <form action="/" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
     </header>
-
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
+    </div>
     <div class="button-container">
         <div class="box">
             <p class="description">Upload an image to get started!</p>
@@ -93,7 +137,7 @@
 
         <div class="box">
             <p class="description">Visit the dashboard for more insights.</p>
-            <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
+            <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
 
             <form action="/dashboard" method="get">
                 <button type="submit" class="go-button">Dashboard</button>
