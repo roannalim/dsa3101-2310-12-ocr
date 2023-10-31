@@ -78,7 +78,6 @@
           border: 1px solid #ccc; /* Optional: adds a border */
           border-radius: 5px;    /* Optional: rounds the corners */
           background-color: #f8f8f8; /* Optional: background color */
-          /* Add other styles like box-shadow, text color, etc., as desired */
         }
 
     </style>
@@ -99,6 +98,7 @@
 <body>
     <!-- Filter Form -->
     <div class="filter-form">
+        <p>Image Taken Date Range:</p>
         <form method="GET" action="/filter_images">
             <label for="st_date">Start Date:</label>
             <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
