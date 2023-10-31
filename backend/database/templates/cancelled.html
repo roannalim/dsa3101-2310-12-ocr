@@ -1,11 +1,112 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Upload Cancelled</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: #f0baba;
+        }
+
+        .box {
+            width: 350px;
+            height: 380px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .confirmation-message {
+            margin-bottom: 1px;
+        }
+
+        .return-button {
+            font-size: 20px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 250px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+    </style>
 </head>
+
 <body>
-    <h1>Upload Cancelled</h1>
-    <p>Your image upload has been cancelled.</p>
-    <a href="{{ url_for('submit') }}"><button type="button">Return to upload page</button></a>
+    <header>
+        <h1>What-A-Waste</h1>
+        <div>
+            <form action="/" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="button-container">
+        <div class="box">
+            <h1>Upload Cancelled</h1>
+            <img src="{{ url_for('static', filename='Web Images/cross_icon.png') }}" alt="Cross Logo" class="logo">
+            <p class="confirmation-message">Your image upload has been cancelled</p>
+            <a href="{{ url_for('submit') }}"><button type="button" class="return-button">Return to upload page</button></a>
+        </div>
+    </div>
 </body>
 </html>
