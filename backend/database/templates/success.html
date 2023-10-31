@@ -24,7 +24,21 @@
             text-align: left;
             background-color: #f4f4f4;
         }
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure the image is at the back */
+        }
 
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3; /* Set the opacity to 30% */
+        }
         .button-container {
             display: flex;
             flex-direction: column; /* Center items vertically */
@@ -75,6 +89,10 @@
     <header>
         <h1>What-A-Waste</h1>
     </header>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
+    </div>
+
     <div class="button-container">
         <div class="box">
             <img src="{{ url_for('static', filename='Web Images/thank-you-page-gif1.gif') }}" alt="Thank You GIF" width="180" height="180">
