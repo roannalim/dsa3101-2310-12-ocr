@@ -2,12 +2,32 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import pandas as pd
 from datetime import datetime
+from flask_babel import Babel
 
 
 app = Flask(__name__)
 app.secret_key = "strongPassword"
 app.config['UPLOAD_FOLDER'] = 'static/uploaded_images'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok = True)
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = './translations'
+
+babel = Babel(app)
+
+@app.before_request
+def before_request():
+    # If the 'lang' parameter is specified in the URL, use it as the locale
+    lang = request.args.get('lang')
+    if lang:
+        session['lang'] = lang
+    elif 'lang' not in session:
+        session['lang'] = app.config['BABEL_DEFAULT_LOCALE']
+
+def get_locale():
+    # If the 'lang' parameter is specified in the URL, use it as the locale
+    return session.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
+
+babel.init_app(app, locale_selector=get_locale)
 
 @app.route('/')
 def login():
