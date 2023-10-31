@@ -3,14 +3,6 @@
 <head>
     <title>Filtered Images</title>
     <style>
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            padding-left: 50px;
-            background-color: #f4f4f4;
-        }
         img {
             max-width: 200px;  /* Adjust the max width as needed */
             max-height: 200px; /* Adjust the max height as needed */
@@ -29,6 +21,15 @@
         th {
             background-color: #f2f2f2; /* Light gray background for table headers */
         }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            padding-left: 50px;
+            background-color: #f4f4f4;
+        }
+
         .home-button {
             font-size: 20px;
             padding: 15px 15px;
@@ -55,55 +56,46 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .filter-list {
-            list-style: none;
-            padding: 0;
+        .filter-form{
+            padding-bottom: 10px ;
+            font-size: 20;
         }
-
-        .filter-label {
-            font-weight: bold;
-            margin-right: 5px;
-            color: #333;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
     </style>
 </head>
-<header>
-        <h1>What-A-Waste</h1>
-        <div>
-            <form action="/home" method="get">
-                <button type="submit" class="home-button">Home Page</button>
-            </form>
-        </div>
-</header>
 
 <body>
-    <h1 style="text-align: center;">Filtered Images</h1>
+    <header>
+            <h1>What-A-Waste</h1>
+            <div>
+                <form action="/home" method="get">
+                    <button type="submit" class="home-button" >Home Page</button>
+                </form>
+            </div>
+    </header>
 
+    <h1 style="text-align: center;">Filtered Images</h1>
+    
+    <!-- Filter Criteria Display -->
     <div class="filter-criteria-box">
         <h2>Filter Criteria:</h2>
-        <ul class="filter-list">
-            {% if loc %}
-            <li><span class="filter-label">Location:</span> {{ loc }}</li>
-            {% endif %}
-            {% if st_date %}
-            <li><span class="filter-label">Start Date:</span> {{ st_date }}</li>
-            {% endif %}
-            <li><span class="filter-label">End Date:</span> {{ end_date }}</li>
-            {% endif %}
-            <li><span class="filter-label">User ID:</span> {{ user_id }}</li>
-            {% endif %}
-        </ul>
+        {% if loc %}
+            <p>Location: {{ loc }}</p>
+        {% endif %}
+        {% if st_date %}
+            <p>Start Date: {{ st_date }}</p>
+        {% endif %}
+        {% if end_date %}
+            <p>End Date: {{ end_date }}</p>
+        {% endif %}
+        {% if user_id %}
+            <p>User ID: {{ user_id }}</p>
+        {% endif %}
     </div>
-
+    
 
     <div class="filter-form">
         <form method="GET" action="/view_images">
-            <button type="submit">View All Images</button>
+            <button type="submit" style="font-size: 20px; padding: 10px 20px;">Reset</button>
         </form>
     </div>
 
