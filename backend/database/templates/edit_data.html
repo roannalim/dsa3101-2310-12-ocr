@@ -135,13 +135,12 @@
 
 
             <select name="location" id="locationSelect" required>
-                <option value="" disabled selected>Select an option</option>
-                <option value="UTown">UTown</option>
-                <option value="PGP">PGP</option>
-                <option value="UTR">UTR</option>
-                <option value="CAPT">CAPT</option>
-                <option value="Tembusu">Tembusu</option>
-            </select>
+                <option value="UTown" {{ 'selected' if image_info['location'] == 'UTown' else '' }}>UTown</option>
+                <option value="PGP" {{ 'selected' if image_info['location'] == 'PGP' else '' }}>PGP</option>
+                <option value="UTR" {{ 'selected' if image_info['location'] == 'UTR' else '' }}>UTR</option>
+                <option value="CAPT" {{ 'selected' if image_info['location'] == 'CAPT' else '' }}>CAPT</option>
+                <option value="Tembusu" {{ 'selected' if image_info['location'] == 'Tembusu' else '' }}>Tembusu</option>
+            </select> 
 
 
             <input type="text" name="username" value="{{ image_info['username'] }}"><br>
