@@ -84,9 +84,9 @@
         <h1>What-A-Waste</h1>
     </header>
 
-    <div class = "image-container">
-        <img src = "{{ url_for(filename='uploads/' ~ file_name) }}" alt = "Uploaded Image">
-    </div>
+    <div class="image-container">
+        <img src="data:image/jpeg;base64,{{ image_data_base64 }}" alt="Uploaded Image">
+    </div>    
 
     <p>Do you want to upload the image?</p>
     <form method="post">

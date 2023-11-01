@@ -49,7 +49,7 @@ def storingImages(file):
     for index, row in file.iterrows():
         # another line to read 10 images and store as image,, binary
             # Assuming you have a column in your CSV that contains file paths of the images
-            image_path = f'C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\dsa3101-2310-12-ocr\\backend\\database\\images\\{index}.jpg'  # Adjust this to match your column name
+            image_path = f'/Users/richmondsin/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/images/{index}.jpg'  # Adjust this to match your column name
 
             # Read the image file as binary data
             with open(image_path, 'rb') as f:
@@ -267,7 +267,7 @@ def deleteUsersTable():
 # deleteUsersTable()
 
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='C:\\Users\\ACER\\Documents\\UNIY3S1\\DSA3101\\dsa3101-2310-12-ocr\\backend\\database\\uploads'
+UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page
@@ -383,7 +383,27 @@ def confirm_upload():
         image_id = session['image_id']
         file_name = session['file_name']
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
-             
+
+        image_data = None  # Initialize image_data as None
+
+        if request.method == 'GET':
+            # Fetch the image data from the database based on image_id
+            connection = mysql.connector.connect(
+                host=os.getenv("MYSQL_HOST"),
+                database=os.getenv("MYSQL_DB"),
+                user=os.getenv("MYSQL_USER"),
+                password=os.getenv("MYSQL_PASSWORD")
+            )
+            cursor = connection.cursor()
+            cursor.execute("SELECT image FROM images WHERE image_id = %s", (image_id,))
+            image_data = cursor.fetchone()
+            if image_data:
+                image_data_base64 = base64.b64encode(image_data[0]).decode('utf-8')
+            else:
+                return "Image not found in the database."
+            cursor.close()
+            connection.close()
+                    
         if request.method == 'POST':
             if request.form.get('confirm') == 'yes':
                 # User confirmed the upload, do nothing
@@ -407,7 +427,7 @@ def confirm_upload():
                 os.remove(file_path)
 
                 return redirect(url_for('cancelled'))
-        return render_template("confirm_upload.html")
+        return render_template("confirm_upload.html", image_data_base64=image_data_base64)
 
 # Define the success route
 @app.route('/success', methods=['GET'])
