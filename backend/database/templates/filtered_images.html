@@ -21,14 +21,63 @@
         th {
             background-color: #f2f2f2; /* Light gray background for table headers */
         }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            padding-left: 50px;
+            background-color: #f4f4f4;
+        }
+
+        .home-button {
+            font-size: 20px;
+            padding: 15px 15px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 150px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px; /* Rounded corners*/
+        }
+
+        .home-button:hover {
+            background-color: #006400;
+        }
+
+        .filter-criteria-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .filter-form{
+            padding-bottom: 10px ;
+            font-size: 20;
+        }
     </style>
 </head>
+
 <body>
+    <header>
+            <h1>What-A-Waste</h1>
+            <div>
+                <form action="/home" method="get">
+                    <button type="submit" class="home-button" >Home Page</button>
+                </form>
+            </div>
+    </header>
+
     <h1 style="text-align: center;">Filtered Images</h1>
     
     <!-- Filter Criteria Display -->
-    <div>
-        <p>Filter Criteria:</p>
+    <div class="filter-criteria-box">
+        <h2>Filter Criteria:</h2>
         {% if loc %}
             <p>Location: {{ loc }}</p>
         {% endif %}
@@ -43,12 +92,10 @@
         {% endif %}
     </div>
     
-    
-    
-    
+
     <div class="filter-form">
         <form method="GET" action="/view_images">
-            <button type="submit">View All Images</button>
+            <button type="submit" style="font-size: 20px; padding: 10px 20px;">Reset</button>
         </form>
     </div>
 
@@ -61,8 +108,10 @@
             <th>Expiry Date</th>
             <th>Location</th>
             <th>Username</th>
+            <th>Gross Weight</th> 
             <th>Edit</th>
             <th>Delete</th>
+
         </tr>
         {% for info in image_info %}
             <tr>
@@ -74,7 +123,9 @@
                 <td>{{ info['expiry_date'] }}</td>
                 <td>{{ info['location'] }}</td>
                 <td>{{ info['username'] }}</td>
+                <td>{{ info['gross_weight'] }}</td>
                 <td>
+
                     <form method="GET" action="/edit_data">
                         <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
                         <button type="submit">Edit</button>

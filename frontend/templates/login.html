@@ -95,11 +95,20 @@
             max-height: 100%;
         }
     </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head elements here -->
 </head>
 <body>
     <header>
         <h1>What-A-Waste</h1>
-        <button onclick="openLoginModal()">Login</button>
+        <div>
+            <button onclick="openLoginModal()">{{ _('Login') }}</button>
+            <button onclick="setLanguage('en')">{{ _('English') }}</button>
+            <button onclick="setLanguage('zh')">{{ _('Chinese') }}</button>
+            <button onclick="setLanguage('ms')">{{ _('Malay') }}</button>
+        </div>
     </header>
     
     <!-- Image container -->
@@ -108,13 +117,13 @@
     </div>
 
     <!-- Login Modal -->
-    <div id="loginModal">
+    <div id="loginModal" style="display:none;"> <!-- Added inline style to hide by default -->
         <button onclick="closeLoginModal()" style="position: absolute; top: 15px; right: 0px;">&times;</button>
         <div class="modal-content">
-            <h1>Login</h1>
+            <h1>{{ _('Login') }}</h1>
             <form action="/authenticate" method="post">
-                Username: <input type="text" name="username"><br><br>
-                Password: <input type="password" name="password"><br><br>
+                {{ _('Username') }}: <input type="text" name="username"><br><br>
+                {{ _('Password') }}: <input type="password" name="password"><br><br>
                 <input type="submit" value="Login">
             </form>
         </div>
@@ -128,6 +137,11 @@
         function closeLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
         }
+
+        function setLanguage(lang) {
+            window.location.search = '?lang=' + lang;
+        }
     </script>
 </body>
 </html>
+

@@ -2,21 +2,157 @@
 <html>
 <head>
     <title>Edit Data</title>
+    <style>
+        body {
+
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 20px;
+            padding-left: 50px;
+            text-align: left;
+            background-color: #f4f4f4;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+
+        .box {
+            width: 400px;
+            height: 550px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            background-color: #fff; 
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        label {
+            font-size: 24px;
+            text-align: left;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        select {
+            padding: 12px;
+            width: 250px;
+            font-size: 18px;
+        }
+
+        .submit-button, .cancel-button {
+            font-size: 20px;
+            padding: 15px 0;
+            cursor: pointer;
+            width: 160px; 
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .submit-button {
+            background-color: #008000;
+            color: #fff;
+        }
+
+        .submit-button:hover {
+            background-color: #006400;
+        }
+
+        .cancel-button {
+            background-color: #f4f4f4;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .cancel-button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Edit Data</h1>
-    <form method="POST" action="/edit_data">
-        <input type="hidden" name="image_id" value="{{ image_info['image_id'] }}">
-        <label for="start_date">Start Date:</label>
-        <input type="date" name="start_date" value="{{ image_info['start_date'] }}"><br>
-        <label for="expiry_date">Expiry Date:</label>
-        <input type="date" name="expiry_date" value="{{ image_info['expiry_date'] }}"><br>
-        <label for="location">Location:</label>
-        <input type="text" name="location" value="{{ image_info['location'] }}"><br>
-        <label for="username">Username:</label>
-        <input type="text" name="username" value="{{ image_info['username'] }}"><br>
-        <button type="submit" name="action" value="update">Update</button>
-        <a href="/view_images">Cancel</a>
-    </form>
+    <header>
+        <h1>What-A-Waste</h1>
+    </header>
+    
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
+    </div>
+
+    <h1 style="text-align: center; padding-top: 20px;">Edit Data</h1>
+
+    <div class="box">
+        <form method="POST" action="/edit_data">
+            <input type="hidden" name="image_id" value="{{ image_info['image_id'] }}">
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" value="{{ image_info['start_date'] }}">
+            <label for="expiry_date">Expiry Date:</label>
+            <input type="date" name="expiry_date" value="{{ image_info['expiry_date'] }}">
+            <label for="location">Location:</label>
+
+
+            <select name="location" id="locationSelect" required>
+                <option value="UTown" {{ 'selected' if image_info['location'] == 'UTown' else '' }}>UTown</option>
+                <option value="PGP" {{ 'selected' if image_info['location'] == 'PGP' else '' }}>PGP</option>
+                <option value="UTR" {{ 'selected' if image_info['location'] == 'UTR' else '' }}>UTR</option>
+                <option value="CAPT" {{ 'selected' if image_info['location'] == 'CAPT' else '' }}>CAPT</option>
+                <option value="Tembusu" {{ 'selected' if image_info['location'] == 'Tembusu' else '' }}>Tembusu</option>
+            </select> 
+
+
+            <input type="text" name="username" value="{{ image_info['username'] }}"><br>
+            <label for="gross_weight">Gross Weight:</label>
+            <input type="int" name="gross_weight" value="{{ image_info['gross_weight'] }}"><br>
+
+
+            <div class="button-container">
+                <button type="submit" name="action" value="update" class="submit-button">Update</button>
+                <a href="/view_images" class="cancel-button" style="width: 160px;">Cancel</a>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
