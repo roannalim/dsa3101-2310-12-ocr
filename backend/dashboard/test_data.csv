@@ -13,3 +13,108 @@ image_id,image,start_date,expiry_date,location,username,gross_weight_kg,remarks
 12,NULL,17/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
 13,NULL,17/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
 14,NULL,17/10/2023,25/1/2024,Start,user1,0,dummy value
+15,NULL,18/10/2023,25/1/2024,College of Alice and Peter Tan,user1,990,dummy value
+16,NULL,18/10/2023,25/1/2024,Residential College 4,user1,1060,dummy value
+17,NULL,18/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,450,dummy value
+18,NULL,18/10/2023,25/1/2024,UTown Residences,user1,200,dummy value
+19,NULL,18/10/2023,25/1/2024,Yale-NUS Cendana College,user1,1420,dummy value
+20,NULL,18/10/2023,25/1/2024,Yale-NUS Elm College,user1,1900,dummy value
+21,NULL,18/10/2023,25/1/2024,Start,user1,0,dummy value
+22,NULL,19/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1520,dummy value
+23,NULL,19/10/2023,25/1/2024,Residential College 4,user1,2000,dummy value
+24,NULL,19/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+25,NULL,19/10/2023,25/1/2024,UTown Residences,user1,300,dummy value
+26,NULL,19/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+27,NULL,19/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+28,NULL,19/10/2023,25/1/2024,Start,user1,0,dummy value
+29,NULL,20/10/2023,25/1/2024,College of Alice and Peter Tan,user1,900,dummy value
+30,NULL,20/10/2023,25/1/2024,Residential College 4,user1,1100,dummy value
+31,NULL,20/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,400,dummy value
+32,NULL,20/10/2023,25/1/2024,UTown Residences,user1,230,dummy value
+33,NULL,20/10/2023,25/1/2024,Yale-NUS Cendana College,user1,1400,dummy value
+34,NULL,20/10/2023,25/1/2024,Yale-NUS Elm College,user1,1800,dummy value
+35,NULL,20/10/2023,25/1/2024,Start,user1,0,dummy value
+36,NULL,21/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+37,NULL,21/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+38,NULL,21/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+39,NULL,21/10/2023,25/1/2024,UTown Residences,user1,105,dummy value
+40,NULL,21/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+41,NULL,21/10/2023,25/1/2024,Yale-NUS Elm College,user1,2600,dummy value
+42,NULL,21/10/2023,25/1/2024,Start,user1,0,dummy value
+43,NULL,22/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1020,dummy value
+44,NULL,22/10/2023,25/1/2024,Residential College 4,user1,1400,dummy value
+45,NULL,22/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+46,NULL,22/10/2023,25/1/2024,UTown Residences,user1,210,dummy value
+47,NULL,22/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+48,NULL,22/10/2023,25/1/2024,Yale-NUS Elm College,user1,2900,dummy value
+49,NULL,22/10/2023,25/1/2024,Start,user1,0,dummy value
+50,NULL,23/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+51,NULL,23/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+52,NULL,23/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,450,dummy value
+53,NULL,23/10/2023,25/1/2024,UTown Residences,user1,120,dummy value
+54,NULL,23/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+55,NULL,23/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+56,NULL,23/10/2023,25/1/2024,Start,user1,0,dummy value
+57,NULL,24/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+58,NULL,24/10/2023,25/1/2024,Residential College 4,user1,1502,dummy value
+59,NULL,24/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+60,NULL,24/10/2023,25/1/2024,UTown Residences,user1,210,dummy value
+61,NULL,24/10/2023,25/1/2024,Yale-NUS Cendana College,user1,1750,dummy value
+62,NULL,24/10/2023,25/1/2024,Yale-NUS Elm College,user1,2100,dummy value
+63,NULL,24/10/2023,25/1/2024,Start,user1,0,dummy value
+64,NULL,25/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+65,NULL,25/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+66,NULL,25/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+67,NULL,25/10/2023,25/1/2024,UTown Residences,user1,300,dummy value
+68,NULL,25/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+69,NULL,25/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+70,NULL,25/10/2023,25/1/2024,Start,user1,0,dummy value
+71,NULL,26/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+72,NULL,26/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+73,NULL,26/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,804,dummy value
+74,NULL,26/10/2023,25/1/2024,UTown Residences,user1,210,dummy value
+75,NULL,26/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+76,NULL,26/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+77,NULL,26/10/2023,25/1/2024,Start,user1,0,dummy value
+78,NULL,27/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+79,NULL,27/10/2023,25/1/2024,Residential College 4,user1,1790,dummy value
+80,NULL,27/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,580,dummy value
+81,NULL,27/10/2023,25/1/2024,UTown Residences,user1,210,dummy value
+82,NULL,27/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2000,dummy value
+83,NULL,27/10/2023,25/1/2024,Yale-NUS Elm College,user1,2310,dummy value
+84,NULL,27/10/2023,25/1/2024,Start,user1,0,dummy value
+85,NULL,28/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+86,NULL,28/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+87,NULL,28/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,450,dummy value
+88,NULL,28/10/2023,25/1/2024,UTown Residences,user1,150,dummy value
+89,NULL,28/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+90,NULL,28/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+91,NULL,28/10/2023,25/1/2024,Start,user1,0,dummy value
+92,NULL,29/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+93,NULL,29/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+94,NULL,29/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+95,NULL,29/10/2023,25/1/2024,UTown Residences,user1,450,dummy value
+96,NULL,29/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+97,NULL,29/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+98,NULL,29/10/2023,25/1/2024,Start,user1,0,dummy value
+99,NULL,30/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+100,NULL,30/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+101,NULL,30/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+102,NULL,30/10/2023,25/1/2024,UTown Residences,user1,302,dummy value
+103,NULL,30/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+104,NULL,30/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+105,NULL,30/10/2023,25/1/2024,Start,user1,0,dummy value
+106,NULL,31/10/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+107,NULL,31/10/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+108,NULL,31/10/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+109,NULL,31/10/2023,25/1/2024,UTown Residences,user1,222,dummy value
+110,NULL,31/10/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+111,NULL,31/10/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+112,NULL,31/10/2023,25/1/2024,Start,user1,0,dummy value
+113,NULL,1/11/2023,25/1/2024,College of Alice and Peter Tan,user1,1310,dummy value
+114,NULL,1/11/2023,25/1/2024,Residential College 4,user1,1940,dummy value
+115,NULL,1/11/2023,25/1/2024,Tembusu / Cinnamon College,user1,790,dummy value
+116,NULL,1/11/2023,25/1/2024,UTown Residences,user1,230,dummy value
+117,NULL,1/11/2023,25/1/2024,Yale-NUS Cendana College,user1,2210,dummy value
+118,NULL,1/11/2023,25/1/2024,Yale-NUS Elm College,user1,2540,dummy value
+119,NULL,1/11/2023,25/1/2024,Start,user1,0,dummy value

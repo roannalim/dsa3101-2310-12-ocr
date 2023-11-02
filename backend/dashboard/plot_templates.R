@@ -29,7 +29,24 @@ df_processed =
   group_by(start_date) %>%
   mutate(calculated_weight_kg = gross_weight_kg-lag(gross_weight_kg, 1)) %>%
   ungroup() %>% 
-  drop_na(calculated_weight_kg)
+  drop_na(calculated_weight_kg) %>%
+  mutate(month_year = format(start_date, "%b %Y")) %>%
+  mutate(year = year(start_date)) %>%
+  mutate(wday = wday(start_date, label = TRUE, abbr = TRUE)) %>%
+  mutate(day = day(start_date)) %>%
+  mutate(month = month(start_date, label = TRUE, abbr = TRUE)) %>%
+  mutate(semester = case_when(
+    (month == "Jan") | (month == "Feb") | (month == "Mar") | (month == "Apr") ~ "s1",
+    (month == "May") | (month == "Jun") | (month == "Jul") ~ "v1",
+    (month == "Aug") | (month == "Sep") | (month == "Oct") | (month == "Nov") ~ "s2",
+    (month == "Dec") ~ "v2"
+  )) %>%
+  mutate(quarter = case_when(
+    (month == "Jan") | (month == "Feb") | (month == "Mar") ~ "q4",
+    (month == "Apr") | (month == "May") | (month == "Jun") ~ "q1",
+    (month == "Jul") | (month == "Aug") | (month == "Sep") ~ "q2",
+    (month == "Oct") | (month == "Nov") | (month == "Dec") ~ "q3"
+  ))
 
 #1. Tabular data
 ##filters
@@ -51,7 +68,8 @@ dashboard_tabular =
 
 dashboard_tabular_with_loc = 
   location_df %>%
-  inner_join(dashboard_tabular, by = c("bin_centre" = "location"))
+  inner_join(dashboard_tabular, by = c("bin_centre" = "location")) %>%
+  rename(id = location_id, Campus = campus, Precinct = precinct, "Bin Centre" = bin_centre)
 
 ##table
 ###DT tips: https://clarewest.github.io/blog/post/making-tables-shiny/
@@ -75,11 +93,14 @@ bar_selected_start_date = date(parse_date_time("01-10-2023", "dmy", tz = "Singap
 bar_selected_end_date = Sys.Date()
 bar_df_processed_filtered = 
   df_processed %>%
-  filter(between(start_date, bar_selected_start_date, bar_selected_end_date))
+  filter(between(start_date, bar_selected_start_date, bar_selected_end_date)) %>%
+  group_by(location, month, .drop = TRUE) %>%
+  summarise(calculated_weight_kg = sum(calculated_weight_kg), .groups = "keep") %>%
+  filter(semester %in% list("s1","v1","s2","v2"))
 
 ##plot
 ggplot(data = bar_df_processed_filtered,
-       aes(x = start_date, y = calculated_weight_kg, fill = location)) +
+       aes(x = month, y = calculated_weight_kg, fill = location)) +
   geom_bar(stat = 'identity', position = "dodge") + 
   labs(x = "Date",
        y = "Weight (kg)",
