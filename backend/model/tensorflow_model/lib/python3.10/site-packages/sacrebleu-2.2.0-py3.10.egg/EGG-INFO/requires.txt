@@ -1,0 +1,14 @@
+portalocker
+regex
+tabulate>=0.8.9
+numpy>=1.17
+colorama
+lxml
+
+[ja]
+mecab-python3==1.0.5
+ipadic<2.0,>=1.0
+
+[ko]
+mecab-ko==1.0.0
+mecab-ko-dic<2.0,>=1.0
