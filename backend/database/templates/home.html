@@ -98,7 +98,7 @@
             right: 100px;
             font-size: 25px;
             padding: 15px 25px;
-            background-color: #008000;
+            background-color: #e74c3c;
             color: #fff;
             cursor: pointer;
             width: 130px;
@@ -109,7 +109,7 @@
         }
 
         .logout-button:hover {
-            background-color: #f0baba;
+            background-color: grey;
         }
 
     </style>
@@ -124,6 +124,7 @@
             </form>
         </div>
     </header>
+
     <div class="image-container">
         <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
     </div>
@@ -145,11 +146,29 @@
         </div>
 
         <div class="box">
-            <p class="description">View History Image Records</p>
-            <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="History Logo" class="logo"> 
-
-            <a href="{{ url_for('view_images') }}"><button class="go-button" type="submit">View History</button></a>
+                    <p class="description">View History Image Records</p>
+                    <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="History Logo" class="logo">
+                    <form action="{{ url_for('view_images') }}" method="get" id="viewHistoryForm">
+                        <button id="viewHistoryButton" class="go-button" type="submit">View History</button>
+                    </form>
+                    <div id="processingMessage" style="display:none;">Processing...</div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('viewHistoryForm').onsubmit = function(e) {
+            // Prevent the default form submission
+            e.preventDefault();
+
+            // Show the processing message
+            document.getElementById('processingMessage').style.display = 'block';
+
+            // Disable the button to prevent multiple submissions
+            document.getElementById('viewHistoryButton').disabled = true;
+
+            // Submit the form
+            this.submit();
+        };
+    </script>
 </body>
 </html>

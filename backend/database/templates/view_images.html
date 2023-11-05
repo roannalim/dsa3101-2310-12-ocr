@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>View Images</title>
+    <title>What-A-Waste View History</title>
     <style>
         header {
             display: flex;
@@ -12,11 +12,45 @@
             background-color: #f4f4f4;
         }
         body {
-            font-family: Arial, sans-serif;
             height: 100%; /* Ensure full viewport height */
             margin: 0;    /* Remove default margin */
         }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
 
+        .logout-button:hover {
+            background-color: grey;
+        }
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 250px;
+            background-image: url('static/Web Images/home_icon.png');
+            width: 55px;
+            height: 55px;
+            text-indent: -9999px;
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            background-color: #f4f4f4;
+        }
+
+        .home-button:hover {
+            background-image: url('static/Web Images/home_icon_hover.png');
+        }
         img {
             max-width: 200px;  /* Adjust the max width as needed */
             max-height: 200px; /* Adjust the max height as needed */
@@ -35,25 +69,7 @@
         th {
             background-color: #f2f2f2; /* Light gray background for table headers */
         }
-
-
-        .home-button {
-            font-size: 25px;
-            padding: 15px 25px;
-            background-color: #008000;
-            color: #fff;
-            cursor: pointer;
-            width: 200px;
-            text-align: center;
-            border: none;
-            display: inline-block;
-            border-radius: 5px; /* Rounded corners*/
-        }
-
-        .home-button:hover {
-            background-color: #006400;
-        }
-
+        
         .filter-form {
             padding-top: 20px;
             padding-left: 10px;
@@ -79,6 +95,24 @@
           border-radius: 5px;    /* Optional: rounds the corners */
           background-color: #f8f8f8; /* Optional: background color */
         }
+        .filter-container {
+            border: 2px solid #000;
+            padding: 10px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(220, 220, 220);
+        }
+
+        .filter-input {
+            flex: 1;
+            padding: 5px;
+            text-align: center;
+        }
+        .filter-button:hover {
+          background-color: rgb(163, 163, 163);
+        }
 
     </style>
 </head>
@@ -86,8 +120,13 @@
     <header>
         <h1>What-A-Waste</h1>
         <div>
+            <form action="/" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+        <div>
             <form action="/home" method="get">
-                <button type="submit" class="home-button">Home Page</button>
+                <button type="submit" class="home-button" aria-label="Home"></button>
             </form>
         </div>
     </header>
@@ -96,37 +135,35 @@
     
 
 <body>
-    <!-- Filter Form -->
-    <div class="filter-form">
-        <p>Image Taken Date Range:</p>
+    <!-- Filter Container -->
+    <div class="filter-container">
         <form method="GET" action="/filter_images">
             <label for="st_date">Start Date:</label>
             <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
     
             <label for="end_date">End Date:</label>
             <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
-    
             <label for="loc">Location:</label>
             <input type="text" name="loc" id="loc" value="{{ loc }}">
-    
             <label for="user_id">Username:</label>
             <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
     
             <input type="submit" value="Filter" class="filter-button">
         </form>
     </div>
+
     
     <div class="image-table">
-        <h1 style="text-align: center;">View Images</h1>
+        <h1 style="text-align: center;">View History</h1>
         <table>
             <tr>
-                <th>Image ID</th>
+                <th>ID</th>
                 <th>Image</th>
                 <th>Start Date</th>
                 <th>Expiry Date</th>
                 <th>Location</th>
-                <th>Username</th>
-                <th>Gross Weight</th> 
+                <th>User</th>
+                <th>Gross<br>Weight</th> 
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -144,13 +181,13 @@
                     <td>
                         <form method="GET" action="/edit_data">
                             <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
-                            <button type="submit">Edit</button>
+                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">Edit</button>
                         </form>
                     </td>
                     <td>
                         <form method="POST" action="/delete_image">
                             <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
-                            <button type="submit">Delete</button>
+                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">Delete</button>
                         </form>
                     </td>
                 </tr>

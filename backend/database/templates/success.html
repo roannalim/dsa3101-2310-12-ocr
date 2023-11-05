@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Successful</title>
+    <title>What-A-Waste Upload Successful</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+
             height: 100vh;
             margin: 0;
             display: flex;
@@ -24,6 +24,44 @@
             text-align: left;
             background-color: #f4f4f4;
         }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: grey;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 250px;
+            background-image: url('static/Web Images/home_icon.png');
+            width: 55px;
+            height: 55px;
+            text-indent: -9999px;
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            background-color: #f4f4f4;
+        }
+
+        .home-button:hover {
+            background-image: url('static/Web Images/home_icon_hover.png');
+        }
+
         .image-container {
             position: absolute;
             top: 0;
@@ -88,6 +126,16 @@
 <body>
     <header>
         <h1>What-A-Waste</h1>
+        <div>
+            <form action="/" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+        <div>
+            <form action="/home" method="get">
+                <button type="submit" class="home-button" aria-label="Home"></button>
+            </form>
+        </div>
     </header>
     <div class="image-container">
         <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
@@ -97,7 +145,7 @@
         <div class="box">
             <img src="{{ url_for('static', filename='Web Images/thank-you-page-gif1.gif') }}" alt="Thank You GIF" width="180" height="180">
             <p class="description">Your image has been successfully uploaded.</p>
-            <a href="{{ url_for('submit') }}"><button class="return-button" type="submit">Return to Upload Page</button></a>
+            <a href="{{ url_for('submit') }}"><button class="return-button" type="submit">Upload another image?</button></a>
         </div>
     </div>
 </body>
