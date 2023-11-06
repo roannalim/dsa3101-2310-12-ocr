@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <html>
 <head>
     <title>What-A-Waste Login</title>
@@ -155,7 +156,7 @@
             <div class="language-buttons-container">
                 <button onclick="changeLanguage('en')" class="language-button">English</button>
                 <button onclick="changeLanguage('zh')" class="language-button">中文</button>
-                <button onclick="openLoginModal()" class="login-button">Login</button>
+                <button onclick="openLoginModal()" class="login-button">{{ _('Login') }}</button>
             </div>
         </div>
     </header>
@@ -170,9 +171,9 @@
         <button onclick="closeLoginModal()" style="position: absolute; top: 15px; right: 0px;">&times;</button>
         <div class="modal-content">
             <form action="/" method="post">
-                Username: <input type="text" name="username"><br><br>
-                Password: <input type="password" name="password" required><br><br>
-                <input type="submit" value="Login">
+                {{ _('Username:') }} <input type="text" name="username"><br><br>
+                {{ _('Password:') }} <input type="password" name="password" required><br><br>
+                <input type="submit" value={{ _('Login') }}>
             </form>
         </div>
     </div>
@@ -186,6 +187,11 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
+        function changeLanguage(lang) {
+            window.location.search = '?lang=' + lang;
+        }
+
+        
     </script>
 </body>
 </html>

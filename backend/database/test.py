@@ -4,6 +4,7 @@ from io import BytesIO
 import io
 from datetime import datetime, timedelta
 import pdb
+from flask_babel import Babel #language translation
 ##cronjob for deletion
 
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -19,6 +20,26 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "strongPassword"
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = './translations'
+
+babel = Babel(app)
+
+@app.before_request
+def before_request():
+    # If the 'lang' parameter is specified in the URL, use it as the locale
+    lang = request.args.get('lang')
+    if lang:
+        session['lang'] = lang
+    elif 'lang' not in session:
+        session['lang'] = app.config['BABEL_DEFAULT_LOCALE']
+
+def get_locale():
+    # If the 'lang' parameter is specified in the URL, use it as the locale
+    return session.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
+
+babel.init_app(app, locale_selector=get_locale)
+
 
 # Read csv file to store the user data
 users_file = pd.read_csv('users.csv')
@@ -49,7 +70,7 @@ def storingImages(file):
     for index, row in file.iterrows():
         # another line to read 10 images and store as image,, binary
             # Assuming you have a column in your CSV that contains file paths of the images
-            image_path = f'/Users/richmondsin/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/images/{index}.jpg'  # Adjust this to match your column name
+            image_path = f'/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/images/{index}.jpg'  # Adjust this to match your column name
 
             # Read the image file as binary data
             with open(image_path, 'rb') as f:
@@ -267,7 +288,7 @@ def deleteUsersTable():
 # deleteUsersTable()
 
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='/Users/richmondsin/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
+UPLOAD_FOLDER='/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
 app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page

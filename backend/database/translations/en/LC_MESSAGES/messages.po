@@ -1,0 +1,64 @@
+# English translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-11-06 12:47+0800\n"
+"PO-Revision-Date: 2023-11-06 12:47+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.1\n"
+
+#: templates/home.html:123
+msgid "Logout"
+msgstr ""
+
+#: templates/home.html:133
+msgid "Upload an image to get started!"
+msgstr ""
+
+#: templates/home.html:136
+msgid "Upload"
+msgstr ""
+
+#: templates/home.html:140
+msgid "Visit the dashboard for more insights."
+msgstr ""
+
+#: templates/home.html:144
+msgid "Dashboard"
+msgstr ""
+
+#: templates/home.html:149
+msgid "View history image records"
+msgstr ""
+
+#: templates/home.html:152
+msgid "View History"
+msgstr ""
+
+#: templates/home.html:154
+msgid "Processing..."
+msgstr ""
+
+#: templates/index.html:159 templates/index.html:176
+msgid "Login"
+msgstr ""
+
+#: templates/index.html:174
+msgid "Username:"
+msgstr ""
+
+#: templates/index.html:175
+msgid "Password:"
+msgstr ""
+

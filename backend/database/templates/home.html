@@ -120,7 +120,7 @@
         <h1>What-A-Waste</h1>
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
     </header>
@@ -130,28 +130,28 @@
     </div>
     <div class="button-container">
         <div class="box">
-            <p class="description">Upload an image to get started!</p>
+            <p class="description">{{ _('Upload an image to get started!') }}</p>
             <img src="{{ url_for('static', filename='Web Images/upload_icon.png') }}" alt="Dashboard Logo" class="logo">
             
-            <a href="{{ url_for('submit') }}"><button class="go-button" type="submit">Upload</button></a>
+            <a href="{{ url_for('submit') }}"><button class="go-button" type="submit">{{ _('Upload') }}</button></a>
         </div>
 
         <div class="box">
-            <p class="description">Visit the dashboard for more insights.</p>
+            <p class="description">{{ _('Visit the dashboard for more insights.') }}</p>
             <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
 
             <form action="/dashboard" method="get">
-                <button type="submit" class="go-button">Dashboard</button>
+                <button type="submit" class="go-button">{{ _('Dashboard') }}</button>
             </form>
         </div>
 
         <div class="box">
-                    <p class="description">View History Image Records</p>
+                    <p class="description">{{ _('View history image records') }}</p>
                     <img src="{{ url_for('static', filename='Web Images/history_icon.png') }}" alt="History Logo" class="logo">
                     <form action="{{ url_for('view_images') }}" method="get" id="viewHistoryForm">
-                        <button id="viewHistoryButton" class="go-button" type="submit">View History</button>
+                        <button id="viewHistoryButton" class="go-button" type="submit">{{ _('View History') }}</button>
                     </form>
-                    <div id="processingMessage" style="display:none;">Processing...</div>
+                    <div id="processingMessage" style="display:none;">{{ _('Processing...') }}</div>
         </div>
     </div>
 
