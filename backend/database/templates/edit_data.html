@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Data</title>
+    <title>What-A-Waste Edit Data</title>
     <style>
         body {
 
@@ -42,7 +42,7 @@
 
         .box {
             width: 400px;
-            height: 550px;
+            height: 580px;
             padding: 20px;
             border: 1px solid #e0e0e0;
             display: flex;
@@ -66,7 +66,7 @@
         }
 
         input[type="date"],
-        input[type="text"],
+        input[type="int"],
         select {
             padding: 12px;
             width: 250px;
@@ -142,8 +142,6 @@
                 <option value="Tembusu" {{ 'selected' if image_info['location'] == 'Tembusu' else '' }}>Tembusu</option>
             </select> 
 
-
-            <input type="text" name="username" value="{{ image_info['username'] }}"><br>
             <label for="gross_weight">Gross Weight:</label>
             <input type="int" name="gross_weight" value="{{ image_info['gross_weight'] }}"><br>
 

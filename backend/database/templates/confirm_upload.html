@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Confirm Upload</title>
+    <title>What-A-Waste Upload Confirmed</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             height: 100vh;
             margin: 0;
             display: flex;
@@ -34,6 +33,7 @@
 
         .image-container {
             text-align: center;
+            width: 100%; /* Ensure container takes full width */
         }
 
         .image-container img {
@@ -41,6 +41,61 @@
             max-height: 500px;
             display: block;
             margin: 0 auto;
+        }
+
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Padding inside the container */
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 2;
+            width: 80%; /* Width of the container */
+            max-width: 800px; /* Maximum width */
+            margin-top: 40px; /* Space from header */
+            /* Remove or reduce margin-bottom if it's creating extra space */
+            height: 600px;
+        }
+
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Adjust gap between buttons if needed */
+            align-items: center;
+            width: 90%; /* Ensure container takes full width */
+            /* Adjust the margin-top to reduce space */
+            margin-top: 20px; /* Reduce this value to reduce space */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Adjust gap between buttons if needed */
+            align-items: center;
+            width: 90%; /* Ensure container takes full width */
+            /* Adjust the margin-top to reduce space */
+            margin-top: 20px; /* Reduce this value to reduce space */
+        }
+
+
+        .background-image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure the image is at the back */
+        }
+
+        .background-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3; /* Set the opacity to 30% */
         }
 
         .confirm-button {
@@ -73,25 +128,86 @@
             border-radius: 5px;
         }
 
+        .cancel-button:hover {
+            background-color: grey;
+        }
+
         .re-browse-button:hover {
             background-color: #808080; /* Dark gray on hover */
         }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 100px;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #e74c3c;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: grey;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 250px;
+            background-image: url('static/Web Images/home_icon.png');
+            width: 55px;
+            height: 55px;
+            text-indent: -9999px;
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            background-color: #f4f4f4;
+        }
+
+        .home-button:hover {
+            background-image: url('static/Web Images/home_icon_hover.png');
+        }
+
     </style>
 </head>
 
 <body>
     <header>
         <h1>What-A-Waste</h1>
+        <div>
+            <form action="/" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+        <div>
+            <form action="/home" method="get">
+                <button type="submit" class="home-button" aria-label="Home"></button>
+            </form>
+        </div>
     </header>
 
-    <div class="image-container">
-        <img src="data:image/jpeg;base64,{{ image_data_base64 }}" alt="Uploaded Image">
-    </div>    
+    <div class="content-container">
+        <div class="image-container">
+            <img src="data:image/jpeg;base64,{{ image_data_base64 }}" alt="Uploaded Image">
+        </div>
 
-    <p>Do you want to upload the image?</p>
-    <form method="post">
-        <button type="submit" name="confirm" value="yes" class="confirm-button">Confirm</button>
-        <button type="submit" name="confirm" value="no" class="cancel-button">Cancel</button>
-    </form>    
+        <div class="button-container">
+            <form method="post">
+                <button type="submit" name="confirm" value="yes" class="confirm-button">Confirm</button>
+                <button type="submit" name="confirm" value="no" class="cancel-button">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="background-image-container">
+        <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
+    </div>    
 </body>
 </html>

@@ -1,35 +1,39 @@
 <!DOCTYPE html>
+<html lang="en">
 <html>
 <head>
-    <title>Login</title>
+    <title>What-A-Waste Login</title>
     <style>
         /* Basic styling for positioning */
         body, html {
-            font-family: Arial, sans-serif;
-            height: 100%; /* Ensure full viewport height */
-            margin: 0;    /* Remove default margin */
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;    /* Remove default margin */
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             padding: 10px 20px;
-            padding-left: 50px;
+            text-align: left;
             background-color: #f4f4f4;
         }
 
-        button {
-            width: 120px;       /* Adjust the width as needed */
-            height: 40px;       /* Adjust the height as needed */
-            font-size: 25px;    /* Adjust the font size as needed */
-            padding: 2px 16px;  /* Adjust the padding for top/bottom and left/right respectively */
-            cursor: pointer;    /* Changes the mouse cursor to a hand when hovering over the button */
-            
+        h1 {
+            margin: 4;
         }
 
-        button:hover {
-            background-color: #e9f6fb; /* Grey on hover */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 80px;
         }
 
         #loginModal {
@@ -42,8 +46,8 @@
             top: 50%;
             transform: translate(-50%, -50%);
             width: 400px;
-            height: 400px;
-            padding: 20px;
+            height: 280px;
+            padding: 60px;
             background-color: #fff;
             border: 1px solid #ccc;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -52,7 +56,7 @@
         #loginModal button {
             background-color: transparent;
             border: none;
-            font-size: 30px;
+            font-size: 40px;
             cursor: pointer;
             color: #333;
             border-radius: 5px; /* Rounded corners */
@@ -79,7 +83,18 @@
 
         .modal-content input[type="submit"] {
             padding: 10px 10px;     /* Add padding to the submit button */
-            font-size: 16px;        /* Larger font size for the button */
+            font-size: 18px;        /* Larger font size for the button */
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            border: none;
+            text-align: center;
+            width: 90px;
+        }
+
+        .modal-content input[type="submit"]:hover {
+            background-color: #006400;
         }
 
         /* Image centering styles */
@@ -94,13 +109,55 @@
             max-width: 100%;
             max-height: 100%;
         }
+
+        .login-button {
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #008000;
+            color: #fff;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .login-button:hover {
+            background-color: #006400;
+        }
+
+        .language-button {
+            font-size: 20px;
+            padding: 8px 15px;
+            background-color: grey;
+            color: #fff;
+            cursor: pointer;
+            width: 100px; /* Set a fixed width for both language buttons */
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px; /* Add some space between buttons */
+        }
+        
+        .language-button:hover {
+            background-color: darkgray;
+        }
+        
+        .language-buttons-container {
+            display: flex;
+        }
+
     </style>
 </head>
 <body>
     <header>
-        <h1>What-A-Waste</h1>
-        <div>
-            <button onclick="openLoginModal()">Login</button>
+        <div class="header-content">
+            <h1>What-A-Waste</h1>
+            <div class="language-buttons-container">
+                <button onclick="changeLanguage('en')" class="language-button">English</button>
+                <button onclick="changeLanguage('zh')" class="language-button">中文</button>
+                <button onclick="openLoginModal()" class="login-button">{{ _('Login') }}</button>
+            </div>
         </div>
     </header>
 
@@ -113,11 +170,10 @@
     <div id="loginModal" style="display:none;"> <!-- Added inline style to hide by default -->
         <button onclick="closeLoginModal()" style="position: absolute; top: 15px; right: 0px;">&times;</button>
         <div class="modal-content">
-            <h1>Login</h1>
             <form action="/" method="post">
-                Username: <input type="text" name="username"><br><br>
-                Password: <input type="password" name="password" required><br><br>
-                <input type="submit" value="Login">
+                {{ _('Username:') }} <input type="text" name="username"><br><br>
+                {{ _('Password:') }} <input type="password" name="password" required><br><br>
+                <input type="submit" value={{ _('Login') }}>
             </form>
         </div>
     </div>
@@ -131,6 +187,11 @@
             document.getElementById('loginModal').style.display = 'none';
         }
 
+        function changeLanguage(lang) {
+            window.location.search = '?lang=' + lang;
+        }
+
+        
     </script>
 </body>
 </html>
