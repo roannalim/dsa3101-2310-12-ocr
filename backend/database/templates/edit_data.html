@@ -4,13 +4,13 @@
     <title>What-A-Waste Edit Data</title>
     <style>
         body {
-
             height: 100vh;
             margin: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background-color: #f0f0f0;
         }
 
         header {
@@ -19,7 +19,6 @@
             left: 0;
             width: 100%;
             padding: 10px 20px;
-            padding-left: 50px;
             text-align: left;
             background-color: #f4f4f4;
         }
@@ -42,7 +41,7 @@
 
         .box {
             width: 400px;
-            height: 580px;
+            height: 500px;
             padding: 20px;
             border: 1px solid #e0e0e0;
             display: flex;
@@ -50,58 +49,62 @@
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            background-color: #fff; 
+            background-color: #fff;
         }
 
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 9px;
             align-items: center;
+            margin-top: 10px;
         }
 
         label {
-            font-size: 24px;
-            text-align: left;
+            font-size: 22px;
         }
 
-        input[type="date"],
-        input[type="int"],
-        select {
+        input, select {
+            font-family: "Arial", sans-serif;
             padding: 12px;
             width: 250px;
-            font-size: 18px;
+            font-size: 16px;
         }
 
-        .submit-button, .cancel-button {
-            font-size: 20px;
-            padding: 15px 0;
+        .update-button {
+            font-size: 25px;
+            padding: 15px 25px;
             cursor: pointer;
-            width: 160px; 
+            width: 180px;
             text-align: center;
             border: none;
             display: inline-block;
             border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .submit-button {
             background-color: #008000;
             color: #fff;
         }
 
-        .submit-button:hover {
+        .update-button:hover {
             background-color: #006400;
         }
 
         .cancel-button {
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: "Arial", sans-serif;
+            font-size: 25px;
+            padding: 15px 25px;
+            background-color: #d3d3d3;
+            color: #000;
+            cursor: pointer;
+            width: 130px;
+            text-align: center;
+            border: none;
+            display: inline-block;
+            border-radius: 5px;
             text-decoration: none;
         }
 
         .cancel-button:hover {
-            background-color: #e6e6e6;
+            background-color: grey;
         }
 
         .button-container {
@@ -111,18 +114,23 @@
             gap: 10px;
         }
 
+        img.icon {
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 65px;
+        }
     </style>
 </head>
+
 <body>
     <header>
-        <h1>What-A-Waste</h1>
+        <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
     </header>
     
     <div class="image-container">
         <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
     </div>
-
-    <h1 style="text-align: center; padding-top: 20px;">Edit Data</h1>
 
     <div class="box">
         <form method="POST" action="/edit_data">
@@ -132,7 +140,6 @@
             <label for="expiry_date">Expiry Date:</label>
             <input type="date" name="expiry_date" value="{{ image_info['expiry_date'] }}">
             <label for="location">Location:</label>
-
 
             <select name="location" id="locationSelect" required>
                 <option value="UTown" {{ 'selected' if image_info['location'] == 'UTown' else '' }}>UTown</option>
@@ -145,10 +152,9 @@
             <label for="gross_weight">Gross Weight:</label>
             <input type="int" name="gross_weight" value="{{ image_info['gross_weight'] }}"><br>
 
-
             <div class="button-container">
-                <button type="submit" name="action" value="update" class="submit-button">Update</button>
-                <a href="/view_images" class="cancel-button" style="width: 160px;">Cancel</a>
+                <button type="submit" name="action" value="update" class="update-button">Update</button>
+                <a href="/view_images" class="cancel-button">Cancel</a>
             </div>
         </form>
     </div>
