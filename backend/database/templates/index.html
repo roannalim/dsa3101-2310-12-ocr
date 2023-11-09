@@ -4,7 +4,6 @@
 <head>
     <title>What-A-Waste Login</title>
     <style>
-        /* Basic styling for positioning */
         body, html {
             height: 100vh;
             margin: 0;
@@ -12,7 +11,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;    /* Remove default margin */
+            background-color: #f0f0f0;
         }
 
         header {
@@ -39,8 +38,8 @@
         #loginModal {
             display: none;
             display: flex;
-            justify-content: center;  /* Center horizontally */
-            align-items: center;      /* Center vertically */
+            justify-content: center;
+            align-items: center;
             position: fixed;
             left: 50%;
             top: 50%;
@@ -59,7 +58,7 @@
             font-size: 40px;
             cursor: pointer;
             color: #333;
-            border-radius: 5px; /* Rounded corners */
+            border-radius: 5px;
         }
 
         #loginModal button:hover {
@@ -75,15 +74,15 @@
 
         .modal-content input[type="text"],
         .modal-content input[type="password"] {
-            width: 80%;             /* Make input fields take up more of the modal's width */
-            padding: 10px;          /* Increase padding for better aesthetics */
-            font-size: 16px;        /* Larger font size for inputs */
-            margin: 10px 0;         /* Space out the input fields */
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
         }
 
         .modal-content input[type="submit"] {
-            padding: 10px 10px;     /* Add padding to the submit button */
-            font-size: 18px;        /* Larger font size for the button */
+            padding: 10px 10px;
+            font-size: 18px;
             background-color: #008000;
             color: #fff;
             cursor: pointer;
@@ -97,12 +96,11 @@
             background-color: #006400;
         }
 
-        /* Image centering styles */
         .image-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100% - 50px); /* Subtracting approximate height of the header */
+            height: calc(100% - 50px);
         }
 
         .centered-image {
@@ -132,11 +130,11 @@
             background-color: grey;
             color: #fff;
             cursor: pointer;
-            width: 100px; /* Set a fixed width for both language buttons */
+            width: 100px;
             text-align: center;
             border: none;
             border-radius: 5px;
-            margin-right: 10px; /* Add some space between buttons */
+            margin-right: 10px;
         }
         
         .language-button:hover {
@@ -147,12 +145,19 @@
             display: flex;
         }
 
+        img.icon {
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 65px;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <div class="header-content">
-            <h1>What-A-Waste</h1>
+            <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
             <div class="language-buttons-container">
                 <button onclick="changeLanguage('en')" class="language-button">English</button>
                 <button onclick="changeLanguage('zh')" class="language-button">中文</button>
