@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>What-A-Waste Upload Cancelled</title>
     <style>
@@ -11,6 +10,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background-color: #f0f0f0;
         }
 
         header {
@@ -19,7 +19,6 @@
             left: 0;
             width: 100%;
             padding: 10px 20px;
-            padding-left: 50px;
             text-align: left;
             background-color: #f4f4f4;
         }
@@ -128,16 +127,21 @@
             background-color: #006400;
         }
 
+        img.icon {
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 65px;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>What-A-Waste</h1>
-            
+        <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -146,15 +150,16 @@
             </form>
         </div>
     </header>
+
     <div class="image-container">
         <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
     </div>
 
     <div class="button-container">
         <div class="box">
-            <h1>Upload Cancelled</h1>
+            <h1>{{ _('Upload Cancelled') }}</h1>
             <img src="{{ url_for('static', filename='Web Images/cross_icon.png') }}" alt="Cross Logo" class="logo">
-            <a href="{{ url_for('submit') }}"><button type="button" class="return-button">Upload another image?</button></a>
+            <a href="{{ url_for('submit') }}"><button type="button" class="return-button">{{ _('Upload another image?') }}</button></a>
         </div>
     </div>
 </body>

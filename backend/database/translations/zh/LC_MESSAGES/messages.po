@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-06 12:47+0800\n"
-"PO-Revision-Date: 2023-11-06 12:47+0800\n"
+"POT-Creation-Date: 2023-11-10 14:13+0800\n"
+"PO-Revision-Date: 2023-11-10 14:13+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
 "Language-Team: zh <LL@li.org>\n"
@@ -18,55 +18,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.1\n"
 
-
-#: templates/home.html:123
+#: templates/cancelled.html:144 templates/confirm_upload.html:186
+#: templates/filtered_images.html:92 templates/home.html:128
+#: templates/success.html:139 templates/upload.html:169
+#: templates/view_images.html:124
 msgid "Logout"
-msgstr "退出"
+msgstr "登出"
 
-#: templates/home.html:133
+#: templates/cancelled.html:160
+msgid "Upload Cancelled"
+msgstr "取消上传"
+
+#: templates/cancelled.html:162 templates/success.html:156
+msgid "Upload another image?"
+msgstr "再次上传"
+
+#: templates/confirm_upload.html:203
+msgid "Confirm"
+msgstr "确认"
+
+#: templates/confirm_upload.html:204 templates/edit_data.html:157
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/edit_data.html:138 templates/view_images.html:141
+msgid "Start Date:"
+msgstr "上传日期:"
+
+#: templates/edit_data.html:140
+msgid "Expiry Date:"
+msgstr "有效期至:"
+
+#: templates/edit_data.html:142 templates/upload.html:193
+#: templates/view_images.html:146
+msgid "Location:"
+msgstr "地点:"
+
+#: templates/edit_data.html:152
+msgid "Gross Weight (kg):"
+msgstr "净重 (千克):"
+
+#: templates/edit_data.html:156
+msgid "Update"
+msgstr "更新"
+
+#: templates/filtered_images.html:102
+msgid "Filtered Images"
+msgstr "筛选结果"
+
+#: templates/filtered_images.html:106
+msgid "Filter Criteria:"
+msgstr "筛选条件:"
+
+#: templates/filtered_images.html:108
+msgid "Location: "
+msgstr "地点: "
+
+#: templates/filtered_images.html:111
+msgid "Start Date: "
+msgstr "上传日期: "
+
+#: templates/filtered_images.html:114
+msgid "End Date: "
+msgstr "有效期至: "
+
+#: templates/filtered_images.html:117
+msgid "User: "
+msgstr "用户: "
+
+#: templates/filtered_images.html:124
+msgid "Reset"
+msgstr "重置"
+
+#: templates/filtered_images.html:131 templates/view_images.html:160
+msgid "ID"
+msgstr "序号"
+
+#: templates/filtered_images.html:132 templates/view_images.html:161
+msgid "Image"
+msgstr "图片"
+
+#: templates/filtered_images.html:133 templates/view_images.html:162
+msgid "Start Date"
+msgstr "上传日期"
+
+#: templates/filtered_images.html:134 templates/view_images.html:163
+msgid "Expiry Date"
+msgstr "有效期至"
+
+#: templates/filtered_images.html:135 templates/view_images.html:164
+msgid "Location"
+msgstr "地点"
+
+#: templates/filtered_images.html:136 templates/view_images.html:165
+msgid "User"
+msgstr "用户"
+
+#: templates/filtered_images.html:137 templates/view_images.html:166
+msgid "Gross"
+msgstr "净重"
+
+#: templates/filtered_images.html:137 templates/view_images.html:166
+msgid "Weight"
+msgstr "(千克)"
+
+#: templates/filtered_images.html:137 templates/view_images.html:172
+msgid "(kg)"
+msgstr " "
+
+#: templates/filtered_images.html:138 templates/filtered_images.html:157
+#: templates/view_images.html:167 templates/view_images.html:184
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/filtered_images.html:139 templates/filtered_images.html:163
+#: templates/view_images.html:168 templates/view_images.html:190
+msgid "Delete"
+msgstr "删除"
+
+#: templates/home.html:139 templates/upload.html:183
 msgid "Upload an image to get started!"
-msgstr "上传图片"
+msgstr "开始上传图片"
 
-#: templates/home.html:136
+#: templates/home.html:142
 msgid "Upload"
 msgstr "上传"
 
-#: templates/home.html:140
+#: templates/home.html:146
 msgid "Visit the dashboard for more insights."
 msgstr "查看数据面板"
 
-#: templates/home.html:144
+#: templates/home.html:150
 msgid "Dashboard"
 msgstr "数据面板"
 
-#: templates/home.html:149
+#: templates/home.html:155
 msgid "View history image records"
 msgstr "查看历史记录"
 
-#: templates/home.html:152
+#: templates/home.html:158 templates/view_images.html:157
 msgid "View History"
 msgstr "查看记录"
 
-#: templates/home.html:154
+#: templates/home.html:160
 msgid "Processing..."
-msgstr "加载中......"
+msgstr "加载中……"
 
-#: templates/index.html:158
+#: templates/index.html:164 templates/index.html:181
 msgid "Login"
 msgstr "登录"
 
-#: templates/index.html:173
+#: templates/index.html:179 templates/view_images.html:148
 msgid "Username:"
-msgstr "用户名："
+msgstr "用户名:"
 
-#: templates/index.html:174
+#: templates/index.html:180
 msgid "Password:"
-msgstr "密码："
+msgstr "密码:"
 
+#: templates/success.html:155
+msgid "Your image has been successfully uploaded."
+msgstr "您的图片已上传成功"
 
+#: templates/upload.html:188
+msgid "Image:"
+msgstr "图片:"
 
+#: templates/upload.html:196
+msgid "Select an option"
+msgstr "选择一个地点"
 
+#: templates/upload.html:207
+msgid "Submit"
+msgstr "上传"
 
+#: templates/view_images.html:144
+msgid "End Date:"
+msgstr "有效期至:"
 
-
-
+#: templates/view_images.html:157
+msgid "Filter"
+msgstr "筛选"

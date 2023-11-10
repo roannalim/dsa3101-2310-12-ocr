@@ -4,22 +4,21 @@
     <title>Home Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             height: 100vh;
             margin: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background-color: #f0f0f0;
         }
-        
+
         header {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             padding: 10px 20px;
-            padding-left: 50px;
             text-align: left;
             background-color: #f4f4f4;
         }
@@ -59,7 +58,7 @@
             text-align: center;
             border: none;
             display: inline-block;
-            border-radius: 5px; /* Rounded corners*/
+            border-radius: 5px;
         }
 
         .go-button:hover {
@@ -82,14 +81,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Ensure the image is at the back */
+            z-index: -1;
         }
 
         .image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.3; /* Set the opacity to 30% */
+            opacity: 0.3;
         }
 
         .logout-button {
@@ -112,12 +111,18 @@
             background-color: grey;
         }
 
+        img.icon {
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 65px;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>What-A-Waste</h1>
+        <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
                 <button type="submit" class="logout-button">{{ _('Logout') }}</button>
@@ -128,6 +133,7 @@
     <div class="image-container">
         <img src="{{ url_for('static', filename='Web Images/background_image.jpg') }}" alt="Zero Waste Image" class="centered-image">
     </div>
+
     <div class="button-container">
         <div class="box">
             <p class="description">{{ _('Upload an image to get started!') }}</p>
@@ -140,9 +146,9 @@
             <p class="description">{{ _('Visit the dashboard for more insights.') }}</p>
             <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
 
-            <form action="/dashboard" method="get">
-                <button type="submit" class="go-button">{{ _('Dashboard') }}</button>
-            </form>
+            
+            <button type="submit" class="go-button" onclick="window.location.href='http://127.0.0.1:8050/'">{{ _('Dashboard') }}</button>
+            
         </div>
 
         <div class="box">

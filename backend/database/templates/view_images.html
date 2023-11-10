@@ -2,126 +2,141 @@
 <html>
 <head>
     <title>What-A-Waste View History</title>
-    <style>
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            padding-left: 50px;
-            background-color: #f4f4f4;
-        }
-        body {
-            height: 100%; /* Ensure full viewport height */
-            margin: 0;    /* Remove default margin */
-        }
-        .logout-button {
-            position: absolute;
-            top: 20px;
-            right: 100px;
-            font-size: 25px;
-            padding: 15px 25px;
-            background-color: #e74c3c;
-            color: #fff;
-            cursor: pointer;
-            width: 130px;
-            text-align: center;
-            border: none;
-            display: inline-block;
-            border-radius: 5px;
-        }
-
-        .logout-button:hover {
-            background-color: grey;
-        }
-        .home-button {
-            position: absolute;
-            top: 20px;
-            right: 250px;
-            background-image: url('static/Web Images/home_icon.png');
-            width: 55px;
-            height: 55px;
-            text-indent: -9999px;
-            background-size: cover;
-            border: none;
-            cursor: pointer;
-            background-color: #f4f4f4;
-        }
-
-        .home-button:hover {
-            background-image: url('static/Web Images/home_icon_hover.png');
-        }
-        img {
-            max-width: 200px;  /* Adjust the max width as needed */
-            max-height: 200px; /* Adjust the max height as needed */
-            display: block;
-            margin: 0 auto;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center; /* Center-align text */
-        }
-        th {
-            background-color: #f2f2f2; /* Light gray background for table headers */
-        }
-        
-        .filter-form {
-            padding-top: 20px;
-            padding-left: 10px;
-
-            align-items: center;
-            justify-content: center;
-            display: flex;
-        }
-
-        .image-table {
-            padding-top: 10px;
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-
-        .filter-button {
-          font-size: 18px;       /* Larger font size */
-          padding: 3px 10px;    /* Padding inside the button; Y-axis X-axis */
-          width: auto;           /* Adjust width as needed, or use 'auto' for natural width */
-          height: auto;          /* Adjust height as needed, or use 'auto' for natural height */
-          cursor: pointer;       /* Changes the cursor to signify it's clickable */
-          border: 1px solid #ccc; /* Optional: adds a border */
-          border-radius: 5px;    /* Optional: rounds the corners */
-          background-color: #f8f8f8; /* Optional: background color */
-        }
-        .filter-container {
-            border: 2px solid #000;
-            padding: 10px;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgb(220, 220, 220);
-        }
-
-        .filter-input {
-            flex: 1;
-            padding: 5px;
-            text-align: center;
-        }
-        .filter-button:hover {
-          background-color: rgb(163, 163, 163);
-        }
-
+    <style> 
+        header { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 70px; 
+            padding: 10px 20px; 
+            text-align: left; 
+            background-color: #f4f4f4; 
+        } 
+         
+        body { 
+            height: 100%; 
+            margin: 0; 
+            background-color: #f0f0f0; 
+        } 
+ 
+        .logout-button { 
+            position: absolute; 
+            top: 20px; 
+            right: 100px; 
+            font-size: 25px; 
+            padding: 15px 25px; 
+            background-color: #e74c3c; 
+            color: #fff; 
+            cursor: pointer; 
+            width: 130px; 
+            text-align: center; 
+            border: none; 
+            display: inline-block; 
+            border-radius: 5px; 
+        } 
+ 
+        .logout-button:hover { 
+            background-color: grey; 
+        } 
+ 
+        .home-button { 
+            position: absolute; 
+            top: 20px; 
+            right: 250px; 
+            background-image: url('static/Web Images/home_icon.png'); 
+            width: 55px; 
+            height: 55px; 
+            text-indent: -9999px; 
+            background-size: cover; 
+            border: none; 
+            cursor: pointer; 
+            background-color: #f4f4f4; 
+        } 
+ 
+        .home-button:hover { 
+            background-image: url('static/Web Images/home_icon_hover.png'); 
+        } 
+        img { 
+            max-width: 200px;  /* Adjust the max width as needed */ 
+            max-height: 200px; /* Adjust the max height as needed */ 
+            display: block; 
+            margin: 0 auto; 
+        } 
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+        } 
+        th, td { 
+            border: 1px solid #000; 
+            padding: 8px; 
+            text-align: center; /* Center-align text */ 
+        } 
+        th { 
+            background-color: #f2f2f2; /* Light gray background for table headers */ 
+        } 
+         
+        .filter-form { 
+            padding-top: 20px; 
+            padding-left: 10px; 
+            align-items: center; 
+            justify-content: center; 
+            display: flex; 
+        } 
+ 
+        .image-table { 
+            padding-top: 10px; 
+            padding-left: 20px; 
+            padding-right: 20px; 
+        } 
+ 
+        .filter-button { 
+          font-size: 18px; 
+          padding: 3px 10px; 
+          width: auto; 
+          height: auto; 
+          cursor: pointer; 
+          border: 1px solid #ccc; 
+          border-radius: 5px; 
+          background-color: #f8f8f8; 
+        } 
+ 
+        .filter-container { 
+            border: 2px solid #000; 
+            padding: 10px; 
+            margin-top: 120px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background-color: rgb(220, 220, 220); 
+        } 
+ 
+        .filter-input { 
+            flex: 1; 
+            padding: 5px; 
+            text-align: center; 
+        } 
+        .filter-button:hover { 
+          background-color: rgb(163, 163, 163); 
+        } 
+         
+        img.icon { 
+            top: 10px; 
+            left: 20px; 
+            width: 100px; 
+            height: 65px; 
+            position: absolute; 
+        } 
     </style>
 </head>
 
+<body>
     <header>
-        <h1>What-A-Waste</h1>
+        <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -131,41 +146,36 @@
         </div>
     </header>
 
-  
-    
-
-<body>
     <!-- Filter Container -->
     <div class="filter-container">
         <form method="GET" action="/filter_images">
-            <label for="st_date">Start Date:</label>
+            <label for="st_date">{{ _('Start Date:') }}</label>
             <input type="date" name="st_date" id="st_date" value="{{ st_date }}">
     
-            <label for="end_date">End Date:</label>
+            <label for="end_date">{{ _('End Date:') }}</label>
             <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
-            <label for="loc">Location:</label>
+            <label for="loc">{{ _('Location:') }}</label>
             <input type="text" name="loc" id="loc" value="{{ loc }}">
-            <label for="user_id">Username:</label>
+            <label for="user_id">{{ _('Username:') }}</label>
             <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
     
-            <input type="submit" value="Filter" class="filter-button">
+            <input type="submit" value="{{ _('Filter') }}" class="filter-button">
         </form>
     </div>
 
-    
     <div class="image-table">
-        <h1 style="text-align: center;">View History</h1>
+        <h1 style="text-align: center;">{{ _('View History') }}</h1>
         <table>
             <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Start Date</th>
-                <th>Expiry Date</th>
-                <th>Location</th>
-                <th>User</th>
-                <th>Gross<br>Weight</th> 
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>{{ _('ID') }}</th>
+                <th>{{ _('Image') }}</th>
+                <th>{{ _('Start Date') }}</th>
+                <th>{{ _('Expiry Date') }}</th>
+                <th>{{ _('Location') }}</th>
+                <th>{{ _('User') }}</th>
+                <th>{{ _('Gross') }}<br>{{ _('Weight') }}<br>{{ _('(kg)') }}</th> 
+                <th>{{ _('Edit') }}</th>
+                <th>{{ _('Delete') }}</th>
             </tr>
             {% for info in image_info %}
                 <tr>
@@ -181,13 +191,13 @@
                     <td>
                         <form method="GET" action="/edit_data">
                             <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
-                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">Edit</button>
+                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">{{ _('Edit') }}</button>
                         </form>
                     </td>
                     <td>
                         <form method="POST" action="/delete_image">
                             <input type="hidden" name="image_id" value="{{ info['image_id'] }}">
-                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">Delete</button>
+                            <button type="submit" style="width: 80px; height: 30px; cursor: pointer;">{{ _('Delete') }}</button>
                         </form>
                     </td>
                 </tr>
