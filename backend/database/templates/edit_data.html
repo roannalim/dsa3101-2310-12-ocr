@@ -135,11 +135,11 @@
     <div class="box">
         <form method="POST" action="/edit_data">
             <input type="hidden" name="image_id" value="{{ image_info['image_id'] }}">
-            <label for="start_date">Start Date:</label>
+            <label for="start_date">{{ _('Start Date:') }}</label>
             <input type="date" name="start_date" value="{{ image_info['start_date'] }}">
-            <label for="expiry_date">Expiry Date:</label>
+            <label for="expiry_date">{{ _('Expiry Date:') }}</label>
             <input type="date" name="expiry_date" value="{{ image_info['expiry_date'] }}">
-            <label for="location">Location:</label>
+            <label for="location">{{ _('Location:') }}</label>
 
             <select name="location" id="locationSelect" required>
                 <option value="UTown" {{ 'selected' if image_info['location'] == 'UTown' else '' }}>UTown</option>
@@ -149,12 +149,12 @@
                 <option value="Tembusu" {{ 'selected' if image_info['location'] == 'Tembusu' else '' }}>Tembusu</option>
             </select> 
 
-            <label for="gross_weight">Gross Weight:</label>
+            <label for="gross_weight">{{ _('Gross Weight (kg):') }}</label>
             <input type="int" name="gross_weight" value="{{ image_info['gross_weight'] }}"><br>
 
             <div class="button-container">
-                <button type="submit" name="action" value="update" class="update-button">Update</button>
-                <a href="/view_images" class="cancel-button">Cancel</a>
+                <button type="submit" name="action" value="update" class="update-button">{{ _('Update') }}</button>
+                <a href="/view_images" class="cancel-button">{{ _('Cancel') }}</a>
             </div>
         </form>
     </div>

@@ -136,7 +136,7 @@
         <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -152,8 +152,8 @@
     <div class="button-container">
         <div class="box">
             <img src="{{ url_for('static', filename='Web Images/thank-you-page-gif1.gif') }}" alt="Thank You GIF" width="180" height="180">
-            <p class="description">Your image has been successfully uploaded.</p>
-            <a href="{{ url_for('submit') }}"><button class="return-button" type="submit">Upload another image?</button></a>
+            <p class="description">{{ _('Your image has been successfully uploaded.') }}</p>
+            <a href="{{ url_for('submit') }}"><button class="return-button" type="submit">{{ _('Upload another image?') }}</button></a>
         </div>
     </div>
 </body>

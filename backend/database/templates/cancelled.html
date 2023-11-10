@@ -141,7 +141,7 @@
         <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -157,9 +157,9 @@
 
     <div class="button-container">
         <div class="box">
-            <h1>Upload Cancelled</h1>
+            <h1>{{ _('Upload Cancelled') }}</h1>
             <img src="{{ url_for('static', filename='Web Images/cross_icon.png') }}" alt="Cross Logo" class="logo">
-            <a href="{{ url_for('submit') }}"><button type="button" class="return-button">Upload another image?</button></a>
+            <a href="{{ url_for('submit') }}"><button type="button" class="return-button">{{ _('Upload another image?') }}</button></a>
         </div>
     </div>
 </body>

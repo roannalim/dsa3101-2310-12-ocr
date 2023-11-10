@@ -183,7 +183,7 @@
         <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -200,8 +200,8 @@
 
         <div class="button-container">
             <form method="post">
-                <button type="submit" name="confirm" value="yes" class="confirm-button">Confirm</button>
-                <button type="submit" name="confirm" value="no" class="cancel-button">Cancel</button>
+                <button type="submit" name="confirm" value="yes" class="confirm-button">{{ _('Confirm') }}</button>
+                <button type="submit" name="confirm" value="no" class="cancel-button">{{ _('Cancel') }}</button>
             </form>
         </div>
     </div>

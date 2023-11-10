@@ -133,6 +133,7 @@
 
         td.label {
             font-size: 20px;
+            white-space: nowrap;
         }
 
         .image-container {
@@ -165,7 +166,7 @@
         <img src="{{ url_for('static', filename='Web Images/our_logo.png') }}" alt="Our icon" class="icon">
         <div>
             <form action="/" method="get">
-                <button type="submit" class="logout-button">Logout</button>
+                <button type="submit" class="logout-button">{{ _('Logout') }}</button>
             </form>
         </div>
         <div>
@@ -180,20 +181,20 @@
 
     <div class="button-container">
         <div class="box">
-            <p class="description">Upload an image to get started!</p>
+            <p class="description">{{ _('Upload an image to get started!') }}</p>
             <img src="{{ url_for('static', filename='Web Images/upload_icon.png') }}" alt="Dashboard Logo" class="logo">
             <form action="/upload" method="POST" enctype="multipart/form-data">
                 <table>
                     <tr>
-                        <td class="label">Image:</td>
+                        <td class="label">{{ _('Image:') }}</td>
                         <td><input type="file" name="image" value="" id="image" required/></td>
                     </tr>
 
                     <tr>
-                        <td class="label">Location:</td>
+                        <td class="label">{{ _('Location:') }}</td>
                         <td>
                             <select name="location" id="locationSelect" required>
-                                <option value="" disabled selected>Select an option</option>
+                                <option value="" disabled selected>{{ _('Select an option') }}</option>
                                 <option value="UTown">UTown</option>
                                 <option value="PGP">PGP</option>
                                 <option value="UTR">UTR</option>
@@ -204,7 +205,7 @@
                     </tr>
 
                     <td colspan="2">
-                        <input type="submit" value="Submit" class="submit-button" />
+                        <input type="submit" value="{{ _('Submit') }}" class="submit-button" />
 
                     </td>
                 </table>

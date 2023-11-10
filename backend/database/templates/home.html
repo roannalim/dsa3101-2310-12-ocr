@@ -146,9 +146,9 @@
             <p class="description">{{ _('Visit the dashboard for more insights.') }}</p>
             <img src="{{ url_for('static', filename='Web Images/dashboard_icon.png') }}" alt="Dashboard Logo" class="logo"> <!-- Dashboard Logo -->
 
-            <form action="/dashboard" method="get">
-                <button type="submit" class="go-button">{{ _('Dashboard') }}</button>
-            </form>
+            
+            <button type="submit" class="go-button" onclick="window.location.href='http://127.0.0.1:8050/'">{{ _('Dashboard') }}</button>
+            
         </div>
 
         <div class="box">
