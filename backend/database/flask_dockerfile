@@ -1,0 +1,32 @@
+# base image
+FROM python:3.10.13-slim-bookworm
+
+### TO DO: ###
+# ADD 1. Python script, 2. requirements file, 3. templates and 4. static folder to /app 
+# directory on the image:
+## ADD YOUR INSTRUCTIONS BELOW ##
+WORKDIR /app
+COPY ./backend/database/images/ /app/images/
+COPY ./backend/database/test.py ./backend/database/requirements.txt ./backend/database/test_data.csv ./backend/database/users.csv /app/
+COPY ./backend/database/templates/ /app/templates/
+COPY ./backend/database/static/ /app/static/
+COPY ./backend/database/translations/ /app/translations/
+
+# things to make test.py work
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+# Install Gunicorn
+RUN pip3 install gunicorn
+
+# Expose the port on which Gunicorn will listen
+EXPOSE 5000
+
+# Define the entry point to run Gunicorn
+ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app"]
+
+
+
+
+#ENTRYPOINT ["python", "-u", "test.py"]
+
