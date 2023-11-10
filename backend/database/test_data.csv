@@ -1,15 +1,15 @@
 image,start_date,expiry_date,location,username,gross_weight
-NULL,2023-01-16,2024-01-25,CAPT,user1,890
-NULL,2023-01-16,2024-01-25,RC4,user1,1040
-NULL,2023-01-16,2024-01-25,Tembusu,user1,370
-NULL,2023-01-16,2024-01-25,UTown,user1,160
-NULL,2023-01-16,2024-01-25,RC4,user1,1422
-NULL,2023-01-16,2024-01-25,UTown,user1,1690
-NULL,2023-01-16,2024-01-25,Start,user1,0
-NULL,2023-01-17,2024-01-25,CAPT,user1,1310
-NULL,2023-01-17,2024-01-25,RC4,user1,1940
-NULL,2023-01-17,2024-01-25,Tembusu,user1,790
-NULL,2023-01-17,2024-01-25,UTown,user1,210
-NULL,2023-01-17,2024-01-25,UTR,user1,2210
-NULL,2023-01-17,2024-01-25,UTR,user1,2540
-NULL,2023-01-17,2024-01-25,Start,user1,0
+NULL,16/1/2023,25/1/2024,College of Alice and Peter Tan,user1,890
+NULL,16/1/2023,25/1/2024,Residential College 4,user1,1040
+NULL,16/1/2023,25/1/2024,Tembusu / Cinnamon College,user1,370
+NULL,16/1/2023,25/1/2024,UTown Residences,user1,160
+NULL,16/1/2023,25/1/2024,Yale-NUS Cendana College,user1,1422
+NULL,16/1/2023,25/1/2024,Yale-NUS Elm College,user1,1690
+NULL,16/1/2023,25/1/2024,Start,user1,0
+NULL,17/1/2023,25/1/2024,College of Alice and Peter Tan,user1,1310
+NULL,17/1/2023,25/1/2024,Residential College 4,user1,1940
+NULL,17/1/2023,25/1/2024,Tembusu / Cinnamon College,user1,790
+NULL,17/1/2023,25/1/2024,UTown Residences,user1,210
+NULL,17/1/2023,25/1/2024,Yale-NUS Cendana College,user1,2210
+NULL,17/1/2023,25/1/2024,Yale-NUS Elm College,user1,2540
+NULL,17/1/2023,25/1/2024,Start,user1,0
