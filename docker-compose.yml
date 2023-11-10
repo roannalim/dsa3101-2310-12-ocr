@@ -20,7 +20,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: ./database/database_dockerfile
+      dockerfile: ./backend/database/database_dockerfile
     ports:
       - "3307:3306"
   

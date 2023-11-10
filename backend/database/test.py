@@ -40,6 +40,14 @@ def get_locale():
 
 babel.init_app(app, locale_selector=get_locale)
 
+def establish_sql_connection():
+    connection = mysql.connector.connect(
+    host="db",
+    user="root",
+    password="icebear123",
+    database="OCR_DB"
+    )
+    return connection
 
 # Read csv file to store the user data
 users_file = pd.read_csv('users.csv')
@@ -70,7 +78,7 @@ def storingImages(file):
     for index, row in file.iterrows():
         # another line to read 10 images and store as image,, binary
             # Assuming you have a column in your CSV that contains file paths of the images
-            image_path = f'/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/images/{index}.jpg'  # Adjust this to match your column name
+            image_path = f'./images/{index}.jpg'  # Adjust this to match your column name
 
             # Read the image file as binary data
             with open(image_path, 'rb') as f:
@@ -94,62 +102,6 @@ images = storingImages(images_file)
 
 def is_authenticated(username, password):
     return users.get(username) == password
-
-# Create the database
-def createDatabase():
-    try:
-        connection = mysql.connector.connect(
-            host=os.getenv("MYSQL_HOST"),
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD")
-        )
-
-        cursor = connection.cursor()
-        database_name = os.getenv("MYSQL_DB")
-
-        create_database_query = f"CREATE DATABASE IF NOT EXISTS {database_name};"
-
-        cursor.execute(create_database_query)
-
-        print(f"Database '{database_name}' created successfully.")
-
-    except Exception as e:
-        print(f'An error occurred: {str(e)}')
-
-    finally:
-        cursor.close()
-        connection.close()
-
-# Call the createDatabase function to create the database
-createDatabase()
-
-# Create the users table
-def createUsersTable():
-    try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
-
-        cursor = connection.cursor()
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS users (
-            user_id int(10) NOT NULL auto_increment,
-            username VARCHAR(45) NOT NULL UNIQUE,
-            password VARCHAR(45) NOT NULL,
-            PRIMARY KEY (user_id, username)
-        );
-        """
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        print("Table 'users' created successfully.")
-
-    except Exception as e:
-        print(f'An error occurred: {str(e)}')
-    
-# Call the createUsersTable function to create the table
-createUsersTable()
 
 # Insert data into the users table
 def insertUsersTable(users):
@@ -178,48 +130,10 @@ def insertUsersTable(users):
 # Call the insertUsersTable function to insert data into the table
 insertUsersTable(users)
 
-# Create the images table
-def createImagesTable():
-    try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
-
-        cursor = connection.cursor()
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS images (
-            image_id int(10) NOT NULL auto_increment,
-            image LONGBLOB NOT NULL,
-            start_date DATE NOT NULL,
-            expiry_date DATE NOT NULL,
-            location VARCHAR(45) NOT NULL,
-            username VARCHAR(45) NOT NULL,
-            gross_weight int(10) NOT NULL,
-            PRIMARY KEY (image_id)
-        );
-        """
-
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        connection.close()
-        print("Table 'images' created successfully.")
-
-    except Exception as e:
-        print(f'An error occurred: {str(e)}')
-
-# Call the createImagesTable function to create the table
-createImagesTable()
-
 # Insert data into the images table
 def insertImagesTable(images):
     try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
-
+        connection = establish_sql_connection()
         cursor = connection.cursor()
         insert_query = """
         INSERT INTO images (image, start_date, expiry_date, location, username, gross_weight) VALUES (%s, %s, %s, %s, %s, %s);
@@ -239,57 +153,9 @@ def insertImagesTable(images):
 # Call the insertImagesTable function to insert data into the table
 insertImagesTable(images)
 
-# Delete the images table
-def deleteImagesTable():
-    try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
-
-        cursor = connection.cursor()
-        create_table_query = """
-        DROP TABLE IF EXISTS images;
-        """
-
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        print("Table 'images' deleted successfully.")
-
-    except Exception as e:
-        return f'An error occurred: {str(e)}'
-
-# Call the deleteImagesTable function to delete the images table
-# deleteImagesTable()
-
-# Delete the users table
-def deleteUsersTable():
-    try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
-
-        cursor = connection.cursor()
-        create_table_query = """
-        DROP TABLE IF EXISTS users;
-        """
-
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        print("Table 'users' deleted successfully.")
-
-    except Exception as e:
-        return f'An error occurred: {str(e)}'
-
-# Call the deleteUsersTable function to delete the users table
-# deleteUsersTable()
-
 # Setting up the location to save the uploaded images
-UPLOAD_FOLDER='/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
-app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
+# UPLOAD_FOLDER='/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
+# app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
 
 # Login page
 @app.route('/', methods=['GET'])
@@ -317,10 +183,7 @@ def home():
 # Retrieve and display the image
 def retrieve_and_display_image(image_id):
     try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
+        connection = establish_sql_connection()
         cursor = connection.cursor()
         
         # Retrieve the binary image data from the database
@@ -343,21 +206,10 @@ def retrieve_and_display_image(image_id):
     except mysql.connector.Error as error:
         print("Failed to retrieve and display the image: {}".format(error))
 
-# Manual retrieval of image
-# image_id = 1
-# retrieve_and_display_image(image_id)
-
-#1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
-#2. front end delete button, and func delete the photo from the db
-#3. tag username to the image, and add it to the users table , and tag it to an image
-
 # Page to upload the images
 @app.route('/upload', methods=['GET', 'POST'])
 def submit():
-    connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
+    connection = establish_sql_connection()
     cursor = connection.cursor()
     if request.method == 'POST':
         if 'username' in session:
@@ -374,8 +226,6 @@ def submit():
 
             ###REPLACE THIS WITH THE GROSS WEIGHT EXTRACTED USING OCR
             gross_weight=0
-            #Save the image to a folder
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_n))
 
             # Insert data into the MySQL database
             cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username, gross_weight) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -402,19 +252,12 @@ def confirm_upload():
     if 'image_id' in session:
         # Retrieve image_id and file_name from session
         image_id = session['image_id']
-        file_name = session['file_name']
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
 
         image_data = None  # Initialize image_data as None
 
         if request.method == 'GET':
             # Fetch the image data from the database based on image_id
-            connection = mysql.connector.connect(
-                host=os.getenv("MYSQL_HOST"),
-                database=os.getenv("MYSQL_DB"),
-                user=os.getenv("MYSQL_USER"),
-                password=os.getenv("MYSQL_PASSWORD")
-            )
+            connection = establish_sql_connection()
             cursor = connection.cursor()
             cursor.execute("SELECT image FROM images WHERE image_id = %s", (image_id,))
             image_data = cursor.fetchone()
@@ -430,12 +273,7 @@ def confirm_upload():
                 # User confirmed the upload, do nothing
                 return redirect(url_for('success'))
             else:
-                connection = mysql.connector.connect(
-                    host=os.getenv("MYSQL_HOST"),
-                    database=os.getenv("MYSQL_DB"),
-                    user=os.getenv("MYSQL_USER"),
-                    password=os.getenv("MYSQL_PASSWORD")
-                )
+                connection = establish_sql_connection()
                 cursor = connection.cursor()
 
                 # Delete the record with the specified ID
@@ -443,9 +281,6 @@ def confirm_upload():
                 connection.commit()
                 cursor.close()
                 connection.close()
-
-                # Delete the uploaded file from the file system
-                os.remove(file_path)
 
                 return redirect(url_for('cancelled'))
         return render_template("confirm_upload.html", image_data_base64=image_data_base64)
@@ -476,10 +311,7 @@ app.jinja_env.filters['to_base64'] = image_to_base64
 @app.route('/view_images', methods=['GET'])
 def view_images():
     try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
+        connection = establish_sql_connection()
         cursor = connection.cursor()
         
         # Retrieve image and associated information from the database
@@ -524,10 +356,7 @@ def edit_data():
     if request.method == 'GET':
         image_id = request.args.get('image_id')
         try:
-            connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                                 database=os.getenv("MYSQL_DB"),
-                                                 user=os.getenv("MYSQL_USER"),
-                                                 password=os.getenv("MYSQL_PASSWORD"))
+            connection = establish_sql_connection()
             cursor = connection.cursor()
             
             # Retrieve image and associated information from the database
@@ -573,10 +402,7 @@ def edit_data():
             gross_weight=request.form.get('gross_weight')
             
             try:
-                connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                                     database=os.getenv("MYSQL_DB"),
-                                                     user=os.getenv("MYSQL_USER"),
-                                                     password=os.getenv("MYSQL_PASSWORD"))
+                connection = establish_sql_connection()
                 cursor = connection.cursor()
                 
                 # Update the image details in the database
@@ -602,10 +428,7 @@ def edit_data():
 def delete_image():
     image_id = request.form.get('image_id')
     try:
-        connection = mysql.connector.connect(host=os.getenv("MYSQL_HOST"),
-                                             database=os.getenv("MYSQL_DB"),
-                                             user=os.getenv("MYSQL_USER"),
-                                             password=os.getenv("MYSQL_PASSWORD"))
+        connection = establish_sql_connection()
         cursor = connection.cursor()
         
         # Delete the image row from the database
@@ -640,12 +463,7 @@ def filter_images():
         user_id = None
 
     try:
-        connection = mysql.connector.connect(
-            host=os.getenv("MYSQL_HOST"),
-            database=os.getenv("MYSQL_DB"),
-            user=os.getenv("MYSQL_USER"),
-            password=os.getenv("MYSQL_PASSWORD")
-        )
+        connection = establish_sql_connection()
         cursor = connection.cursor()
         
         query = "SELECT image_id, image, start_date, expiry_date, location, username, gross_weight FROM images WHERE 1=1"
@@ -671,8 +489,6 @@ def filter_images():
             params.append(user_id)
 
         cursor.execute(query, params)  # Pass the query and parameters to cursor.execute
-
-
 
         results = cursor.fetchall()
 

@@ -2,4 +2,4 @@ FROM mysql:latest
 
 ENV MYSQL_ROOT_PASSWORD=icebear123
 
-COPY ./database/ocr_db.sql /docker-entrypoint-initdb.d/
+COPY ./backend/database/ocr_db.sql /docker-entrypoint-initdb.d/
