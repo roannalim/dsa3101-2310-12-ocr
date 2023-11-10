@@ -108,3 +108,5 @@ def tesseract_ocr(filename):
     # # Convert image to text
     text = pytesseract.image_to_string(deskew(image))
     return text
+
+#print(tesseract_ocr("../../../12-ocr-image-data/u_town_residence_after/Android/li_-4.33.png"))
