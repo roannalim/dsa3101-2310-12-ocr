@@ -1,4 +1,4 @@
-# change directory to: "c:/users/wenji/desktop/nus academics/nus y3s1/dsa3101/dsa3101-2310-12-ocr/backend/model"
+# if local_image == true: change directory to: "c:/users/wenji/desktop/nus academics/nus y3s1/dsa3101/dsa3101-2310-12-ocr/backend/model"
 
 # pip install pytesseract numpy opencv-python imutils
 
@@ -6,6 +6,7 @@
 from PIL import Image
 import pytesseract #also required for preprocessing
 import numpy as np
+import re
 
 # libraries for preprocessing 
 from pytesseract import Output
@@ -13,40 +14,13 @@ import argparse
 import imutils
 import cv2
 
-# Load image
-## testing from local image
-area = 'capt' #'capt' or 'rc4', 'u_town_residence', 'cinnamon'
-time = 'after' #'after' or 'before'
-phonetype = 'Android' #'iPhone' or 'Android'
-photo = 'test-skewed' 
-filetype = 'jpg' #'jpeg' or 'jpg'
+local_image = False
 
-filename = f'../../../12-ocr-image-data/{area}_{time}/{phonetype}/{photo}.{filetype}'
-
-def tesseract_ocr(filename):
-    #img1 = np.array(Image.open(filename))
+def tesseract_ocr(filename, debugging = False):
+    #if want to show deskew process, set debugging = True
     pytesseract.pytesseract.tesseract_cmd = 'C:/Program Files/Tesseract-OCR/tesseract.exe' 
 
-    # # Preprocessing
-    # # ap = argparse.ArgumentParser()
-    # # ap.add_argument("-i", "--image", required = True, help = "path to input image to be OCR'd")
-    # # args = vars(ap.parse_args())
-
-    # image = cv2.imread(filename)
-    # rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    # results = pytesseract.image_to_osd(rgb, output_type=Output.DICT)
-
-    # print("[INFO] detected orientation: {}".format(results["orientation"]))
-    # print("[INFO] rotate by {} degrees to correct". format(results["rotate"]))
-    # print("[INFO] detected script: {}".format(results["script"]))
-
-    # rotated = imutils.rotate_bound(image, angle=results["rotate"])
-
-    # cv2.imshow("Original", image)
-    # cv2.imshow("Output", rotated)
-    # cv2.waitKey(0)
-
-    # Preprocessing method 2: Deskewing
+    # Preprocessing functions: Deskewing
     def getSkewAngle(cvImage) -> float:
         newImage = cvImage.copy()
         gray = cv2.cvtColor(newImage, cv2.COLOR_BGR2GRAY)
@@ -80,33 +54,57 @@ def tesseract_ocr(filename):
         angle = getSkewAngle(cvImage)
         return rotateImage(cvImage, angle)
 
-    #resize for cv2.imshow() on local machine
-    def ResizeWithAspectRatio(image, width=None, height=None, inter=cv2.INTER_AREA):
-        dim = None
-        (h, w) = image.shape[:2]
-
-        if width is None and height is None:
-            return image
-        if width is None:
-            r = height / float(h)
-            dim = (int(w * r), height)
-        else:
-            r = width / float(w)
-            dim = (width, int(h * r))
-
-        return cv2.resize(image, dim, interpolation=inter)
-
     image = cv2.imread(filename)
-    #gray = cv2.cvtColor(image.copy(), cv2.COLOR_BGR2GRAY)
 
-    #cv2.imshow("Original", ResizeWithAspectRatio(image, height = 1000))
-    #cv2.imshow("Output", ResizeWithAspectRatio(deskew(image), height=1000))
-    #cv2.imshow("Output", ResizeWithAspectRatio(gray, height=1000))
+    if debugging:
+        #resize for cv2.imshow() on local machine
+        def ResizeWithAspectRatio(image, width=None, height=None, inter=cv2.INTER_AREA):
+            dim = None
+            (h, w) = image.shape[:2]
 
-    #cv2.waitKey(0)
+            if width is None and height is None:
+                return image
+            if width is None:
+                r = height / float(h)
+                dim = (int(w * r), height)
+            else:
+                r = width / float(w)
+                dim = (width, int(h * r))
 
-    # # Convert image to text
+            return cv2.resize(image, dim, interpolation=inter)
+        
+        cv2.imshow("Original", ResizeWithAspectRatio(image, height = 1000))
+        cv2.imshow("Deskewed", ResizeWithAspectRatio(deskew(image), height=1000))
+
+        cv2.waitKey(0)
+
+    # Convert image to text
     text = pytesseract.image_to_string(deskew(image))
-    return text
 
-#print(tesseract_ocr("../../../12-ocr-image-data/u_town_residence_after/Android/li_-4.33.png"))
+    if text is not None: #no text recognised in image
+        weight_4digit = re.match(r'\d{4}', text)
+        if weight_4digit is None: #no 4 digit numbers matched
+            weight_3digit = re.match(r'\d{3}', text)
+            if weight_3digit is None: #no 3 digit numbers matched
+                weight_2digit = re.match(r'\d{2}', text)
+                if weight_2digit is None: #no 2 digit numbers matched
+                    return ""
+                else:
+                    return weight_2digit.group(0)
+            else:
+                return weight_3digit.group(0)
+        else:
+            return weight_4digit.group(0)
+    else:
+        return ""
+
+if local_image:
+    ## testing from local image
+    area = 'capt' #'capt' or 'rc4', 'u_town_residence', 'cinnamon'
+    time = 'after' #'after' or 'before'
+    phonetype = 'Android' #'iPhone' or 'Android'
+    photo = '20231006_085648' #insert photo file name without extension
+    filetype = 'jpg' #'jpeg' or 'jpg'
+
+    filename = f'../../../12-ocr-image-data/{area}_{time}/{phonetype}/{photo}.{filetype}'
+    print(tesseract_ocr(filename))
