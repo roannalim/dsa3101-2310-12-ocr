@@ -453,6 +453,9 @@ def filter_images():
     end_date = request.args.get('end_date')
     user_id = request.args.get('user_id')
 
+    # Handle defualt value
+    if loc == "":
+        loc = None
     if not loc:
         loc = None
     if not st_date:

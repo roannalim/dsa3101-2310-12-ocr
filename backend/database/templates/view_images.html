@@ -154,8 +154,19 @@
     
             <label for="end_date">{{ _('End Date:') }}</label>
             <input type="date" name="end_date" id="end_date" value="{{ end_date }}">
+            
             <label for="loc">{{ _('Location:') }}</label>
-            <input type="text" name="loc" id="loc" value="{{ loc }}">
+            <select name="loc" id="loc">
+                <option value="" disabled selected>{{ _('Select an option') }}</option>
+                <option value="Start">Start</option>
+                <option value="UTown Residences">UTown Residences</option>
+                <option value="Tembusu / Cinnamon College">Tembusu / Cinnamon College</option>
+                <option value="College of Alice and Peter Tan">College of Alice and Peter Tan</option>
+                <option value="Residential College 4">Residential College 4</option>
+                <option value="Yale-NUS Cendana College">Yale-NUS Cendana College</option>
+                <option value="Yale-NUS Elm College">Yale-NUS Elm College</option>
+            </select>
+
             <label for="user_id">{{ _('Username:') }}</label>
             <input type="text" name="user_id" id="user_id" value="{{ user_id }}">
     
