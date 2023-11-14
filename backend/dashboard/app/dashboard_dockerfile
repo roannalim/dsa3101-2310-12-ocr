@@ -13,7 +13,7 @@ RUN R -e "install.packages(c('shiny', 'shinyWidgets', 'ggplot2', 'DT', 'dplyr', 
 RUN addgroup --system app && adduser --system --ingroup app app
 
 COPY ./backend/dashboard/app/app.R app.R
-COPY ./backend/dashboard/app/test1_data.csv test1_data.csv
+COPY ./backend/dashboard/app/test_data.csv test_data.csv
 COPY ./backend/dashboard/app/location_database.csv location_database.csv
 
 RUN chown app:app -R /home/app
