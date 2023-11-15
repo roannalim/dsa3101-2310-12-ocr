@@ -200,6 +200,13 @@
 
         <div class="button-container">
             <form method="post">
+                <!-- Add the updated gross weight input field -->
+                <label for="updated_gross_weight">Gross Weight:</label>
+                <input type="text" id="updated_gross_weight" name="updated_gross_weight" value="{{ image_info['gross_weight'] }}">
+
+                <!-- Add a hidden input field for the original gross weight -->
+                <input type="hidden" name="original_gross_weight" value="{{ image_info['gross_weight'] }}">
+
                 <button type="submit" name="confirm" value="yes" class="confirm-button">{{ _('Confirm') }}</button>
                 <button type="submit" name="confirm" value="no" class="cancel-button">{{ _('Cancel') }}</button>
             </form>

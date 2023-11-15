@@ -5,7 +5,6 @@ import io
 from datetime import datetime, timedelta
 import pdb
 from flask_babel import Babel #language translation
-##cronjob for deletion
 
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.utils import secure_filename
@@ -15,6 +14,8 @@ from dotenv import load_dotenv
 
 import pandas as pd
 import base64
+
+from pytorch_ocr_model_function import pytorch_easy_ocr
 
 load_dotenv()
 
@@ -40,14 +41,79 @@ def get_locale():
 
 babel.init_app(app, locale_selector=get_locale)
 
+# def establish_sql_connection():
+#     connection = mysql.connector.connect(
+#     host="db",
+#     user="root",
+#     password="icebear123",
+#     database="OCR_DB"
+#     )
+#     return connection
+
 def establish_sql_connection():
     connection = mysql.connector.connect(
-    host="db",
-    user="root",
-    password="icebear123",
-    database="OCR_DB"
+    host=os.getenv("MYSQL_HOST"),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DB")
     )
     return connection
+
+# Create the users table
+def createUsersTable():
+    try:
+        connection = establish_sql_connection()
+
+        cursor = connection.cursor()
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS users (
+            user_id int(10) NOT NULL auto_increment,
+            username VARCHAR(45) NOT NULL UNIQUE,
+            password VARCHAR(45) NOT NULL,
+            PRIMARY KEY (user_id, username)
+        );
+        """
+        cursor.execute(create_table_query)
+        connection.commit()
+        cursor.close()
+        print("Table 'users' created successfully.")
+
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+    
+# Call the createUsersTable function to create the table
+createUsersTable()
+
+# Create the images table
+def createImagesTable():
+    try:
+        connection = establish_sql_connection()
+
+        cursor = connection.cursor()
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS images (
+            image_id int(10) NOT NULL auto_increment,
+            image LONGBLOB NOT NULL,
+            start_date DATE NOT NULL,
+            expiry_date DATE NOT NULL,
+            location VARCHAR(45) NOT NULL,
+            username VARCHAR(45) NOT NULL,
+            gross_weight int(10) NOT NULL,
+            PRIMARY KEY (image_id)
+        );
+        """
+
+        cursor.execute(create_table_query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        print("Table 'images' created successfully.")
+
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+
+# Call the createImagesTable function to create the table
+createImagesTable()
 
 # Read csv file to store the user data
 users_file = pd.read_csv('users.csv')
@@ -218,14 +284,21 @@ def submit():
             image_data = f.read()
             photo_n = secure_filename(f.filename)
 
+            # OCR Processing
+            ocr_result_str = pytorch_easy_ocr(image_data)
+            # Attempting to convert the detected text to an integer
+            try:
+                gross_weight = int(ocr_result_str)
+                print("Successfully converted to an integer:", gross_weight)
+            except ValueError:
+                print("Error: Could not convert detected text to an integer")
+                gross_weight = 0
+
             # Calculate the start_date as the current date
             start_date = datetime.now().date()
 
             # Calculate the expiry_date as 3 months from the start_date
             expiry_date = start_date + timedelta(days=90)
-
-            ###REPLACE THIS WITH THE GROSS WEIGHT EXTRACTED USING OCR
-            gross_weight=0
 
             # Insert data into the MySQL database
             cursor.execute("INSERT INTO images (image, start_date, expiry_date, location, username, gross_weight) VALUES (%s, %s, %s, %s, %s, %s)",
@@ -253,16 +326,24 @@ def confirm_upload():
         # Retrieve image_id and file_name from session
         image_id = session['image_id']
 
-        image_data = None  # Initialize image_data as None
+        image_data_base64 = None  # Initialize image_data as None
+        image_info = None  # Initialize image_info as None
 
         if request.method == 'GET':
             # Fetch the image data from the database based on image_id
             connection = establish_sql_connection()
             cursor = connection.cursor()
-            cursor.execute("SELECT image FROM images WHERE image_id = %s", (image_id,))
-            image_data = cursor.fetchone()
-            if image_data:
-                image_data_base64 = base64.b64encode(image_data[0]).decode('utf-8')
+            cursor.execute("SELECT image, start_date, expiry_date, location, username, gross_weight FROM images WHERE image_id = %s", (image_id,))
+            result = cursor.fetchone()
+            if result:
+                image_data_base64 = base64.b64encode(result[0]).decode('utf-8')
+                image_info = {
+                    'start_date': result[1],
+                    'expiry_date': result[2],
+                    'location': result[3],
+                    'username': result[4],
+                    'gross_weight': result[5]
+                }
             else:
                 return "Image not found in the database."
             cursor.close()
@@ -270,6 +351,18 @@ def confirm_upload():
                     
         if request.method == 'POST':
             if request.form.get('confirm') == 'yes':
+                # Retrieve updated gross_weight from the form
+                updated_gross_weight = request.form.get('updated_gross_weight')
+
+                connection = establish_sql_connection()
+                cursor = connection.cursor()
+
+                # Update the gross_weight in the database
+                cursor.execute("UPDATE images SET gross_weight = %s WHERE image_id = %s", (updated_gross_weight, image_id))
+                connection.commit()
+                cursor.close()
+                connection.close()
+
                 # User confirmed the upload, do nothing
                 return redirect(url_for('success'))
             else:
@@ -283,7 +376,7 @@ def confirm_upload():
                 connection.close()
 
                 return redirect(url_for('cancelled'))
-        return render_template("confirm_upload.html", image_data_base64=image_data_base64)
+        return render_template("confirm_upload.html", image_data_base64=image_data_base64, image_info=image_info)
 
 # Define the success route
 @app.route('/success', methods=['GET'])
