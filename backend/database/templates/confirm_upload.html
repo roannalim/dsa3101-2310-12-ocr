@@ -23,22 +23,18 @@
             background-color: #f4f4f4;
         }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            align-items: center;
-            margin-top: 3%;
-        }
 
         .image-container {
             text-align: center;
             width: 100%;
+            height: 75%;
+            margin-top: 50px;
+            margin-bottom: 0px;
         }
 
         .image-container img {
             max-width: 100%;
-            max-height: 500px;
+            max-height: 70%;
             display: block;
             margin: 0 auto;
         }
@@ -56,8 +52,9 @@
             width: 80%;
             max-width: 800px;
             margin-top: 100px;
-            height: 600px;
+            height: 700px;
         }
+
 
         .button-container {
             display: flex;
@@ -65,16 +62,7 @@
             gap: 20px;
             align-items: center;
             width: 90%;
-            margin-top: 20px;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            align-items: center;
-            width: 90%;
-            margin-top: 20px;
+            margin-top: 0px;
         }
 
         .background-image-container {
@@ -175,6 +163,34 @@
             width: 100px;
             height: 65px;
         }
+
+        .input-container {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-container label {
+            font-size: 20px;
+            margin-right: 10px;
+            display: block;
+        }
+
+        .input-container input {
+
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .post-input-container {
+            margin-bottom: 50px;
+            margin-top: 0px;
+            display: flex;
+            align-items: center;
+        }
+        
+
     </style>
 </head>
 
@@ -198,17 +214,20 @@
             <img src="data:image/jpeg;base64,{{ image_data_base64 }}" alt="Uploaded Image">
         </div>
 
-        <div class="button-container">
+        <div class ="post-input-container">
             <form method="post">
-                <!-- Add the updated gross weight input field -->
-                <label for="updated_gross_weight">Gross Weight:</label>
-                <input type="text" id="updated_gross_weight" name="updated_gross_weight" value="{{ image_info['gross_weight'] }}">
+                <div class="input-container">
+                    <label for="updated_gross_weight">{{ _('Gross Weight (kg):') }}</label>
+                    <input type="text" id="updated_gross_weight" name="updated_gross_weight" value="{{ image_info['gross_weight'] }}">
+                    <!-- Add a hidden input field for the original gross weight -->
+                    <input type="hidden" name="original_gross_weight" value="{{ image_info['gross_weight'] }}">
 
-                <!-- Add a hidden input field for the original gross weight -->
-                <input type="hidden" name="original_gross_weight" value="{{ image_info['gross_weight'] }}">
+                </div>
 
-                <button type="submit" name="confirm" value="yes" class="confirm-button">{{ _('Confirm') }}</button>
-                <button type="submit" name="confirm" value="no" class="cancel-button">{{ _('Cancel') }}</button>
+                <div class="button-container">
+                    <button type="submit" name="confirm" value="yes" class="confirm-button">{{ _('Confirm') }}</button>
+                    <button type="submit" name="confirm" value="no" class="cancel-button">{{ _('Cancel') }}</button>
+                </div>
             </form>
         </div>
     </div>
