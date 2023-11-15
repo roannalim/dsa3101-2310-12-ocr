@@ -71,6 +71,7 @@ users = storingUser(users_file)
 
 # Read csv file to store the images data
 images_file = pd.read_csv('test_data.csv')
+
 # Create a dictionary to store the images data from the csv file
 def storingImages(file):
     images = {}
@@ -100,7 +101,6 @@ def storingImages(file):
 # Call the storingUser function to store the images data
 images = storingImages(images_file)
 
-
 def is_authenticated(username, password):
     return users.get(username) == password
 
@@ -124,7 +124,6 @@ def insertUsersTable(users):
         cursor.close()
         print("Data inserted successfully.")
 
-
     except Exception as e:
         print(f'An error occurred: {str(e)}')
 
@@ -146,7 +145,6 @@ def insertImagesTable(images):
         connection.commit()
         cursor.close()
         print("Data inserted successfully.")
-
 
     except Exception as e:
         print(f'An error occurred: {str(e)}')
@@ -419,7 +417,6 @@ def edit_data():
         # If the "Cancel" button is clicked, simply redirect to the "View Images" page
         return redirect('/view_images')
 
-
 # Delete Image
 @app.route('/delete_image', methods=['POST'])
 def delete_image():
@@ -518,7 +515,6 @@ def filter_images():
 
     except mysql.connector.Error as error:
         print("Failed to retrieve and display the filtered images: {}".format(error))
-
 
 if __name__ == 'main':
     app.run(debug=True)
