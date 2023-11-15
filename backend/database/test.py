@@ -41,79 +41,14 @@ def get_locale():
 
 babel.init_app(app, locale_selector=get_locale)
 
-# def establish_sql_connection():
-#     connection = mysql.connector.connect(
-#     host="db",
-#     user="root",
-#     password="icebear123",
-#     database="OCR_DB"
-#     )
-#     return connection
-
 def establish_sql_connection():
     connection = mysql.connector.connect(
-    host=os.getenv("MYSQL_HOST"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    database=os.getenv("MYSQL_DB")
+    host="db",
+    user="root",
+    password="icebear123",
+    database="OCR_DB"
     )
     return connection
-
-# Create the users table
-def createUsersTable():
-    try:
-        connection = establish_sql_connection()
-
-        cursor = connection.cursor()
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS users (
-            user_id int(10) NOT NULL auto_increment,
-            username VARCHAR(45) NOT NULL UNIQUE,
-            password VARCHAR(45) NOT NULL,
-            PRIMARY KEY (user_id, username)
-        );
-        """
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        print("Table 'users' created successfully.")
-
-    except Exception as e:
-        print(f'An error occurred: {str(e)}')
-    
-# Call the createUsersTable function to create the table
-createUsersTable()
-
-# Create the images table
-def createImagesTable():
-    try:
-        connection = establish_sql_connection()
-
-        cursor = connection.cursor()
-        create_table_query = """
-        CREATE TABLE IF NOT EXISTS images (
-            image_id int(10) NOT NULL auto_increment,
-            image LONGBLOB NOT NULL,
-            start_date DATE NOT NULL,
-            expiry_date DATE NOT NULL,
-            location VARCHAR(45) NOT NULL,
-            username VARCHAR(45) NOT NULL,
-            gross_weight int(10) NOT NULL,
-            PRIMARY KEY (image_id)
-        );
-        """
-
-        cursor.execute(create_table_query)
-        connection.commit()
-        cursor.close()
-        connection.close()
-        print("Table 'images' created successfully.")
-
-    except Exception as e:
-        print(f'An error occurred: {str(e)}')
-
-# Call the createImagesTable function to create the table
-createImagesTable()
 
 # Read csv file to store the user data
 users_file = pd.read_csv('users.csv')
@@ -219,10 +154,6 @@ def insertImagesTable(images):
 # Call the insertImagesTable function to insert data into the table
 insertImagesTable(images)
 
-# Setting up the location to save the uploaded images
-# UPLOAD_FOLDER='/Users/Shirley/Desktop/DSA3101/dsa3101-2310-12-ocr/backend/database/uploads'
-# app.config['UPLOAD_FOLDER']=UPLOAD_FOLDER
-
 # Login page
 @app.route('/', methods=['GET'])
 def login_page():
@@ -245,32 +176,6 @@ def login():
 @app.route('/home', methods=['GET'])
 def home():
     return render_template("home.html")
-
-# Retrieve and display the image
-def retrieve_and_display_image(image_id):
-    try:
-        connection = establish_sql_connection()
-        cursor = connection.cursor()
-        
-        # Retrieve the binary image data from the database
-        query = "SELECT image FROM images WHERE image_id = %s"
-
-        cursor.execute(query, (image_id,))
-        result = cursor.fetchone()
-
-        if result:
-            image_data = result[0]
-            
-            # Convert binary data to an image
-            image = Image.open(BytesIO(image_data))
-            
-            # Display the image
-            image.show()
-        else:
-            print("Image with ID {} not found.".format(image_id))
-        
-    except mysql.connector.Error as error:
-        print("Failed to retrieve and display the image: {}".format(error))
 
 # Page to upload the images
 @app.route('/upload', methods=['GET', 'POST'])

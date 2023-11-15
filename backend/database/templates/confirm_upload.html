@@ -216,12 +216,19 @@
 
         <div class ="post-input-container">
             <form method="post">
+                <!-- Section title -->
+                <h2>Confirm the data information?</h2>
+                <!-- Gross Weight input field -->
                 <div class="input-container">
                     <label for="updated_gross_weight">{{ _('Gross Weight (kg):') }}</label>
                     <input type="text" id="updated_gross_weight" name="updated_gross_weight" value="{{ image_info['gross_weight'] }}">
                     <!-- Add a hidden input field for the original gross weight -->
                     <input type="hidden" name="original_gross_weight" value="{{ image_info['gross_weight'] }}">
-
+                </div>
+                <!-- Location display -->
+                <div class="input-container">
+                    <label for="location">{{ _('Location:') }}</label>
+                    <span>{{ image_info['location'] }}</span>
                 </div>
 
                 <div class="button-container">

@@ -5,12 +5,16 @@ FROM python:3.10.13-slim-bookworm
 # ADD 1. Python script, 2. requirements file, 3. templates and 4. static folder to /app 
 # directory on the image:
 ## ADD YOUR INSTRUCTIONS BELOW ##
+RUN apt-get update && apt-get install -y libglib2.0-0 libgl1-mesa-glx && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY ./backend/database/images/ /app/images/
 COPY ./backend/database/test.py ./backend/database/requirements.txt ./backend/database/test_data.csv ./backend/database/users.csv /app/
 COPY ./backend/database/templates/ /app/templates/
 COPY ./backend/database/static/ /app/static/
 COPY ./backend/database/translations/ /app/translations/
+COPY ./backend/database/pytorch_ocr_model_function.py /app/
+COPY ./backend/database/best_retrained_object_detection_model.pth/ /app/
 
 # things to make test.py work
 RUN pip3 install --upgrade pip
@@ -23,10 +27,5 @@ RUN pip3 install gunicorn
 EXPOSE 5000
 
 # Define the entry point to run Gunicorn
-ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app"]
-
-
-
-
-#ENTRYPOINT ["python", "-u", "test.py"]
+ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app", "--timeout", "300"]
 

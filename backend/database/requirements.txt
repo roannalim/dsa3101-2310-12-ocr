@@ -6,4 +6,10 @@ python-dotenv==1.0.0
 Werkzeug==3.0.1
 Flask-Babel==4.0.0
 babel==2.12.1
-
+torch==2.1.0
+torchvision==0.16.0
+torchaudio ==2.1.0
+easyocr==1.7.1
+numpy==1.26.2
+opencv-python==4.8.0.76
+matplotlib==3.8.1
