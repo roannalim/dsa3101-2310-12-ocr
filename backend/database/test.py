@@ -491,7 +491,7 @@ def edit_data():
             start_date = request.form.get('start_date')
             expiry_date = request.form.get('expiry_date')
             location = request.form.get('location')
-            username = request.form.get('username')
+            username = session['username']
             gross_weight=request.form.get('gross_weight')
             
             try:
@@ -499,8 +499,7 @@ def edit_data():
                 cursor = connection.cursor()
                 
                 # Update the image details in the database
-                query = "UPDATE images SET start_date = %s, expiry_date = %s, location = %s, username = %s, gross_weight=%s WHERE image_id = %s"
-                cursor.execute(query, (start_date, expiry_date, location, username,gross_weight, image_id))
+                cursor.execute("UPDATE images SET start_date = %s, expiry_date = %s, location = %s, username = %s, gross_weight=%s WHERE image_id = %s", (start_date, expiry_date, location, username, gross_weight, image_id))
                 connection.commit()
 
                 cursor.close()
