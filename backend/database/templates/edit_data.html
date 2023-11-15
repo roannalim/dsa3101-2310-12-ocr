@@ -142,11 +142,13 @@
             <label for="location">{{ _('Location:') }}</label>
 
             <select name="location" id="locationSelect" required>
-                <option value="UTown" {{ 'selected' if image_info['location'] == 'UTown' else '' }}>UTown</option>
-                <option value="PGP" {{ 'selected' if image_info['location'] == 'PGP' else '' }}>PGP</option>
-                <option value="UTR" {{ 'selected' if image_info['location'] == 'UTR' else '' }}>UTR</option>
-                <option value="CAPT" {{ 'selected' if image_info['location'] == 'CAPT' else '' }}>CAPT</option>
-                <option value="Tembusu" {{ 'selected' if image_info['location'] == 'Tembusu' else '' }}>Tembusu</option>
+                <option value="Start" {{ 'selected' if image_info['location'] == 'Start' else '' }}>Start</option>
+                <option value="UTown Residences" {{ 'selected' if image_info['location'] == 'UTown Residences' else '' }}>UTown Residences</option>
+                <option value="Tembusu / Cinnamon College" {{ 'selected' if image_info['location'] == 'Tembusu / Cinnamon College' else '' }}>Tembusu / Cinnamon College</option>
+                <option value="College of Alice and Peter Tan" {{ 'selected' if image_info['location'] == 'SCollege of Alice and Peter Tan' else '' }}>College of Alice and Peter Tan</option>
+                <option value="Residential College 4" {{ 'selected' if image_info['location'] == 'Residential College 4' else '' }}>Residential College 4</option>
+                <option value="Yale-NUS Cendana College" {{ 'selected' if image_info['location'] == 'Yale-NUS Cendana College' else '' }}>Yale-NUS Cendana College</option>
+                <option value="Yale-NUS Elm College" {{ 'selected' if image_info['location'] == 'Yale-NUS Elm College' else '' }}>Yale-NUS Elm College</option>
             </select> 
 
             <label for="gross_weight">{{ _('Gross Weight (kg):') }}</label>
