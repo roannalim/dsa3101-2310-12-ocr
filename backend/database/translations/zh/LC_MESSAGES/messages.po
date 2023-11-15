@@ -54,7 +54,7 @@ msgstr "有效期至:"
 msgid "Location:"
 msgstr "地点:"
 
-#: templates/edit_data.html:152
+#: templates/edit_data.html:152 templates/confirm_upload.html:220
 msgid "Gross Weight (kg):"
 msgstr "净重 (千克):"
 
