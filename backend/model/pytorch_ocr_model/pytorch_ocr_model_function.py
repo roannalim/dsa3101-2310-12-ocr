@@ -10,11 +10,11 @@ import torch
 import torchvision
 import torchvision.transforms as T
 import torchvision.transforms.functional as TF
+from io import BytesIO
 from matplotlib import pyplot as plt
 from PIL import Image
-from torch.utils.data import IterableDataset
+from torch.utils.data import IterableDataset, DataLoader
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-from torchvision.transforms import v2
 
 local_image = False
 
@@ -33,7 +33,7 @@ class MyDataset(IterableDataset):
     def __iter__(self):
         return self.read_next_image()
 
-def pytorch_easy_ocr(filename, debugging = False):
+def pytorch_easy_ocr(image, debugging = False):
 
     # load trained model
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn()
@@ -50,15 +50,15 @@ def pytorch_easy_ocr(filename, debugging = False):
     
     # load input image
     buffer = queue.Queue()
-    new_input = Image.open(filename)
+    if type(image) is str:
+        new_input = Image.open(image)
+    else:
+        new_input = Image.open(BytesIO(image))
     buffer.put(TF.to_tensor(new_input)) 
 
-    # image = Image.open(filename)
-    # processed_image = TF.to_tensor(image)
-    # processed_image.unsqueeze_(0)
-
+    # load image into dataloader
     dataset = MyDataset(buffer)
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=1)
+    dataloader = DataLoader(dataset, batch_size=1)
 
     outputs = None
 
@@ -78,29 +78,27 @@ def pytorch_easy_ocr(filename, debugging = False):
         score = scores[0]                # select only those scores with highest score 
         print("Bounding Box Detection Score: ", score)
 
-    xmin = box[0]
-    ymin = box[1]
-    xmax = box[2]
-    ymax = box[3]
+    xmin, ymin, xmax, ymax = box[0], box[1], box[2], box[3]
     area = (xmin, ymin, xmax, ymax)
     
     # Filter image to bounding box
     region = new_input.crop(area)
-    opencvImage = cv2.cvtColor(np.array(region), cv2.COLOR_RGB2GRAY)
+    opencvImage = cv2.cvtColor(np.array(region), cv2.COLOR_BGR2GRAY)
 
     # histogram equalization
     equ = cv2.equalizeHist(opencvImage)
 
     # manual thresholding
-    th2 = 100 # this threshold might vary!
+    th2 = 80 # this threshold might vary!
     equ[equ>=th2] = 255
     equ[equ<th2]  = 0
 
-    photo = re.search(r'[\/][^\/.]+[.]', filename).group()[1:-1]
-    filetype = re.search(r'.[j][p].+', filename).group()
-    right = "/"+photo+filetype
-    path = filename.partition(right)[0]
-    cv2.imwrite(f'{path}/{photo}_cropped.jpg', equ)
+    if local_image:
+        photo = re.search(r'[\/][^\/.]+[.]', filename).group()[1:-1]
+        filetype = re.search(r'.[j][p].+', filename).group()
+        right = "/"+photo+filetype
+        path = filename.partition(right)[0]
+        cv2.imwrite(f'{path}/{photo}_cropped.jpg', equ)
 
     # Initialise EasyOCR Reader
     reader = easyocr.Reader(['en'])
@@ -108,16 +106,32 @@ def pytorch_easy_ocr(filename, debugging = False):
     # Obtain OCR Result
     ocr_result = reader.readtext(equ, # region of interest image
                                  allowlist = '0123456789', # only output digits
-                                 detail = 0, # less-detailed and simple output
+                                 detail = 1, # less-detailed and simple output
                                  paragraph = False, # no paragraphing in image
                                  rotation_info = [0, 90, 180, 270], # try all possible text orientations
                                  width_ths = 0.2) #maximum horizontal distance for bounding box merging
+    
+    final_result = ""
+
+    if ocr_result is not None:
+        highest_score = 0
+        desired_ocr_result = None
+        for i in range(len(ocr_result)):
+            if float(ocr_result[i][2]) > highest_score:
+                desired_ocr_result = ocr_result[i]
+                highest_score = ocr_result[i][2]
+
+        print("EasyOCR Results:\n",
+            "Recognised Text = ", desired_ocr_result[1], "\n",
+            "Text Recognition Score = ", desired_ocr_result[2])
+        
+        final_result = desired_ocr_result[1]
 
     if debugging: # Show image with bounding boxes
 
         sample = images[0].permute(1,2,0).cpu().numpy()
         
-        fig, ax = plt.subplots(1, 1, figsize=(16, 8))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 8))
 
         sample = np.ascontiguousarray(sample)
 
@@ -126,15 +140,25 @@ def pytorch_easy_ocr(filename, debugging = False):
                     (box[2], box[3]),
                     (220, 0, 0), 2)
             
-        ax.set_axis_off()
-        ax.imshow(sample)
+        ax1.set_axis_off()
+        ax1.imshow(sample)
+        ax1.set_title("Original Image with\nObject Detection Bounding Box")
+
+        bbox = desired_ocr_result[0]
+        print(bbox)
+
+        equ = np.ascontiguousarray(equ)
+
+        cv2.rectangle(equ,
+                    (bbox[0][0], bbox[0][1]),
+                    (bbox[2][0], bbox[2][1]),
+                    (220, 0, 0), 2)                        
+
+        ax2.set_axis_off()
+        ax2.imshow(equ)
+        ax2.set_title("Cropped Image with\nEasyOCR Bounding Box")
+
         plt.show(block = True)
-
-    final_result = ""
-
-    for i in ocr_result:
-        if len(i) >= 2:
-            final_result += i
 
     return final_result
 
