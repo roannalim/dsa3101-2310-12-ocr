@@ -16,7 +16,7 @@ from PIL import Image
 from torch.utils.data import IterableDataset, DataLoader
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-local_image = False
+local_image = True
 
 class MyDataset(IterableDataset):
     def __init__(self, image_queue, transforms = None):
@@ -45,7 +45,7 @@ def pytorch_easy_ocr(image, debugging = False):
 
     # replace the pre-trained head with a new one
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-    model.load_state_dict(torch.load('./best_retrained_object_detection_model.pth'))
+    model.load_state_dict(torch.load('./best_trained_object_detection_model.pth'))
     model.eval()
     
     # load input image
@@ -85,11 +85,11 @@ def pytorch_easy_ocr(image, debugging = False):
     region = new_input.crop(area)
     opencvImage = cv2.cvtColor(np.array(region), cv2.COLOR_BGR2GRAY)
 
-    # histogram equalization
+    # Histogram equalisation
     equ = cv2.equalizeHist(opencvImage)
 
-    # manual thresholding
-    th2 = 80 # this threshold might vary!
+    # Manual thresholding
+    th2 = 65 # Vary this threshold to determine extent of Histogram Equalisation
     equ[equ>=th2] = 255
     equ[equ<th2]  = 0
 
@@ -110,14 +110,14 @@ def pytorch_easy_ocr(image, debugging = False):
                                  paragraph = False, # no paragraphing in image
                                  rotation_info = [0, 90, 180, 270], # try all possible text orientations
                                  width_ths = 0.2) #maximum horizontal distance for bounding box merging
-    
     final_result = ""
+    print(ocr_result)
 
-    if ocr_result is not None:
+    if (ocr_result != []):
         highest_score = 0
         desired_ocr_result = None
         for i in range(len(ocr_result)):
-            if float(ocr_result[i][2]) > highest_score:
+            if ocr_result[i][2] > highest_score:
                 desired_ocr_result = ocr_result[i]
                 highest_score = ocr_result[i][2]
 
@@ -126,6 +126,8 @@ def pytorch_easy_ocr(image, debugging = False):
             "Text Recognition Score = ", desired_ocr_result[2])
         
         final_result = desired_ocr_result[1]
+    else: 
+        print("No digits recognised")
 
     if debugging: # Show image with bounding boxes
 
@@ -144,15 +146,19 @@ def pytorch_easy_ocr(image, debugging = False):
         ax1.imshow(sample)
         ax1.set_title("Original Image with\nObject Detection Bounding Box")
 
-        bbox = desired_ocr_result[0]
-        print(bbox)
+        if (ocr_result != []):
+            bbox = desired_ocr_result[0]
 
-        equ = np.ascontiguousarray(equ)
+            print(bbox)
+            equ = np.ascontiguousarray(equ)
 
-        cv2.rectangle(equ,
-                    (bbox[0][0], bbox[0][1]),
-                    (bbox[2][0], bbox[2][1]),
-                    (220, 0, 0), 2)                        
+            start_point = (int(bbox[0][0]), int(bbox[1][1]))
+            end_point = (int(bbox[2][0]), int(bbox[3][1]))
+
+            cv2.rectangle(equ,
+                        start_point,
+                        end_point,
+                        (220, 0, 0), 2)                        
 
         ax2.set_axis_off()
         ax2.imshow(equ)
@@ -165,9 +171,9 @@ def pytorch_easy_ocr(image, debugging = False):
 if local_image:
     ## testing from local image
     area = 'cinnamon' #'capt' or 'rc4', 'u_town_residence', 'cinnamon'
-    time = 'before' #'after' or 'before'
+    time = 'after' #'after' or 'before'
     phonetype = 'Android' #'iPhone' or 'Android'
-    photo = '20231006_084437' #insert photo file name without extension
+    photo = '20231006_084748' #insert photo file name without extension
     filetype = 'jpg' #'jpeg' or 'jpg'
 
     filename = f'../../../../12-ocr-image-data/{area}_{time}/{phonetype}/{photo}.{filetype}'

@@ -8,18 +8,20 @@ import pandas as pd
 import cv2
 import torch
 import torchvision
+from torchvision import tv_tensors
 from torchvision.transforms import v2
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_ResNet50_FPN_Weights
 from torch.utils.data import DataLoader, Dataset
 from matplotlib import pyplot as plt
+from PIL import Image
 
-cpu = torch.device("cpu") # Code not optimised for CUDA GPU usage
+cpu = torch.device("cpu") # Code is not optimised for GPU usage
 
 show_train_image_flag = False # set to True if want to show plot of training image with bounding box
 show_test_image_flag = False # set to True if want to show plot of training image with bounding box
 train_new_model_flag = False # set to True if want to train new model from pre-trained
-train_existing_model_flag = False # set to True if want to re-train existing model
+train_existing_model_flag = True # set to True if want to re-train existing model
 test_model_flag = True # set to True if want to test model
 
 train_df = pd.read_csv("training_data.csv")
@@ -27,6 +29,9 @@ train_df = pd.read_csv("training_data.csv")
 print("Checkpoint 1/11: Imports successful + CSV files successfully read")
 
 train_transform = v2.Compose([v2.ToImage(), 
+                              #v2.RandomResizedCrop((4000, 3000), antialias= True),
+                              #v2.Resize((4000,3000), antialias= True),
+                              #v2.RandomRotation(degrees = (90,90)),
                               v2.ToDtype(torch.float32, scale=True)])
 
 # Custom Dataset Class
@@ -47,24 +52,23 @@ class ScreenDataset(Dataset):
     
     def __getitem__(self, index: int):
         image_id = self.image_ids[index]
-        image = cv2.imread(f'{self.image_dir}/{image_id}', cv2.IMREAD_COLOR)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
-        image /= 255.0
+        image = Image.open(f'{self.image_dir}/{image_id}')
+        image = tv_tensors.Image(image)
 
-        if self.transforms is not None:  # Apply specified transformations
-            image = self.transforms(image)
-
-        if (self.train == False): # For test data
-            return image, image_id
-        
         # For train data
         records = self.df[self.df['image_id'] == image_id]   
         boxes = records[['xmin', 'ymin', 'xmax', 'ymax']].values
-        boxes = torch.as_tensor(boxes, dtype=torch.float32)
+        boxes = tv_tensors.BoundingBoxes(boxes,
+                                         format = "XYXY", 
+                                         canvas_size = image.shape[-2:])
         
-        area = (boxes[:, 3] - boxes[:, 1]) * (boxes[:, 2] - boxes[:, 0])
-        area = torch.as_tensor(area, dtype=torch.float32)
+        if self.transforms is not None:  # Apply specified transformations
+            image, boxes = self.transforms(image, boxes)
 
+        # For test data
+        if (self.train == False): 
+            return image, image_id
+        
         # there is only one class
         labels = torch.ones((records.shape[0],), dtype=torch.int64)
         
@@ -75,7 +79,6 @@ class ScreenDataset(Dataset):
         target['boxes'] = boxes
         target['labels'] = labels
         target['image_id'] = torch.tensor([index])
-        target['area'] = area
         target['iscrowd'] = iscrowd
 
         return image, target, image_id 
@@ -128,11 +131,12 @@ if (show_train_image_flag == True):
     boxes = targets[4]['boxes'].cpu().numpy().astype(np.int32)
     sample = images[4].permute(1,2,0).cpu().numpy()
 
-    fig, ax = plt.subplots(1, 1, figsize=(16, 8))
+    fig, ax = plt.subplots(1, 1, figsize = (16, 8))
 
     sample = np.ascontiguousarray(sample)
 
     for box in boxes:
+        print(box)
         cv2.rectangle(sample,
                     (box[0], box[1]),
                     (box[2], box[3]),
@@ -181,7 +185,7 @@ if ((train_new_model_flag) | (train_existing_model_flag)):
     optimizer = torch.optim.SGD(params, lr=0.01, momentum=0.9, weight_decay=0.00001)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.5)
 
-    num_epochs = 10
+    num_epochs = 50
 
     loss_hist = Averager()
     itr = 1
@@ -332,4 +336,4 @@ if (test_model_flag):
 
     print("Checkpoint 11/11: Saving Predictions to test_df.csv [Final]")
 
-    test_df.to_csv("test_prediction.csv", index = False)
+    test_df.to_csv("test_prediction1.csv", index = False)
