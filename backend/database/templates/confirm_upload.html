@@ -23,38 +23,34 @@
             background-color: #f4f4f4;
         }
 
-
         .image-container {
             text-align: center;
             width: 100%;
             height: 75%;
-            margin-top: 50px;
-            margin-bottom: 0px;
         }
 
         .image-container img {
             max-width: 100%;
-            max-height: 70%;
+            max-height: 400px;
             display: block;
             margin: 0 auto;
         }
 
         .content-container {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
             background: #fff;
-            border-radius: 10px;
+            border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 2;
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             margin-top: 100px;
-            height: 700px;
+            height: 600px;
         }
-
 
         .button-container {
             display: flex;
@@ -168,7 +164,7 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-left: 20px;
         }
 
         .input-container label {
@@ -178,18 +174,21 @@
         }
 
         .input-container input {
-
-            padding: 10px;
+            padding: 5px;
             box-sizing: border-box;
         }
 
         .post-input-container {
-            margin-bottom: 50px;
+            padding: 2px;
+            margin-left: 50px;
             margin-top: 0px;
             display: flex;
             align-items: center;
         }
         
+        .post-input-container h3 {
+            margin-left: 60px;
+        }
 
     </style>
 </head>
@@ -217,7 +216,7 @@
         <div class ="post-input-container">
             <form method="post">
                 <!-- Section title -->
-                <h2>Confirm the data information?</h2>
+                <h3>Confirm the data information?</h3>
                 <!-- Gross Weight input field -->
                 <div class="input-container">
                     <label for="updated_gross_weight">{{ _('Gross Weight (kg):') }}</label>
@@ -228,7 +227,7 @@
                 <!-- Location display -->
                 <div class="input-container">
                     <label for="location">{{ _('Location:') }}</label>
-                    <span>{{ image_info['location'] }}</span>
+                    <span style="font-size: 18px;">{{ image_info['location'] }}</span>
                 </div>
 
                 <div class="button-container">
