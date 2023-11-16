@@ -53,15 +53,17 @@ ERR: Empty Response Error:
 For Mac Users, during the uploading of images, you would face this error. Please use a Windows device if you would like to use this function.
 
 ## Troubleshooting
-1. Problem: Denied access to your own localhost  Solution: 1. Go to this website:  
+1. Problem: Denied access to your own localhost<br/>
+Solution: 1.Go to this website:  
 ```bash
 chrome://net-internals/#sockets
 ```
-2. Click on 'flush socket pools'.  
-3. Re-run your flask application.
+2.Click on 'flush socket pools'.<br/> 
+3.Re-run your flask application.
 
 
-2. Problem: Python 3.10 Certificate issue  Solution: Run this command in the terminal 
+2. Problem: Python 3.10 Certificate issue<br/>
+Solution: Run this command in the terminal 
 ```bash
 /Applications/Python\ 3.10/Install\ Certificates.command
 ```
