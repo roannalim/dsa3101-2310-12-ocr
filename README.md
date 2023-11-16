@@ -54,12 +54,13 @@ For Mac Users, during the uploading of images, you would face this error. Please
 
 ## Troubleshooting
 1. Problem: Denied access to your own localhost<br/>
-Solution: 1.Go to this website:  
+Solution:<br/> 
+	1.Go to this website:  
 ```bash
 chrome://net-internals/#sockets
 ```
-2.Click on 'flush socket pools'.<br/> 
-3.Re-run your flask application.
+	2.Click on 'flush socket pools'.<br/> 
+	3.Re-run your flask application.
 
 
 2. Problem: Python 3.10 Certificate issue<br/>
