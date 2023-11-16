@@ -509,7 +509,7 @@ def delete_image():
     except mysql.connector.Error as error:
         print("Failed to delete the image: {}".format(error))
 
-#1. filter by location and day , start_date = %s AND location= %s,, filter by user also, so user themselves can see their own hist
+# Filter images
 @app.route('/filter_images', methods=['GET'])
 def filter_images():
     loc = request.args.get('loc')
