@@ -9,10 +9,6 @@ services:
       - "9001:5000"
     depends_on:
       - db
-    deploy:
-      resources:
-        limits:
-          memory: 2G  # Set the memory limit for the 'web' service to 2GB
   dashboard:
     build: 
       context: .
