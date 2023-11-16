@@ -199,3 +199,7 @@ msgstr "有效期至:"
 #: templates/view_images.html:157
 msgid "Filter"
 msgstr "筛选"
+
+#: templates/confirm_upload.html:219
+msgid "Confirm the data information?"
+msgstr "请确认上传信息："
