@@ -41,14 +41,84 @@ def get_locale():
 
 babel.init_app(app, locale_selector=get_locale)
 
+# Uncomment this for docker version
+# def establish_sql_connection():
+#     connection = mysql.connector.connect(
+#     host="db",
+#     user="root",
+#     password="icebear123",
+#     database="OCR_DB"
+#     )
+#     return connection
+
+# Uncomment this for non-docker version
 def establish_sql_connection():
     connection = mysql.connector.connect(
-    host="db",
-    user="root",
-    password="icebear123",
-    database="OCR_DB"
-    )
+    host=os.getenv("MYSQL_HOST"),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DB"))
     return connection
+
+# Uncomment this for non-docker version
+# Create the users table
+def createUsersTable():
+    try:
+        connection = establish_sql_connection()
+
+        cursor = connection.cursor()
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS users (
+            user_id int(10) NOT NULL auto_increment,
+            username VARCHAR(45) NOT NULL UNIQUE,
+            password VARCHAR(45) NOT NULL,
+            PRIMARY KEY (user_id, username)
+        );
+        """
+        cursor.execute(create_table_query)
+        connection.commit()
+        cursor.close()
+        print("Table 'users' created successfully.")
+
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+
+# Uncomment this for non-docker version
+# Call the createUsersTable function to create the table
+createUsersTable()
+
+# Uncomment this for non-docker version
+# Create the images table
+def createImagesTable():
+    try:
+        connection = establish_sql_connection()
+
+        cursor = connection.cursor()
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS images (
+            image_id int(10) NOT NULL auto_increment,
+            image LONGBLOB NOT NULL,
+            start_date DATE NOT NULL,
+            expiry_date DATE NOT NULL,
+            location VARCHAR(45) NOT NULL,
+            username VARCHAR(45) NOT NULL,
+            gross_weight int(10) NOT NULL,
+            PRIMARY KEY (image_id)
+        );
+        """
+
+        cursor.execute(create_table_query)
+        connection.commit()
+        cursor.close()
+        connection.close()
+        print("Table 'images' created successfully.")
+
+    except Exception as e:
+        print(f'An error occurred: {str(e)}')
+
+# Uncomment this for non-docker version
+# Call the createImagesTable function to create the table
+createImagesTable()
 
 # Read csv file to store the user data
 users_file = pd.read_csv('users.csv')
@@ -520,3 +590,4 @@ if __name__ == 'main':
     app.run(debug=True)
 
 # flask --app test.py --debug run
+
