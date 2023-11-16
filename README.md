@@ -49,5 +49,15 @@ This command initializes the project services defined in the ```docker-compose.y
 Login credentials: 
 Access the web application using the provided credentials found in ```users.csv``` file. This file can be found in ```./backend/database``` directory.
 
+ERR: Empty Response Error:
+For Mac Users, during the uploading of images, you would face this error. Please use a Windows device if you would like to use this function.
+
 ## Troubleshooting
-If you are denied access to your own localhost, click the following link: chrome://net-internals/#sockets and click on 'flush socket pools', and re-run your flask application.
+1. Problem: Denied access to your own localhost
+   Solution: click the following link: chrome://net-internals/#sockets and click on 'flush socket pools', and re-run your flask application.
+
+2. Problem: Python 3.10 Certificate issue:
+   Solution: run this command in the terminal 
+```bash
+/Applications/Python\ 3.10/Install\ Certificates.command
+```
