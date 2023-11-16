@@ -27,5 +27,5 @@ RUN pip3 install gunicorn
 EXPOSE 5000
 
 # Define the entry point to run Gunicorn
-ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app", "--timeout", "300"]
+ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app", "--timeout", "30"]
 
