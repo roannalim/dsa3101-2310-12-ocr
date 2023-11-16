@@ -21,6 +21,7 @@ The model utilises a pretrained Faster RCNN Pytorch model to train a new Faster 
     3. `./pytorch_ocr_model/testing_data`: CSV file used as test dataset as part of model training
     4. `./pytorch_ocr_model/testing_prediction`: CSV file that stores output of model when fed the test dataset as part of model training
     5. `./pytorch_ocr_model/training_data`: CSV file used as train dataset as part of model training
+    **__- `./pytorch_ocr_model/best_retrained_object_detection_model.pth`: to Prof and TAs, please download this file from Teams and upload to the directory as listed for `./pytorch_ocr_model/pytorch_ocr_model_training.py` to execute successfully __**
 2. `./image_labelling.ipynb`:
 3. `./model_evaluator.py`: Python script that iterates through entire image dataset and checks if the model recognises and outputs the correct digits
 4. `./pytorch_evaluation_results.xlsx`: (Output of `model_evaluator.py`) Excel Workbook containing results of evaluation of `pytorch` + `easyocr` Model
