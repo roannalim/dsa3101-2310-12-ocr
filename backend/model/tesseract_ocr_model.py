@@ -1,5 +1,3 @@
-# if local_image == true: change directory to: "c:/users/wenji/desktop/nus academics/nus y3s1/dsa3101/dsa3101-2310-12-ocr/backend/model"
-
 # pip install pytesseract numpy opencv-python imutils
 
 # libraries for OCR
@@ -14,7 +12,7 @@ import argparse
 import imutils
 import cv2
 
-local_image = False
+local_image = False # set to True if want to debug with image on local machine
 
 def tesseract_ocr(filename, debugging = False):
     #if want to show deskew process, set debugging = True

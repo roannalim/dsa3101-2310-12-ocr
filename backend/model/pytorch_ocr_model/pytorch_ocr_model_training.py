@@ -21,7 +21,7 @@ cpu = torch.device("cpu") # Code is not optimised for GPU usage
 show_train_image_flag = False # set to True if want to show plot of training image with bounding box
 show_test_image_flag = False # set to True if want to show plot of training image with bounding box
 train_new_model_flag = False # set to True if want to train new model from pre-trained
-train_existing_model_flag = True # set to True if want to re-train existing model
+train_existing_model_flag = False # set to True if want to re-train existing model
 test_model_flag = True # set to True if want to test model
 
 train_df = pd.read_csv("training_data.csv")
@@ -169,7 +169,7 @@ if ((train_new_model_flag) | (train_existing_model_flag)):
         # replace the trained head with a new one
         model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
 
-        model.load_state_dict(torch.load('./best_trained_object_detection_model.pth'))
+        model.load_state_dict(torch.load('./best_retrained_object_detection_model.pth'))
 
         print("Checkpoint 5/11: Model successfully loaded")
     
@@ -185,10 +185,11 @@ if ((train_new_model_flag) | (train_existing_model_flag)):
     optimizer = torch.optim.SGD(params, lr=0.01, momentum=0.9, weight_decay=0.00001)
     lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.5)
 
-    num_epochs = 50
+    num_epochs = 20
 
     loss_hist = Averager()
     itr = 1
+    least_loss = 1
 
     print("Checkpoint 6/11: Iterating through epochs")
 
@@ -222,9 +223,8 @@ if ((train_new_model_flag) | (train_existing_model_flag)):
 
         print(f"Epoch #{epoch} loss: {loss_hist.value}")
 
-        least_loss = 1
-
         if (loss_hist.value < least_loss):
+            least_loss = loss_hist.value
             torch.save(model.state_dict(), './best_retrained_object_detection_model.pth')
 
 if (test_model_flag):
@@ -241,7 +241,7 @@ if (test_model_flag):
 
     # replace the pre-trained head with a new one
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-    model.load_state_dict(torch.load('./best_trained_object_detection_model.pth'))
+    model.load_state_dict(torch.load('./best_retrained_object_detection_model.pth'))
 
     test_transform = v2.Compose([v2.ToImage(), 
                                 v2.ToDtype(torch.float32, scale=True),
@@ -260,12 +260,6 @@ if (test_model_flag):
 
     print("Checkpoint 8/11: Test DataLoader successfully initialised")
 
-    detection_threshold = 0.1 #Set threshold value for predicting bounding box
-
-    def format_prediction_string(box, score): # Define function for storing prediction results
-        pred_string = "{0:.4f} {1} {2} {3} {4}".format(score, box[0], box[1], box[2], box[3])
-        return pred_string
-
     print("Checkpoint 9/11: Model Prediction Phase")
     wanted = 0
     results=[]
@@ -281,17 +275,20 @@ if (test_model_flag):
             boxes = outputs[i]['boxes'].data.cpu().numpy()    # Format of the output's box is [Xmin,Ymin,Xmax,Ymax]
             scores = outputs[i]['scores'].data.cpu().numpy()
             
-            if (boxes is not None):
+            if (boxes.size != 0):
                 box = boxes[0].astype(np.int32) # select only those boxes with highest score
+            else:
+                box = ["", "", "", ""]
                 
-            if (scores is not None):                      
+            if (scores.size != 0):                      
                 score = scores[0]                # select only those scores with highest score   
+            else: 
+                score = ""
 
             image_id = image_ids[i]
 
             result = {                                     # Store the image id and boxes and scores in result dict.
                 'image_id': image_id,
-                'PredictionString': format_prediction_string(box, score),
                 'score': score,
                 'box_xmin': box[0],
                 'box_ymin': box[1],
@@ -303,17 +300,16 @@ if (test_model_flag):
 
     print("Checkpoint 10/11: Displaying first 5 rows of prediction_df")
 
-    prediction_df = pd.DataFrame(results, columns = ['image_id', 'PredictionString', 'score', 'box_xmin', 'box_ymin', 'box_xmax', 'box_ymax'])
+    prediction_df = pd.DataFrame(results, columns = ['image_id', 'score', 'box_xmin', 'box_ymin', 'box_xmax', 'box_ymax'])
     print(prediction_df.head(5)) # Observe output data frame
 
-    test_df['PredictionString'] = prediction_df['PredictionString']
     test_df['score'] = prediction_df['score']
     test_df['box_xmin'] = prediction_df['box_xmin']
     test_df['box_ymin'] = prediction_df['box_ymin']
     test_df['box_xmax'] = prediction_df['box_xmax']
     test_df['box_ymax'] = prediction_df['box_ymax']
 
-    if (__name__ == '__main__') & (show_test_image_flag == True):
+    if (show_test_image_flag == True):
         print("Showing image: ", image_ids[wanted])
         sample = images[wanted].permute(1,2,0).cpu().numpy()
         boxes = outputs[wanted]['boxes'].data.cpu().numpy()
@@ -336,4 +332,4 @@ if (test_model_flag):
 
     print("Checkpoint 11/11: Saving Predictions to test_df.csv [Final]")
 
-    test_df.to_csv("test_prediction1.csv", index = False)
+    test_df.to_csv("test_prediction.csv", index = False)

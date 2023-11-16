@@ -1,8 +1,7 @@
-# change directory to: "c:/users/wenji/desktop/nus academics/nus y3s1/dsa3101/dsa3101-2310-12-ocr/backend/model"
-
 import os
 import xlsxwriter
 from tesseract_ocr_model import tesseract_ocr
+from pytorch_ocr_model.pytorch_ocr_model_function import pytorch_easy_ocr
 
 answers = {"capt_after": 1310,
            "cinnamon_after": 790,
@@ -14,7 +13,7 @@ answers = {"capt_after": 1310,
 row_id = 0
 col_id = 0
 
-model = "tesseract" #"tesseract" or "tensorflow"
+model = "pytorch" #"tesseract" or "tensorflow" or "pytorch"
 
 workbook = xlsxwriter.Workbook(f'{model}_evaluation_results.xlsx')
 worksheet = workbook.add_worksheet()
@@ -30,7 +29,7 @@ for area, value in answers.items():
     for filename in os.scandir(directory):
         if filename.is_file():
             filepath = filename.path
-            result = tesseract_ocr(filepath)
+            result = pytorch_easy_ocr(filepath)
 
             if (str(value) in result):
                 outcome = "Pass"

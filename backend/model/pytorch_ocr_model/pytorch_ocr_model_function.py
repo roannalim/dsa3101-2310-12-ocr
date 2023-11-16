@@ -16,7 +16,7 @@ from PIL import Image
 from torch.utils.data import IterableDataset, DataLoader
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-local_image = True
+local_image = False # set to True if want to debug with image on local machine
 
 class MyDataset(IterableDataset):
     def __init__(self, image_queue, transforms = None):
@@ -45,7 +45,7 @@ def pytorch_easy_ocr(image, debugging = False):
 
     # replace the pre-trained head with a new one
     model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
-    model.load_state_dict(torch.load('./best_trained_object_detection_model.pth'))
+    model.load_state_dict(torch.load('./best_retrained_object_detection_model.pth'))
     model.eval()
     
     # load input image
@@ -69,27 +69,30 @@ def pytorch_easy_ocr(image, debugging = False):
     boxes = outputs[0]['boxes'].data.cpu().numpy()    # Format of the output's box is [Xmin,Ymin,Xmax,Ymax]
     scores = outputs[0]['scores'].data.cpu().numpy()
     
-    if (boxes is not None):
+    if (boxes.size != 0):
         box = boxes[0].astype(np.int32) # select only those boxes with highest score
     else:
+        print("No Bounding Box detected")
         return ""
         
-    if (scores is not None):                      
+    if (scores.size != 0):                      
         score = scores[0]                # select only those scores with highest score 
         print("Bounding Box Detection Score: ", score)
+    else:
+        score = 0
 
     xmin, ymin, xmax, ymax = box[0], box[1], box[2], box[3]
     area = (xmin, ymin, xmax, ymax)
     
     # Filter image to bounding box
     region = new_input.crop(area)
-    opencvImage = cv2.cvtColor(np.array(region), cv2.COLOR_BGR2GRAY)
+    opencvImage = cv2.cvtColor(np.array(region), cv2.COLOR_RGB2GRAY)
 
     # Histogram equalisation
     equ = cv2.equalizeHist(opencvImage)
 
     # Manual thresholding
-    th2 = 65 # Vary this threshold to determine extent of Histogram Equalisation
+    th2 = 80 # Vary this threshold to determine extent of Histogram Equalisation
     equ[equ>=th2] = 255
     equ[equ<th2]  = 0
 
@@ -105,27 +108,30 @@ def pytorch_easy_ocr(image, debugging = False):
     
     # Obtain OCR Result
     ocr_result = reader.readtext(equ, # region of interest image
-                                 allowlist = '0123456789', # only output digits
-                                 detail = 1, # less-detailed and simple output
-                                 paragraph = False, # no paragraphing in image
-                                 rotation_info = [0, 90, 180, 270], # try all possible text orientations
-                                 width_ths = 0.2) #maximum horizontal distance for bounding box merging
+                                allowlist = '0123456789', # only output digits
+                                detail = 1, # less-detailed and simple output
+                                paragraph = False, # no paragraphing in image
+                                rotation_info = [90, 180, 270]) # try all possible text orientations
+                                
     final_result = ""
     print(ocr_result)
 
     if (ocr_result != []):
-        highest_score = 0
-        desired_ocr_result = None
+        score_threshold = 0.8
+        filtered_ocr_result = []
+        recognised_text = ""
+        scores = ""
         for i in range(len(ocr_result)):
-            if ocr_result[i][2] > highest_score:
-                desired_ocr_result = ocr_result[i]
-                highest_score = ocr_result[i][2]
+            if ocr_result[i][2] > score_threshold:
+                filtered_ocr_result.append(ocr_result[i])
+                recognised_text += ocr_result[i][1]
+                scores += str(ocr_result[i][2])
 
         print("EasyOCR Results:\n",
-            "Recognised Text = ", desired_ocr_result[1], "\n",
-            "Text Recognition Score = ", desired_ocr_result[2])
+            "Recognised Text = ", recognised_text, "\n",
+            "Text Recognition Score = ", scores)
         
-        final_result = desired_ocr_result[1]
+        final_result = recognised_text
     else: 
         print("No digits recognised")
 
@@ -147,18 +153,20 @@ def pytorch_easy_ocr(image, debugging = False):
         ax1.set_title("Original Image with\nObject Detection Bounding Box")
 
         if (ocr_result != []):
-            bbox = desired_ocr_result[0]
-
-            print(bbox)
+            
             equ = np.ascontiguousarray(equ)
 
-            start_point = (int(bbox[0][0]), int(bbox[1][1]))
-            end_point = (int(bbox[2][0]), int(bbox[3][1]))
+            for i in range(len(filtered_ocr_result)):
+                bbox = filtered_ocr_result[i][0]
+                print(bbox)
 
-            cv2.rectangle(equ,
-                        start_point,
-                        end_point,
-                        (220, 0, 0), 2)                        
+                start_point = (int(bbox[0][0]), int(bbox[1][1]))
+                end_point = (int(bbox[2][0]), int(bbox[3][1]))
+
+                cv2.rectangle(equ,
+                            start_point,
+                            end_point,
+                            (220, 0, 0), 2)                        
 
         ax2.set_axis_off()
         ax2.imshow(equ)
@@ -171,10 +179,10 @@ def pytorch_easy_ocr(image, debugging = False):
 if local_image:
     ## testing from local image
     area = 'cinnamon' #'capt' or 'rc4', 'u_town_residence', 'cinnamon'
-    time = 'after' #'after' or 'before'
-    phonetype = 'Android' #'iPhone' or 'Android'
-    photo = '20231006_084748' #insert photo file name without extension
-    filetype = 'jpg' #'jpeg' or 'jpg'
+    time = 'before' #'after' or 'before'
+    phonetype = 'iPhone' #'iPhone' or 'Android'
+    photo = 'IMG_6044' #insert photo file name without extension
+    filetype = 'jpeg' #'jpeg' or 'jpg'
 
     filename = f'../../../../12-ocr-image-data/{area}_{time}/{phonetype}/{photo}.{filetype}'
     print(pytorch_easy_ocr(filename, debugging = True))
