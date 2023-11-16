@@ -59,8 +59,8 @@ Solution:<br/>
 ```bash
 chrome://net-internals/#sockets
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;1.2. Click on 'flush socket pools'.<br/> 
-&nbsp;&nbsp;&nbsp;&nbsp;1.3. Re-run your flask application.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2. Click on 'flush socket pools'.<br/> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3. Re-run your flask application.
 
 
 2. Problem: Python 3.10 Certificate issue<br/>
