@@ -33,9 +33,9 @@ git clone https://github.com/wenjieng/dsa3101-2310-12-ocr.git
 ```
 
 2. Enter into the root folder of the project ```dsa3101-2310-12-ocr```:
-	```bash
-	cd dsa3101-2310-12-ocr
-	```
+```bash
+cd dsa3101-2310-12-ocr
+```
 
 3. Run the following command on the terminal to to start the project using Docker Compose:
 ```bash
@@ -48,3 +48,6 @@ This command initializes the project services defined in the ```docker-compose.y
 ## Additional notes
 Login credentials: 
 Access the web application using the provided credentials found in ```users.csv``` file. This file can be found in ```./backend/database``` directory.
+
+## Troubleshooting
+If you are denied access to your own localhost, click the following link: chrome://net-internals/#sockets and click on 'flush socket pools', and re-run your flask application.
