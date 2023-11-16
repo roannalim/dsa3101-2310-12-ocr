@@ -65,7 +65,7 @@ To run the script, open your command line or terminal and navigate to the direct
     flask --app test.py --debug run
 
 ## Access the Website
-You may access the website through the link [http://127.0.0.1:5000](http://127.0.0.1:5000) or the link provided displayed in your terminal.
+You may access the website through the link [http://127.0.0.1:5000](http://127.0.0.1:5000) or the link displayed in your terminal.
 
 ## Troubleshooting 
 If you are denied access to your own localhost, click the following link: chrome://net-internals/#sockets and click on 'flush socket pools', and re-run your flask application. 
