@@ -10,7 +10,7 @@ library(lubridate)
 library(RMySQL)
 
 # Choose database flag = "test-data" or "database"
-flag = "test-data"
+flag = "database"
 
 if (flag == "test-data") {
   df = read.csv("test_data.csv")
