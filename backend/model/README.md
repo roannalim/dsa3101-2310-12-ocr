@@ -7,7 +7,7 @@ This directory holds all files that are related to training, building and applyi
 For `pytesseract`, the method employed here is to directly apply the OCR model onto the input dataset. We have found that the accuracy is very low without proper object detection assisting in locating the area that we wish to OCR.
 
 ### Tensorflow + EasyOCR Information
-...
+This model employed RCNN object detection training using the RCNN pre-trained model from the TensorFlow object detection zoo to recognise the area where gross weight is found. The image is then fed into EasyOCR after object detection for character recognition. 
 
 ### PyTorch + EasyOCR Information
 The model utilises a pretrained Faster RCNN Pytorch model to train a new Faster RCNN model on object detection for the area that is required to OCR. The model was trained through 20 epochs and selected based on least loss value. It is then fed into EasyOCR after image enhancement through Histogram Equalisation. EasyOCR is set to only recognise digits. Accuracy is much higher after object detection, but further image enhancement can be done to improve the accuracy.
@@ -18,14 +18,14 @@ The model utilises a pretrained Faster RCNN Pytorch model to train a new Faster 
 1. `./pytorch_ocr_model`: Folder containing all things related to `pytorch` OCR Model
     1. `./pytorch_ocr_model/images`: Folder containing screenshots of OCR Model executing
     2. `./pytorch_ocr_model/pytorch_ocr_model_function.py`: Python script that consists of a function that takes in an image and outputs the recognised digits
-    2. `./pytorch_ocr_model/pytorch_ocr_model_training.py`: Python script that trains or retrains an object detection model (Faster RCNN)
-    3. `./pytorch_ocr_model/testing_data`: CSV file used as test dataset as part of model training
-    4. `./pytorch_ocr_model/testing_prediction`: CSV file that stores output of model when fed the test dataset as part of model training
-    5. `./pytorch_ocr_model/training_data`: CSV file used as train dataset as part of model training
-    **__- `./pytorch_ocr_model/best_retrained_object_detection_model.pth`: to Prof and TAs, please download this file from Teams and upload to the directory as listed for `./pytorch_ocr_model/pytorch_ocr_model_training.py` to execute successfully __**
-2. `./image_labelling.ipynb`:
+    3. `./pytorch_ocr_model/pytorch_ocr_model_training.py`: Python script that trains or retrains an object detection model (Faster RCNN)
+    4. `./pytorch_ocr_model/testing_data`: CSV file used as test dataset as part of model training
+    5. `./pytorch_ocr_model/testing_prediction`: CSV file that stores output of model when fed the test dataset as part of model training
+    6. `./pytorch_ocr_model/training_data`: CSV file used as train dataset as part of model training
+    7. **__- `./pytorch_ocr_model/best_retrained_object_detection_model.pth`: to Prof and TAs, please download this file from Teams and upload to the directory as listed for `./pytorch_ocr_model/pytorch_ocr_model_training.py` to execute successfully __**
+2. `./image_labelling.ipynb`: Jupyter notebook that contains python file used to annotate and label image dataset to be used for the Tensorflow model training
 3. `./model_evaluator.py`: Python script that iterates through entire image dataset and checks if the model recognises and outputs the correct digits
 4. `./pytorch_evaluation_results.xlsx`: (Output of `model_evaluator.py`) Excel Workbook containing results of evaluation of `pytorch` + `easyocr` Model
-5. `./tensorflow-ocr-model.py`:
+5. `./tensorflow-ocr-model.py`: Python script that consists of RCNN object detection training and character recognition using EasyOCR
 6. `./tesseract_evaluation_results.xlsx`: (Output of `model_evaluator.py`) Excel Workbook containing results of evaluation of `pytesseract` OCR Model
 7. `./tesseract_ocr_model.py`: Python script that consists of a function that takes in an image and outputs the recognised digits
