@@ -4,7 +4,7 @@
 This directory holds all files that is required for the Shiny R Dashboard solution, which is programmed in R language. Prominent libraries, other than `shiny`, used in this dashboard are `dplyr`, `ggplot`, DataTables (`DT`), and `RMySQL` (for communicating with MySQL Database). *Full list of libraries used can be found in lines `1` to `10` in `./app/app.R`.
 
 ### Dashboard Key Features
-![Dashboard Screenshot](./images/filename.png "Dashboard Screenshot")*Screenshot of Dashboard*
+![Dashboard Screenshot](./images/Dashboard_Screenshot.jpg "Dashboard Screenshot")*Screenshot of Dashboard*
 1. **Bar Chart**: Users are able to visualise data on a bar chart for comparisons of waste weight between particular bin centres across dates. Data is pulled from connected MySQL Database, and can be refreshed.
 2. **Line Plot**: Users can also visualise data on a line plot for comparisons of waste weight across dates (time series analysis). Data is also pulled from connected MySQL Database, and can be refreshed.
 3. **DataTable**: For users who prefer clear numerical and definitive values, they can refer to the DataTable which displays waste weight by each bin centre. Users can also download the data in CSV or Excel file formats for further data manipulation
