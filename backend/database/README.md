@@ -25,7 +25,7 @@ This script includes a Flask application which serves the "What-A-Waste" website
 - `pytorch_ocr_model_function.py`: This is the file that contains the PyTorch EasyOCR processing function. 
 - `requirements.txt`: This is the requirements file with the list of packages required.
 - `test.py`: This is the flask python file for the web app.
-- `test_mac.py`: This is the flask python file for the web app for mac users only.
+- `test_mac.py`: This is the flask python file for the web app for mac users to test out the upload function only.
 - `test_data.csv`: This is the 14 images data to be pre-inserted into the images table.
 - `users.csv`: This is the 3 users data to be pre-inserted into users table.
 
