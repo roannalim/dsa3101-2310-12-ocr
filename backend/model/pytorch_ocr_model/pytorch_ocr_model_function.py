@@ -16,7 +16,7 @@ from PIL import Image
 from torch.utils.data import IterableDataset, DataLoader
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-local_image = False # set to True if want to debug with image on local machine
+local_image = True # set to True if want to debug with image on local machine
 
 class MyDataset(IterableDataset):
     def __init__(self, image_queue, transforms = None):
@@ -181,7 +181,7 @@ if local_image:
     area = 'cinnamon' #'capt' or 'rc4', 'u_town_residence', 'cinnamon'
     time = 'before' #'after' or 'before'
     phonetype = 'iPhone' #'iPhone' or 'Android'
-    photo = 'IMG_6044' #insert photo file name without extension
+    photo = 'IMG_6040' #insert photo file name without extension
     filetype = 'jpeg' #'jpeg' or 'jpg'
 
     filename = f'../../../../12-ocr-image-data/{area}_{time}/{phonetype}/{photo}.{filetype}'
