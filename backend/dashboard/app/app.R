@@ -10,7 +10,7 @@ library(lubridate)
 library(RMySQL)
 
 # Choose database flag = "test-data" or "database"
-flag = "database"
+flag = "test-data"
 
 if (flag == "test-data") {
   df = read.csv("test_data.csv")
@@ -170,8 +170,8 @@ ui <- fluidPage(
 # Define server logic required to draw a necessary plots/datatable
 server <- function(input, output, session) {
   if (flag == "database") { 
-    counter = reactiveValues(countervalue = 0)
-    observeEvent(input$goButton_DataRefresh, {counter$countervalue <- counter$countervalue + 1})
+    data = reactiveValues(refreshed = df_processed)
+    
     df_refreshed <- eventReactive(
       #Refresh data pull from database when button is clicked
       input$goButton_DataRefresh, {
@@ -181,6 +181,8 @@ server <- function(input, output, session) {
       df_processing(df)
       }
     )
+    observeEvent(input$goButton_DataRefresh, 
+                 {data$refreshed <- df_refreshed()})
   }
   # print text when invalid date range
   output$DateRange_table <- renderText({
@@ -195,8 +197,8 @@ server <- function(input, output, session) {
   output$tablePlot <- DT::renderDataTable({
     #Refresh data from database
     if (flag == "database"){
-      if (counter$countervalue != 0) {
-        df_processed = df_refreshed()
+      if (input$goButton_DataRefresh != 0) {
+        df_processed = data$refreshed
       }
     }
     #execute when "Apply Configurations for Table" is clicked
@@ -261,8 +263,8 @@ server <- function(input, output, session) {
   output$barPlot <- renderPlot({
     #Refresh data from database
     if (flag == "database"){
-      if (counter$countervalue != 0) {
-        df_processed = df_refreshed()
+      if (input$goButton_DataRefresh != 0) {
+        df_processed = data$refreshed
       }
     }
     #execute when "Apply Configurations for Graphs" is clicked
@@ -377,8 +379,8 @@ server <- function(input, output, session) {
   output$linePlot <- renderPlot({
     #Refresh data from database
     if (flag == "database"){
-      if (counter$countervalue != 0) {
-        df_processed = df_refreshed()
+      if (input$goButton_DataRefresh != 0) {
+        df_processed = data$refreshed
       }
     }
     #execute when "Apply Configuration" is clicked
