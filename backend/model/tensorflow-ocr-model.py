@@ -5,6 +5,8 @@ import git
 import object_detection
 import cv2
 import numpy as np
+import matplotlib
+import easyocr
 
 from matplotlib import pyplot as plt
 from object_detection.utils import config_util
@@ -113,12 +115,13 @@ with tf.io.gfile.GFile(files['PIPELINE_CONFIG'], "wb") as f:
     
 """ # Train the model 
 TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
-command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps=10000".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'])
+command = "python {} --model_dir={} --pipeline_config_path={} --num_train_steps=2000".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'])
 print(command)
 os.system(command) """
 
-# Evaluate the model
-""" TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
+
+""" # Evaluate the model
+TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
 command = "python {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
 print(command)
 os.system(command) """
@@ -129,7 +132,7 @@ detection_model = model_builder.build(model_config=configs['model'], is_training
 
 # Restore checkpoint
 ckpt = tf.compat.v2.train.Checkpoint(model=detection_model) 
-ckpt.restore(os.path.join(paths['CHECKPOINT_PATH'], 'ckpt-11')).expect_partial()
+ckpt.restore(os.path.join(paths['CHECKPOINT_PATH'], 'ckpt-3')).expect_partial()
 
 @tf.function
 def detect_fn(image):
@@ -140,11 +143,10 @@ def detect_fn(image):
 
 # Detectiong from an image
 category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
-IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', '20231006_083526.jpg')
+IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', '20231006_085657.jpg')
 img = cv2.imread(IMAGE_PATH)
-#image_np = dict(enumerate(np.array(img).flatten(), 1))
 image_np = np.array(img)
-#print(image_np)
+
 
 input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
 detections = detect_fn(input_tensor)
@@ -158,13 +160,9 @@ detections['num_detections'] = num_detections
 detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
 
 label_id_offset = 1
-#image_np_with_detections = dict(enumerate(np.array(img).flatten(), 1)).copy()
-#image_np_with_detections_str = ''.join(map(str, image_np_with_detections))
-#image_np_with_detections_int = int(image_np_with_detections_str)
 image_np_with_detections = image_np.copy()
 
 viz_utils.visualize_boxes_and_labels_on_image_array(
-            #image_np_with_detections_int,
             image_np_with_detections,
             detections['detection_boxes'],
             detections['detection_classes']+label_id_offset,
@@ -172,15 +170,31 @@ viz_utils.visualize_boxes_and_labels_on_image_array(
             category_index,
             use_normalized_coordinates=True,
             max_boxes_to_draw=5,
-            min_score_thresh=.8,
+            min_score_thresh=0.8,
             agnostic_mode=False)
 
+matplotlib.use('Qt5Agg')
 plt.imshow(cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB))
-#plt.imshow(cv2.imread("Show image @ line 171", cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB)))
-plt.show()
-#cv2.imshow("Show image @ line 171", cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB))
-#cv2.waitKey(0)
+plt.show() 
 
-detections.keys()
 
-print('heelo world')
+detection_threshold = 0.7
+image = image_np_with_detections
+scores = list(filter(lambda x: x> detection_threshold, detections['detection_scores']))
+boxes = detections['detection_boxes'][:len(scores)]
+classes = detections['detection_classes'][:len(scores)]
+width = image.shape[1]
+height = image.shape[0]
+# Apply ROI filtering and OCR
+for idx, box in enumerate(boxes):
+    print(box)
+    roi = box*[height, width, height, width]
+    print(roi)
+    region = image[int(roi[0]):int(roi[2]),int(roi[1]):int(roi[3])]
+    reader = easyocr.Reader(['en'])
+    ocr_result = reader.readtext(region)
+    print(ocr_result)
+    plt.imshow(cv2.cvtColor(region, cv2.COLOR_BGR2RGB))
+for result in ocr_result:
+    print(np.sum(np.subtract(result[0][2],result[0][1])))
+    print("Weight:" + result[1])
