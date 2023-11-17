@@ -33,7 +33,7 @@ if (flag == "test-data") {
     df = dbFetch(result)
     
     dbDisconnect(mysqlconnection)
-    
+    print(df)
     return(df)
   }
   df = establish_sql_connection()
@@ -41,8 +41,8 @@ if (flag == "test-data") {
 
 # Pre-processing of data and calculating weight at each bin centre
 df_processing <- function(df_processed) {
-  df_processed$start_date = date(parse_date_time(df$start_date, "ymd", tz = "Singapore")) 
-  df_processed$expiry_date = date(parse_date_time(df$expiry_date, "ymd", tz = "Singapore"))
+  df_processed$start_date = date(parse_date_time(df_processed$start_date, "ymd", tz = "Singapore")) 
+  df_processed$expiry_date = date(parse_date_time(df_processed$expiry_date, "ymd", tz = "Singapore"))
   
   df_processed = 
     df_processed %>%
@@ -170,10 +170,11 @@ ui <- fluidPage(
 # Define server logic required to draw a necessary plots/datatable
 server <- function(input, output, session) {
   if (flag == "database") { 
+    counter = reactiveValues(countervalue = 0)
+    observeEvent(input$goButton_DataRefresh, {counter$countervalue <- counter$countervalue + 1})
     df_refreshed <- eventReactive(
       #Refresh data pull from database when button is clicked
       input$goButton_DataRefresh, {
-      
       req(establish_sql_connection())
       # Pre-processing of data and calculating weight at each bin centre
       df = establish_sql_connection()
@@ -194,7 +195,7 @@ server <- function(input, output, session) {
   output$tablePlot <- DT::renderDataTable({
     #Refresh data from database
     if (flag == "database"){
-      if (input$goButton_DataRefresh != 0) {
+      if (counter$countervalue != 0) {
         df_processed = df_refreshed()
       }
     }
@@ -260,7 +261,7 @@ server <- function(input, output, session) {
   output$barPlot <- renderPlot({
     #Refresh data from database
     if (flag == "database"){
-      if (input$goButton_DataRefresh != 0) {
+      if (counter$countervalue != 0) {
         df_processed = df_refreshed()
       }
     }
@@ -376,7 +377,7 @@ server <- function(input, output, session) {
   output$linePlot <- renderPlot({
     #Refresh data from database
     if (flag == "database"){
-      if (input$goButton_DataRefresh != 0) {
+      if (counter$countervalue != 0) {
         df_processed = df_refreshed()
       }
     }
