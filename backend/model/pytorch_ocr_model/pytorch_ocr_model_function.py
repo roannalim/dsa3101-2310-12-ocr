@@ -16,7 +16,7 @@ from PIL import Image
 from torch.utils.data import IterableDataset, DataLoader
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
-local_image = True # set to True if want to debug with image on local machine
+local_image = False # set to True if want to debug with image on local machine
 
 class MyDataset(IterableDataset):
     def __init__(self, image_queue, transforms = None):
