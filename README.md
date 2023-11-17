@@ -15,7 +15,7 @@ The What-A-Waste Web project is a groundbreaking initiative dedicated to waste d
 dsa3101-2310-12-ocr/
 │
 ├── backend/ # Source code for the project
-│   ├── dashboard/ # Forlder containing dashboard code
+│   ├── dashboard/ # Folder containing dashboard code
 │   ├── database/ # Folder containing database & flask application
 │   └── model/ # Folder containing OCR model code
 │
@@ -62,9 +62,11 @@ chrome://net-internals/#sockets
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.2. Click on 'flush socket pools'.<br/> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.3. Re-run your flask application.
 
-
 2. Problem: Python 3.10 Certificate issue<br/>
 Solution: Run this command in the terminal 
 ```bash
 /Applications/Python\ 3.10/Install\ Certificates.command
 ```
+
+3. Problem: Upload page timeout/Worker exited in docker web container<br/>
+Solution: Edit line 30 in the flask_dockerfile, "ENTRYPOINT ["gunicorn", "-b", "0.0.0.0:5000", "test:app", "--timeout", "30"]", increase the timeout from 30 to a timing that will work for your device.
